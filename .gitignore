@@ -1,0 +1,41 @@
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### Ignire all DBs ###
+*.db
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### Private Folder ###
+src/main/resources/private/
+
+### LOGS ###
+*.log
+
+### Visual Studio Code ###
+.vscode
+
+### DB files ###
+*.db
+
