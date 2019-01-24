@@ -20,8 +20,8 @@ import org.fogbowcloud.as.core.constants.Messages;
 import org.fogbowcloud.as.core.tokengenerator.TokenGeneratorPlugin;
 import org.fogbowcloud.as.core.tokengenerator.plugins.AttributeJoiner;
 
-public class ShibbolethTokenGenerator implements TokenGeneratorPlugin {
-	private static final Logger LOGGER = Logger.getLogger(ShibbolethTokenGenerator.class);
+public class ShibbolethTokenGeneratorPlugin implements TokenGeneratorPlugin {
+	private static final Logger LOGGER = Logger.getLogger(ShibbolethTokenGeneratorPlugin.class);
 	// Shib token parameters
 	private static final int SHIB_TOKEN_PARAMETERS_SIZE = 5;
 	private static final int SAML_ATTRIBUTES_ATTR_SHIB_INDEX = 4;
@@ -43,7 +43,7 @@ public class ShibbolethTokenGenerator implements TokenGeneratorPlugin {
 	private RSAPublicKey shibAppPublicKey;
 	private SecretManager secretManager;
 
-	public ShibbolethTokenGenerator() {
+	public ShibbolethTokenGeneratorPlugin() {
 		this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID);
         try {
 			this.asPrivateKey = ServiceAsymmetricKeysHolder.getInstance().getPrivateKey();
