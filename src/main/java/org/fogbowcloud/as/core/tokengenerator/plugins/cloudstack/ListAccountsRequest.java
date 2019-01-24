@@ -1,6 +1,6 @@
 package org.fogbowcloud.as.core.tokengenerator.plugins.cloudstack;
 
-import org.fogbowcloud.as.core.exceptions.InvalidParameterException;
+import org.fogbowcloud.as.common.exceptions.InvalidParameterException;
 import org.fogbowcloud.as.core.util.cloud.CloudStackRequest;
 
 public class ListAccountsRequest extends CloudStackRequest {

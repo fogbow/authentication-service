@@ -1,28 +1,23 @@
 package org.fogbowcloud.as.core.tokengenerator.plugins.opennebula;
 
 import org.apache.log4j.Logger;
+import org.fogbowcloud.as.common.exceptions.UnexpectedException;
+import org.fogbowcloud.as.core.PropertiesHolder;
+import org.fogbowcloud.as.core.constants.ConfigurationConstants;
 import org.fogbowcloud.as.core.constants.Messages;
-import org.fogbowcloud.as.core.exceptions.*;
-import org.fogbowcloud.as.common.util.PropertiesUtil;
 import org.opennebula.client.*;
 import org.opennebula.client.group.GroupPool;
 import org.opennebula.client.image.ImagePool;
 import org.opennebula.client.template.TemplatePool;
 import org.opennebula.client.user.UserPool;
 
-import java.util.Properties;
-
 public class OpenNebulaClientFactory {
-
-    private final static Logger LOGGER = Logger.getLogger(OpenNebulaClientFactory.class);
-
-    private static final String OPENNEBULA_RPC_ENDPOINT_URL = "opennebula_rpc_endpoint";
+	private final static Logger LOGGER = Logger.getLogger(OpenNebulaClientFactory.class);
 
     private String endpoint;
 
-	public OpenNebulaClientFactory(String confFilePath) {
-		Properties properties = PropertiesUtil.readProperties(confFilePath);
-		this.endpoint = properties.getProperty(OPENNEBULA_RPC_ENDPOINT_URL);
+	public OpenNebulaClientFactory() {
+		this.endpoint = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.OPENNEBULA_ENDPOINT);
 	}
 
 	public Client createClient(String federationTokenValue) throws UnexpectedException {
@@ -60,5 +55,4 @@ public class OpenNebulaClientFactory {
 
 		return null;
 	}
-
 }

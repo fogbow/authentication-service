@@ -1,11 +1,16 @@
 package org.fogbowcloud.as.core;
 
 import org.apache.log4j.Logger;
-import org.fogbowcloud.as.core.constants.*;
-import org.fogbowcloud.as.core.exceptions.*;
-import org.fogbowcloud.as.core.tokengenerator.TokenGeneratorPlugin;
+import org.fogbowcloud.as.common.exceptions.FogbowException;
+import org.fogbowcloud.as.common.exceptions.UnexpectedException;
+import org.fogbowcloud.as.common.util.ServiceAsymmetricKeysHolder;
 import org.fogbowcloud.as.common.util.PropertiesUtil;
+import org.fogbowcloud.as.core.constants.*;
+import org.fogbowcloud.as.core.tokengenerator.TokenGeneratorPlugin;
+import org.fogbowcloud.as.core.tokengenerator.TokenGeneratorPluginDecorator;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -16,7 +21,7 @@ public class ApplicationFacade {
 
     private String buildNumber;
 
-    private TokenGeneratorPlugin tokenGeneratorPlugin;
+    private TokenGeneratorPluginDecorator tokenGeneratorPluginDecorator;
 
     private ApplicationFacade() {
         this.buildNumber = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.BUILD_NUMBER,
@@ -33,16 +38,29 @@ public class ApplicationFacade {
     }
 
     public void setTokenGeneratorPlugin(TokenGeneratorPlugin tokenGeneratorPlugin) {
-        this.tokenGeneratorPlugin = tokenGeneratorPlugin;
+        // The token generator plugin generates a raw token; the wrapper adds an expiration time,
+        // a signature, and encrypts the token using the public key provided by the client.
+        this.tokenGeneratorPluginDecorator = new TokenGeneratorPluginDecorator(tokenGeneratorPlugin);
+    }
+
+    public String createTokenValue(Map<String, String> userCredentials, String publicKey)
+            throws UnexpectedException, FogbowException {
+        // There is no need to authenticate the user or authorize this operation
+        return this.tokenGeneratorPluginDecorator.createTokenValue(userCredentials, publicKey);
+    }
+
+    public String getPublicKey() throws UnexpectedException {
+        // There is no need to authenticate the user or authorize this operation
+        try {
+            return ServiceAsymmetricKeysHolder.getInstance().getPublicKey().toString();
+        } catch (IOException | GeneralSecurityException e) {
+            throw new UnexpectedException(e.getMessage(), e);
+        }
     }
 
     public String getVersionNumber() {
-        return SystemConstants.API_VERSION_NUMBER + "-" + this.buildNumber;
-    }
-
-    public String createTokenValue(Map<String, String> userCredentials) throws UnexpectedException, FogbowAsException {
         // There is no need to authenticate the user or authorize this operation
-        return this.tokenGeneratorPlugin.createTokenValue(userCredentials);
+        return SystemConstants.API_VERSION_NUMBER + "-" + this.buildNumber;
     }
 
     // Used for testing

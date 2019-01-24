@@ -1,9 +1,9 @@
 package org.fogbowcloud.as.core;
 
+import org.fogbowcloud.as.common.exceptions.FatalErrorException;
 import org.fogbowcloud.as.common.util.HomeDir;
-import org.fogbowcloud.as.core.constants.SystemConstants;
-import org.fogbowcloud.as.core.exceptions.FatalErrorException;
 import org.fogbowcloud.as.common.util.PropertiesUtil;
+import org.fogbowcloud.as.core.constants.SystemConstants;
 
 import java.util.ArrayList;
 import java.util.List;

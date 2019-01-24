@@ -1,23 +1,22 @@
 package org.fogbowcloud.as.core.tokengenerator.plugins.openstack.v3;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.http.Header;
 import org.apache.http.client.HttpResponseException;
 import org.apache.log4j.Logger;
+import org.fogbowcloud.as.common.constants.FogbowConstants;
+import org.fogbowcloud.as.common.exceptions.FatalErrorException;
+import org.fogbowcloud.as.common.util.connectivity.HttpRequestClientUtil;
+import org.fogbowcloud.as.common.exceptions.FogbowException;
+import org.fogbowcloud.as.common.exceptions.UnexpectedException;
 import org.fogbowcloud.as.core.PropertiesHolder;
 import org.fogbowcloud.as.core.constants.ConfigurationConstants;
+import org.fogbowcloud.as.core.constants.DefaultConfigurationConstants;
 import org.fogbowcloud.as.core.constants.Messages;
-import org.fogbowcloud.as.core.exceptions.FatalErrorException;
-import org.fogbowcloud.as.core.exceptions.FogbowAsException;
-import org.fogbowcloud.as.core.exceptions.UnexpectedException;
-import org.fogbowcloud.as.common.util.FogbowAuthenticationHolder;
 import org.fogbowcloud.as.core.tokengenerator.TokenGeneratorPlugin;
-import org.fogbowcloud.as.common.util.PropertiesUtil;
-import org.fogbowcloud.as.common.util.connectivity.HttpRequestClientUtil;
+import org.fogbowcloud.as.core.tokengenerator.plugins.AttributeJoiner;
 import org.fogbowcloud.as.core.util.HttpToFogbowAsExceptionMapper;
 
 public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
@@ -25,31 +24,28 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
 
     public static final String V3_TOKENS_ENDPOINT_PATH = "/auth/tokens";
     public static final String X_SUBJECT_TOKEN = "X-Subject-Token";
-    public static final String OPENSTACK_TOKEN_STRING_SEPARATOR = "!#!";
     public static final String PROJECT_NAME = "projectname";
     public static final String PASSWORD = "password";
     public static final String USER_NAME = "username";
     public static final Object DOMAIN = "domain";
-    public static final String KEYSTONE_V3_URL_KEY = "openstack_keystone_v3_url";
+    private static final String PROJECT_ID_KEY = "project";
 
     private String v3TokensEndpoint;
     private HttpRequestClientUtil client;
     private String tokenProviderId;
-	private FogbowAuthenticationHolder fogbowAuthenticationHolder;
 
-    public OpenStackTokenGeneratorPlugin(String confFilePath) throws FatalErrorException {
+    public OpenStackTokenGeneratorPlugin() throws FatalErrorException {
         this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID);
 
-        Properties properties = PropertiesUtil.readProperties(confFilePath);
 
-        String identityUrl = properties.getProperty(KEYSTONE_V3_URL_KEY);
+        String identityUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.OPENSTACK_KEYSTONE_V3_ENDPOINT);
         if (isUrlValid(identityUrl)) {
             this.v3TokensEndpoint = identityUrl + V3_TOKENS_ENDPOINT_PATH;
         }
-        
-        this.fogbowAuthenticationHolder = FogbowAuthenticationHolder.getInstance();
-        
-        this.client = new HttpRequestClientUtil();
+        String timeoutRequestStr = PropertiesHolder.getInstance().getProperty(
+                ConfigurationConstants.HTTP_REQUEST_TIMEOUT, DefaultConfigurationConstants.HTTP_REQUEST_TIMEOUT);
+        Integer timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
+        this.client = new HttpRequestClientUtil(timeoutHttpRequest);
     }
 
     private boolean isUrlValid(String url) throws FatalErrorException {
@@ -60,7 +56,7 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     }
 
     @Override
-    public String createTokenValue(Map<String, String> credentials) throws FogbowAsException,
+    public String createTokenValue(Map<String, String> credentials) throws FogbowException,
             UnexpectedException {
 
         String jsonBody = mountJsonBody(credentials);
@@ -94,22 +90,19 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
             CreateTokenResponse.Project projectTokenResponse = createTokenResponse.getProject();
             String projectId = projectTokenResponse.getId();
 
-            String tokenString = this.tokenProviderId + OPENSTACK_TOKEN_STRING_SEPARATOR + tokenValue +
-                    OPENSTACK_TOKEN_STRING_SEPARATOR +
-                    userId + OPENSTACK_TOKEN_STRING_SEPARATOR + userName + OPENSTACK_TOKEN_STRING_SEPARATOR + projectId;
-            
-            String signature = createSignature(tokenString);
-            return tokenString + OPENSTACK_TOKEN_STRING_SEPARATOR + signature;
+            Map<String, String> attributes = new HashMap<>();
+            attributes.put(FogbowConstants.PROVIDER_ID_KEY, this.tokenProviderId);
+            attributes.put(FogbowConstants.USER_ID_KEY, userId);
+            attributes.put(FogbowConstants.USER_NAME_KEY, userName);
+            attributes.put(PROJECT_ID_KEY, projectId);
+            attributes.put(FogbowConstants.TOKEN_VALUE_KEY, tokenValue);
+            return AttributeJoiner.join(attributes);
         } catch (Exception e) {
             LOGGER.error(Messages.Error.UNABLE_TO_GET_TOKEN_FROM_JSON, e);
             throw new UnexpectedException(Messages.Error.UNABLE_TO_GET_TOKEN_FROM_JSON, e);
         }
     }
 
-    protected String createSignature(String message) throws IOException, GeneralSecurityException, FogbowAsException {
-        return this.fogbowAuthenticationHolder.createSignature(message);
-    }
-    
     private String mountJsonBody(Map<String, String> credentials) {
         String projectName = credentials.get(PROJECT_NAME);
         String password = credentials.get(PASSWORD);

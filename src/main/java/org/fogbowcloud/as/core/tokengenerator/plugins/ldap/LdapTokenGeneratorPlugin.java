@@ -3,9 +3,9 @@ package org.fogbowcloud.as.core.tokengenerator.plugins.ldap;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.naming.AuthenticationException;
 import javax.naming.Context;
@@ -16,28 +16,22 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
+import org.fogbowcloud.as.common.constants.FogbowConstants;
+import org.fogbowcloud.as.common.util.RSAUtil;
+import org.fogbowcloud.as.common.exceptions.InvalidParameterException;
+import org.fogbowcloud.as.common.exceptions.InvalidUserCredentialsException;
+import org.fogbowcloud.as.common.exceptions.UnauthenticatedUserException;
+import org.fogbowcloud.as.common.exceptions.UnexpectedException;
+
 import org.fogbowcloud.as.core.PropertiesHolder;
 import org.fogbowcloud.as.core.constants.ConfigurationConstants;
 import org.fogbowcloud.as.core.constants.Messages;
-import org.fogbowcloud.as.core.exceptions.FatalErrorException;
-import org.fogbowcloud.as.core.exceptions.InvalidParameterException;
-import org.fogbowcloud.as.core.exceptions.InvalidUserCredentialsException;
-import org.fogbowcloud.as.core.exceptions.UnauthenticatedUserException;
-import org.fogbowcloud.as.core.exceptions.UnexpectedException;
-import org.fogbowcloud.as.common.util.FogbowAuthenticationHolder;
 import org.fogbowcloud.as.core.tokengenerator.TokenGeneratorPlugin;
-import org.fogbowcloud.as.common.util.PropertiesUtil;
-import org.fogbowcloud.as.common.util.RSAUtil;
+import org.fogbowcloud.as.core.tokengenerator.plugins.AttributeJoiner;
 
 public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
-	
-    private static final String PROP_LDAP_BASE = "ldap_base";
-    private static final String PROP_LDAP_URL = "ldap_identity_url";
-    private static final String PROP_LDAP_ENCRYPT_TYPE = "ldap_encrypt_type";
     public static final String CRED_USERNAME = "username";
     public static final String CRED_PASSWORD = "password";
-    public static final String TOKEN_VALUE_SEPARATOR = "!#!";
-    public static final int LDAP_TOKEN_NUMBER_OF_FIELDS = 5;
     private static final String ENCRYPT_TYPE = ":TYPE:";
     private static final String ENCRYPT_PASS = ":PASS:";
     private static final String PASSWORD_ENCRYPTED = "{" + ENCRYPT_TYPE + "}" + ENCRYPT_PASS;
@@ -45,17 +39,12 @@ public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private String ldapBase;
     private String ldapUrl;
     private String encryptType;
-	private FogbowAuthenticationHolder fogbowAuthenticationHolder;
 
-    public LdapTokenGeneratorPlugin(String confFilePath) throws FatalErrorException {
+    public LdapTokenGeneratorPlugin() {
         this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID);
-
-        this.fogbowAuthenticationHolder = FogbowAuthenticationHolder.getInstance();
-        
-        Properties properties = PropertiesUtil.readProperties(confFilePath);
-        this.ldapBase = properties.getProperty(PROP_LDAP_BASE);
-        this.ldapUrl = properties.getProperty(PROP_LDAP_URL);
-        this.encryptType = properties.getProperty(PROP_LDAP_ENCRYPT_TYPE);
+        this.ldapBase = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LDAP_BASE);
+        this.ldapUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LDAP_ENDPOINT);
+        this.encryptType = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LDAP_ENCRYPT_TYPE);
     }
 
     @Override
@@ -68,16 +57,11 @@ public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
         String name = null;
         name = ldapAuthenticate(userId, password);
 
-        String expirationTime = this.fogbowAuthenticationHolder.generateExpirationTime();
-
-        try {
-            String tokenValue = this.tokenProviderId + TOKEN_VALUE_SEPARATOR + userId + TOKEN_VALUE_SEPARATOR +
-                    name + TOKEN_VALUE_SEPARATOR + expirationTime;
-            String signature = this.fogbowAuthenticationHolder.createSignature(tokenValue);
-            return tokenValue + TOKEN_VALUE_SEPARATOR + signature;
-        } catch (Exception e) {
-            throw new UnexpectedException(Messages.Exception.UNABLE_TO_SIGN_LDAP_TOKEN, e);
-        }
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put(FogbowConstants.PROVIDER_ID_KEY, this.tokenProviderId);
+        attributes.put(FogbowConstants.USER_ID_KEY, userId);
+        attributes.put(FogbowConstants.USER_NAME_KEY, name);
+        return AttributeJoiner.join(attributes);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -131,7 +115,7 @@ public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
             return name;
 
         } catch (AuthenticationException e0) {
-            throw new UnauthenticatedUserException(Messages.Exception.AUTHENTICATION_ERROR);
+            throw new UnauthenticatedUserException(org.fogbowcloud.as.common.constants.Messages.Exception.AUTHENTICATION_ERROR);
         } catch (NamingException e1) {
             throw new InvalidParameterException(Messages.Exception.LDAP_URL_MISSING, e1);
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e2) {
@@ -150,8 +134,7 @@ public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
         return null;
     }
 
-    private String encryptPassword(String password)
-            throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    private String encryptPassword(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         if (this.encryptType == null || this.encryptType.isEmpty()) {
             return password;
         }
@@ -168,5 +151,4 @@ public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
                 .replaceAll(ENCRYPT_TYPE, this.encryptType)
                 .replaceAll(ENCRYPT_PASS, hexString.toString());
     }
-
 }

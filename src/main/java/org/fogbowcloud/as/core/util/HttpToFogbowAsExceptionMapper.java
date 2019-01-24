@@ -2,11 +2,11 @@ package org.fogbowcloud.as.core.util;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpResponseException;
-import org.fogbowcloud.as.core.exceptions.*;
+import org.fogbowcloud.as.common.exceptions.*;
 
 public class HttpToFogbowAsExceptionMapper {
 
-    public static void map(HttpResponseException e) throws FogbowAsException, UnexpectedException {
+    public static void map(HttpResponseException e) throws FogbowException, UnexpectedException {
         switch (e.getStatusCode()) {
             case HttpStatus.SC_FORBIDDEN:
             case HttpStatus.SC_UNAUTHORIZED:

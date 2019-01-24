@@ -1,6 +1,6 @@
-package org.fogbowcloud.as.core.exceptions;
+package org.fogbowcloud.as.common.exceptions;
 
-import org.fogbowcloud.as.core.constants.Messages;
+import org.fogbowcloud.as.common.constants.Messages;
 
 public class FatalErrorException extends RuntimeException {
     private static final long serialVersionUID = 1L;

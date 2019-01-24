@@ -20,9 +20,9 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
-import org.fogbowcloud.as.core.constants.Messages;
-import org.fogbowcloud.as.core.exceptions.FatalErrorException;
-import org.fogbowcloud.as.core.exceptions.UnavailableProviderException;
+import org.fogbowcloud.as.common.constants.Messages;
+import org.fogbowcloud.as.common.exceptions.FatalErrorException;
+import org.fogbowcloud.as.common.exceptions.UnavailableProviderException;
 import org.fogbowcloud.as.common.util.GsonHolder;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -32,8 +32,8 @@ public class HttpRequestClientUtil {
 
     private HttpClient client;
 
-    public HttpRequestClientUtil() throws FatalErrorException {
-        this.client = HttpRequestUtil.createHttpClient();
+    public HttpRequestClientUtil(Integer timeout) throws FatalErrorException {
+        this.client = HttpRequestUtil.createHttpClient(timeout);
     }
 
     public HttpRequestClientUtil(HttpClient httpClient) {

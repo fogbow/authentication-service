@@ -94,12 +94,11 @@ public class RSAUtil {
         return sign.verify(Base64.decode(signature.getBytes("UTF-8")));
     }
 
-    public static String encrypt(String rawText, PublicKey publicKey)
+    public static String encrypt(String rawText, Key key)
             throws IOException, GeneralSecurityException {
         Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-        return new String(
-                org.bouncycastle.util.encoders.Base64.encode(
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        return new String(org.bouncycastle.util.encoders.Base64.encode(
                         cipher.doFinal(rawText.getBytes("UTF-8"))));
     }
 
@@ -162,10 +161,10 @@ public class RSAUtil {
         return key64;
     }
 
-    public static String decrypt(String cipherText, PrivateKey privateKey)
+    public static String decrypt(String cipherText, Key key)
             throws IOException, GeneralSecurityException {
         Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+        cipher.init(Cipher.DECRYPT_MODE, key);
         return new String(
                 cipher.doFinal(org.bouncycastle.util.encoders.Base64.decode(cipherText)), "UTF-8");
     }

@@ -1,7 +1,7 @@
 package org.fogbowcloud.as.core.util.cloud;
 
 import org.apache.http.client.utils.URIBuilder;
-import org.fogbowcloud.as.core.exceptions.InvalidParameterException;
+import org.fogbowcloud.as.common.exceptions.InvalidParameterException;
 
 public abstract class CloudStackRequest {
     private URIBuilder uriBuilder;
@@ -18,7 +18,7 @@ public abstract class CloudStackRequest {
         }
     }
 
-    public URIBuilder getUriBuilder() throws InvalidParameterException {
+    public URIBuilder getUriBuilder() {
         return this.uriBuilder;
     }
 

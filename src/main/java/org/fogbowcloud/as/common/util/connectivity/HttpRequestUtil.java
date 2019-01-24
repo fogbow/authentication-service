@@ -6,11 +6,7 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.log4j.Logger;
-import org.fogbowcloud.as.core.PropertiesHolder;
-import org.fogbowcloud.as.core.constants.ConfigurationConstants;
-import org.fogbowcloud.as.core.constants.DefaultConfigurationConstants;
-import org.fogbowcloud.as.core.constants.Messages;
-import org.fogbowcloud.as.core.exceptions.FatalErrorException;
+import org.fogbowcloud.as.common.exceptions.FatalErrorException;
 
 public class HttpRequestUtil {
     private static final Logger LOGGER = Logger.getLogger(HttpRequestUtil.class);
@@ -21,20 +17,8 @@ public class HttpRequestUtil {
     public static final String X_AUTH_TOKEN_KEY = "X-Auth-Token";
     private static Integer timeoutHttpRequest;
 
-    private static void init() throws FatalErrorException {
-        try {
-            String timeoutRequestStr =
-                    PropertiesHolder.getInstance().getProperty(ConfigurationConstants.HTTP_REQUEST_TIMEOUT);
-            timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
-        } catch (NullPointerException | NumberFormatException e) {
-            timeoutHttpRequest = Integer.valueOf(DefaultConfigurationConstants.HTTP_REQUEST_TIMEOUT);
-        } catch (Exception e) {
-            throw new FatalErrorException(Messages.Fatal.UNABLE_TO_INITIALIZE_HTTP_REQUEST_UTIL, e);
-        }
-    }
-
-    public static CloseableHttpClient createHttpClient() throws FatalErrorException {
-        return createHttpClient(null, null, null);
+    public static CloseableHttpClient createHttpClient(Integer timeout) throws FatalErrorException {
+        return createHttpClient(timeout, null, null);
     }
 
     public static CloseableHttpClient createHttpClient(SSLConnectionSocketFactory sslsf) throws FatalErrorException {
@@ -46,10 +30,8 @@ public class HttpRequestUtil {
     }
 
     public static CloseableHttpClient createHttpClient(Integer timeout, SSLConnectionSocketFactory sslsf,
-                                                       HttpClientConnectionManager connManager) throws FatalErrorException {
-        if (timeoutHttpRequest == null) {
-            init(); // Set to default timeout.
-        }
+                                               HttpClientConnectionManager connManager) throws FatalErrorException {
+
         HttpClientBuilder builder = HttpClientBuilder.create();
         setDefaultResquestConfig(timeout, builder);
         setSSLConnection(sslsf, builder);

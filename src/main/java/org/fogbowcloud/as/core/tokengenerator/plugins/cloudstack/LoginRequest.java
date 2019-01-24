@@ -1,6 +1,6 @@
 package org.fogbowcloud.as.core.tokengenerator.plugins.cloudstack;
 
-import org.fogbowcloud.as.core.exceptions.InvalidParameterException;
+import org.fogbowcloud.as.common.exceptions.InvalidParameterException;
 import org.fogbowcloud.as.core.util.cloud.CloudStackRequest;
 
 public class LoginRequest extends CloudStackRequest {
@@ -51,6 +51,5 @@ public class LoginRequest extends CloudStackRequest {
             this.cloudStackUrl = cloudStackUrl;
             return new LoginRequest(this);
         }
-
     }
 }

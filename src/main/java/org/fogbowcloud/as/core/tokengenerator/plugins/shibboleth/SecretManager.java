@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
-import org.fogbowcloud.as.common.util.FogbowAuthenticationHolder;
 
 public class SecretManager {
-	
 	private static final Logger LOGGER = Logger.getLogger(SecretManager.class);
-	
+	public static final long EXPIRATION_INTERVAL = TimeUnit.DAYS.toMillis(1); // One day
+
 	protected static final int MAXIMUM_MAP_SIZE = 100;
 	private Map<String, Long> secrets;
 	private Date rasStartingTime;
@@ -30,7 +30,7 @@ public class SecretManager {
 			return false;
 		}
 		
-		Long validity = getNow() + FogbowAuthenticationHolder.EXPIRATION_INTERVAL;
+		Long validity = getNow() + EXPIRATION_INTERVAL;
 		this.secrets.put(secret, validity);
 		return true;
 	}
@@ -83,5 +83,4 @@ public class SecretManager {
 	protected Map<String, Long> getSecrets() {
 		return secrets;
 	}
-	
 }

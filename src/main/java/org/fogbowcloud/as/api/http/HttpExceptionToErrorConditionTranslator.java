@@ -1,6 +1,8 @@
 package org.fogbowcloud.as.api.http;
 
-import org.fogbowcloud.as.core.exceptions.*;
+import org.fogbowcloud.as.common.exceptions.InvalidParameterException;
+import org.fogbowcloud.as.common.exceptions.UnauthenticatedUserException;
+import org.fogbowcloud.as.common.exceptions.UnexpectedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

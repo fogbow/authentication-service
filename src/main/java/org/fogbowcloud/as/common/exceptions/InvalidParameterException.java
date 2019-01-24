@@ -1,8 +1,8 @@
-package org.fogbowcloud.as.core.exceptions;
+package org.fogbowcloud.as.common.exceptions;
 
-import org.fogbowcloud.as.core.constants.Messages;
+import org.fogbowcloud.as.common.constants.Messages;
 
-public class InvalidParameterException extends FogbowAsException {
+public class InvalidParameterException extends FogbowException {
     private static final long serialVersionUID = 1L;
 
     public InvalidParameterException() {

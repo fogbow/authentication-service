@@ -1,8 +1,8 @@
 package org.fogbowcloud.as.common.util;
 
 import org.apache.log4j.Logger;
-import org.fogbowcloud.as.core.constants.Messages;
-import org.fogbowcloud.as.core.exceptions.FatalErrorException;
+import org.fogbowcloud.as.common.constants.Messages;
+import org.fogbowcloud.as.common.exceptions.FatalErrorException;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
