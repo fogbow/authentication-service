@@ -1,13 +1,13 @@
 package cloud.fogbow.as;
 
-import cloud.fogbow.as.common.exceptions.FatalErrorException;
+import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.as.core.ApplicationFacade;
 import cloud.fogbow.as.core.PropertiesHolder;
 import cloud.fogbow.as.core.TokenGeneratorPluginInstantiator;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import org.apache.log4j.Logger;
-import cloud.fogbow.as.common.constants.FogbowConstants;
-import cloud.fogbow.as.common.util.ServiceAsymmetricKeysHolder;
+import cloud.fogbow.common.constants.FogbowConstants;
+import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import cloud.fogbow.as.core.constants.ConfigurationConstants;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

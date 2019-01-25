@@ -1,11 +1,11 @@
 package cloud.fogbow.as.core.tokengenerator.plugins.openstack.v3;
 
-import cloud.fogbow.as.common.util.GsonHolder;
-import cloud.fogbow.as.common.util.JsonSerializable;
+import cloud.fogbow.common.util.GsonHolder;
+import cloud.fogbow.common.util.JsonSerializable;
 import com.google.gson.annotations.SerializedName;
 import java.util.Arrays;
 
-import static cloud.fogbow.as.common.constants.OpenstackRestApiConstants.Identity.*;
+import static cloud.fogbow.common.constants.OpenstackRestApiConstants.Identity.*;
 
 /**
  * 

@@ -1,6 +1,6 @@
 package cloud.fogbow.as.core.tokengenerator.plugins.opennebula;
 
-import cloud.fogbow.as.common.exceptions.UnexpectedException;
+import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.as.core.PropertiesHolder;
 import cloud.fogbow.as.core.constants.ConfigurationConstants;
 import cloud.fogbow.as.core.constants.Messages;

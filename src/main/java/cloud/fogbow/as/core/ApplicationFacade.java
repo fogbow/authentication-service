@@ -1,14 +1,14 @@
 package cloud.fogbow.as.core;
 
-import cloud.fogbow.as.common.util.PropertiesUtil;
-import cloud.fogbow.as.common.util.RSAUtil;
+import cloud.fogbow.common.util.PropertiesUtil;
+import cloud.fogbow.common.util.RSAUtil;
 import cloud.fogbow.as.core.constants.ConfigurationConstants;
 import cloud.fogbow.as.core.constants.DefaultConfigurationConstants;
 import cloud.fogbow.as.core.constants.SystemConstants;
 import org.apache.log4j.Logger;
-import cloud.fogbow.as.common.exceptions.FogbowException;
-import cloud.fogbow.as.common.exceptions.UnexpectedException;
-import cloud.fogbow.as.common.util.ServiceAsymmetricKeysHolder;
+import cloud.fogbow.common.exceptions.FogbowException;
+import cloud.fogbow.common.exceptions.UnexpectedException;
+import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPluginDecorator;
 

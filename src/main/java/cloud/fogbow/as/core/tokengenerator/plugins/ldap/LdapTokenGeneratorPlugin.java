@@ -16,14 +16,14 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import cloud.fogbow.as.common.constants.Messages;
-import cloud.fogbow.as.common.exceptions.InvalidParameterException;
-import cloud.fogbow.as.common.exceptions.InvalidUserCredentialsException;
-import cloud.fogbow.as.common.util.RSAUtil;
+import cloud.fogbow.common.constants.Messages;
+import cloud.fogbow.common.exceptions.InvalidParameterException;
+import cloud.fogbow.common.exceptions.InvalidUserCredentialsException;
+import cloud.fogbow.common.util.RSAUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
-import cloud.fogbow.as.common.constants.FogbowConstants;
-import cloud.fogbow.as.common.exceptions.UnauthenticatedUserException;
-import cloud.fogbow.as.common.exceptions.UnexpectedException;
+import cloud.fogbow.common.constants.FogbowConstants;
+import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
+import cloud.fogbow.common.exceptions.UnexpectedException;
 
 import cloud.fogbow.as.core.constants.ConfigurationConstants;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;

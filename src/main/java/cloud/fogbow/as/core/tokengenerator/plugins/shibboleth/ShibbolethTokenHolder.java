@@ -1,7 +1,7 @@
 package cloud.fogbow.as.core.tokengenerator.plugins.shibboleth;
 
 import org.apache.commons.lang.StringUtils;
-import cloud.fogbow.as.common.constants.FogbowConstants;
+import cloud.fogbow.common.constants.FogbowConstants;
 
 public class ShibbolethTokenHolder {
 	private static final int PARAMETERS_SIZE_TOKEN_VALUE = 7;

@@ -1,6 +1,6 @@
 package cloud.fogbow.as.core;
 
-import cloud.fogbow.as.common.util.PluginFactory;
+import cloud.fogbow.common.util.PluginFactory;
 import cloud.fogbow.as.core.constants.ConfigurationConstants;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 

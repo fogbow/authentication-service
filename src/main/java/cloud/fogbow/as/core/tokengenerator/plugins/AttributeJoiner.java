@@ -1,7 +1,7 @@
 package cloud.fogbow.as.core.tokengenerator.plugins;
 
 import org.apache.commons.lang.StringUtils;
-import cloud.fogbow.as.common.constants.FogbowConstants;
+import cloud.fogbow.common.constants.FogbowConstants;
 
 import java.util.ArrayList;
 import java.util.Map;

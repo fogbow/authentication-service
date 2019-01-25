@@ -1,6 +1,6 @@
 package cloud.fogbow.as.api.http;
 
-import cloud.fogbow.as.common.exceptions.UnexpectedException;
+import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.as.core.ApplicationFacade;
 import cloud.fogbow.as.core.constants.ApiDocumentation;
 import cloud.fogbow.as.core.constants.Messages;
@@ -29,7 +29,7 @@ public class PublicKey {
             return new ResponseEntity<>(publicKey, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.info(String.format(
-                    cloud.fogbow.as.common.constants.Messages.Exception.GENERIC_EXCEPTION, e.getMessage()), e);
+                    cloud.fogbow.common.constants.Messages.Exception.GENERIC_EXCEPTION, e.getMessage()), e);
             throw e;
         }
     }

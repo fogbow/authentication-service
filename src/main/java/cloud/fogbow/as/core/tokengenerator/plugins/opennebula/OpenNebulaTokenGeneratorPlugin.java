@@ -1,10 +1,10 @@
 package cloud.fogbow.as.core.tokengenerator.plugins.opennebula;
 
-import cloud.fogbow.as.common.constants.Messages;
-import cloud.fogbow.as.common.exceptions.*;
+import cloud.fogbow.common.constants.Messages;
+import cloud.fogbow.common.exceptions.*;
 import cloud.fogbow.as.core.PropertiesHolder;
 import org.apache.log4j.Logger;
-import cloud.fogbow.as.common.constants.FogbowConstants;
+import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.as.core.constants.ConfigurationConstants;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import cloud.fogbow.as.core.tokengenerator.plugins.AttributeJoiner;

@@ -1,6 +1,6 @@
 package cloud.fogbow.as.core.util.cloud;
 
-import cloud.fogbow.as.common.exceptions.InvalidParameterException;
+import cloud.fogbow.common.exceptions.InvalidParameterException;
 import cloud.fogbow.as.core.constants.Messages;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.log4j.Logger;

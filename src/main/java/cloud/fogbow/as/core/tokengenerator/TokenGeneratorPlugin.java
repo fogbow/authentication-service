@@ -1,7 +1,7 @@
 package cloud.fogbow.as.core.tokengenerator;
 
-import cloud.fogbow.as.common.exceptions.FogbowException;
-import cloud.fogbow.as.common.exceptions.UnexpectedException;
+import cloud.fogbow.common.exceptions.FogbowException;
+import cloud.fogbow.common.exceptions.UnexpectedException;
 
 import java.util.Map;
 

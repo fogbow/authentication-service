@@ -1,11 +1,11 @@
 package cloud.fogbow.as.core.tokengenerator.plugins.cloudstack;
 
-import cloud.fogbow.as.common.util.GsonHolder;
+import cloud.fogbow.common.util.GsonHolder;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import static cloud.fogbow.as.common.constants.CloudStackRestApiConstants.Identity.*;
+import static cloud.fogbow.common.constants.CloudStackRestApiConstants.Identity.*;
 
 /**
  * Documentation: https://cloudstack.apache.org/api/apidocs-4.9/apis/listAccounts.html

@@ -12,12 +12,12 @@
     </repositories>
 
     <groupId>fogbow</groupId>
-    <artifactId>fogbow-as</artifactId>
+    <artifactId>as</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>fogbow-as</name>
-    <description>Fogbow AS</description>
+    <name>as</name>
+    <description>Fogbow Authentication Service</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -34,6 +34,12 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>fogbow</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>

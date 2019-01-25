@@ -1,13 +1,13 @@
 package cloud.fogbow.as.core.tokengenerator;
 
-import cloud.fogbow.as.common.exceptions.FatalErrorException;
-import cloud.fogbow.as.common.exceptions.FogbowException;
-import cloud.fogbow.as.common.exceptions.UnexpectedException;
-import cloud.fogbow.as.common.util.RSAUtil;
+import cloud.fogbow.common.exceptions.FatalErrorException;
+import cloud.fogbow.common.exceptions.FogbowException;
+import cloud.fogbow.common.exceptions.UnexpectedException;
+import cloud.fogbow.common.util.RSAUtil;
 import org.apache.log4j.Logger;
-import cloud.fogbow.as.common.constants.FogbowConstants;
-import cloud.fogbow.as.common.util.ServiceAsymmetricKeysHolder;
-import cloud.fogbow.as.common.util.TokenValueProtector;
+import cloud.fogbow.common.constants.FogbowConstants;
+import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
+import cloud.fogbow.common.util.TokenValueProtector;
 import cloud.fogbow.as.core.constants.Messages;
 
 import java.io.IOException;

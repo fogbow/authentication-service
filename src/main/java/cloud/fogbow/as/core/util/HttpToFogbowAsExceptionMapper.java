@@ -1,6 +1,6 @@
 package cloud.fogbow.as.core.util;
 
-import cloud.fogbow.as.common.exceptions.*;
+import cloud.fogbow.common.exceptions.*;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpResponseException;
 
