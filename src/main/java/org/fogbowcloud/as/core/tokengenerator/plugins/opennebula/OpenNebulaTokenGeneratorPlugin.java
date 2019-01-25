@@ -68,7 +68,7 @@ public class OpenNebulaTokenGeneratorPlugin implements TokenGeneratorPlugin {
             client = this.factory.createClient(openNebulaTokenValue);
             userPool = this.factory.createUserPool(client);
         } catch (UnexpectedException e) {
-            LOGGER.error(org.fogbowcloud.as.common.constants.Messages.Exception.UNEXPECTED_ERROR, e);
+            LOGGER.error(org.fogbowcloud.as.common.constants.Messages.Exception.UNEXPECTED, e);
             return false;
         }
 

@@ -3,6 +3,7 @@ package org.fogbowcloud.as.core;
 import org.apache.log4j.Logger;
 import org.fogbowcloud.as.common.exceptions.FogbowException;
 import org.fogbowcloud.as.common.exceptions.UnexpectedException;
+import org.fogbowcloud.as.common.util.RSAUtil;
 import org.fogbowcloud.as.common.util.ServiceAsymmetricKeysHolder;
 import org.fogbowcloud.as.common.util.PropertiesUtil;
 import org.fogbowcloud.as.core.constants.*;
@@ -52,7 +53,7 @@ public class ApplicationFacade {
     public String getPublicKey() throws UnexpectedException {
         // There is no need to authenticate the user or authorize this operation
         try {
-            return ServiceAsymmetricKeysHolder.getInstance().getPublicKey().toString();
+            return RSAUtil.savePublicKey(ServiceAsymmetricKeysHolder.getInstance().getPublicKey());
         } catch (IOException | GeneralSecurityException e) {
             throw new UnexpectedException(e.getMessage(), e);
         }
