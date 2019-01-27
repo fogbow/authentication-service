@@ -5,7 +5,7 @@ import cloud.fogbow.common.util.JsonSerializable;
 import com.google.gson.annotations.SerializedName;
 import java.util.Arrays;
 
-import static cloud.fogbow.common.constants.OpenstackRestApiConstants.Identity.*;
+import static cloud.fogbow.common.constants.OpenStackRestApiConstants.Identity.*;
 
 /**
  * 

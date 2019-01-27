@@ -3,6 +3,7 @@ package cloud.fogbow.as.core.tokengenerator.plugins.openstack.v3;
 import java.util.HashMap;
 import java.util.Map;
 
+import cloud.fogbow.common.constants.OpenStackRestApiConstants;
 import cloud.fogbow.common.util.connectivity.HttpRequestClientUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
 import org.apache.http.Header;
@@ -22,16 +23,8 @@ import cloud.fogbow.as.core.util.HttpToFogbowAsExceptionMapper;
 public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private static final Logger LOGGER = Logger.getLogger(OpenStackTokenGeneratorPlugin.class);
 
-    public static final String V3_TOKENS_ENDPOINT_PATH = "/auth/tokens";
-    public static final String X_SUBJECT_TOKEN = "X-Subject-Token";
-    public static final String PROJECT_NAME = "projectname";
-    public static final String PASSWORD = "password";
-    public static final String USER_NAME = "username";
-    public static final Object DOMAIN = "domain";
-    private static final String PROJECT_ID_KEY = "project";
-
-    private String v3TokensEndpoint;
     private HttpRequestClientUtil client;
+    private String v3TokensEndpoint;
     private String tokenProviderId;
 
     public OpenStackTokenGeneratorPlugin() throws FatalErrorException {
@@ -40,12 +33,18 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
 
         String identityUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.OPENSTACK_KEYSTONE_V3_ENDPOINT);
         if (isUrlValid(identityUrl)) {
-            this.v3TokensEndpoint = identityUrl + V3_TOKENS_ENDPOINT_PATH;
+            this.v3TokensEndpoint = identityUrl + OpenStackRestApiConstants.Identity.V3_TOKENS_ENDPOINT_PATH;
         }
         String timeoutRequestStr = PropertiesHolder.getInstance().getProperty(
                 ConfigurationConstants.HTTP_REQUEST_TIMEOUT, DefaultConfigurationConstants.HTTP_REQUEST_TIMEOUT);
         Integer timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
         this.client = new HttpRequestClientUtil(timeoutHttpRequest);
+    }
+
+    public OpenStackTokenGeneratorPlugin(HttpRequestClientUtil client, String v3TokensEndpoint, String tokenProviderId) {
+        this.client = client;
+        this.v3TokensEndpoint = v3TokensEndpoint;
+        this.tokenProviderId = tokenProviderId;
     }
 
     private boolean isUrlValid(String url) throws FatalErrorException {
@@ -76,7 +75,7 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
         String tokenValue = null;
         Header[] headers = response.getHeaders();
         for (Header header : headers) {
-            if (header.getName().equals(X_SUBJECT_TOKEN)) {
+            if (header.getName().equals(OpenStackRestApiConstants.X_SUBJECT_TOKEN)) {
                 tokenValue = header.getValue();
             }
         }
@@ -94,7 +93,7 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
             attributes.put(FogbowConstants.PROVIDER_ID_KEY, this.tokenProviderId);
             attributes.put(FogbowConstants.USER_ID_KEY, userId);
             attributes.put(FogbowConstants.USER_NAME_KEY, userName);
-            attributes.put(PROJECT_ID_KEY, projectId);
+            attributes.put(OpenStackRestApiConstants.Identity.PROJECT_KEY_JSON, projectId);
             attributes.put(FogbowConstants.TOKEN_VALUE_KEY, tokenValue);
             return AttributeJoiner.join(attributes);
         } catch (Exception e) {
@@ -104,10 +103,10 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     }
 
     private String mountJsonBody(Map<String, String> credentials) {
-        String projectName = credentials.get(PROJECT_NAME);
-        String password = credentials.get(PASSWORD);
-        String domain = credentials.get(DOMAIN);
-        String userName = credentials.get(USER_NAME);
+        String projectName = credentials.get(OpenStackRestApiConstants.Identity.PROJECT_NAME_KEY_JSON);
+        String password = credentials.get(OpenStackRestApiConstants.Identity.PASSWORD_KEY_JSON);
+        String domain = credentials.get(OpenStackRestApiConstants.Identity.DOMAIN_KEY_JSON);
+        String userName = credentials.get(OpenStackRestApiConstants.Identity.USER_NAME_KEY_JSON);
 
         CreateTokenRequest createTokenRequest = new CreateTokenRequest.Builder()
                 .projectName(projectName)

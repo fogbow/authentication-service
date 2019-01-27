@@ -12,11 +12,11 @@
     </repositories>
 
     <groupId>fogbow</groupId>
-    <artifactId>as</artifactId>
+    <artifactId>fogbow-as</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>as</name>
+    <name>fogbow-as</name>
     <description>Fogbow Authentication Service</description>
 
     <parent>

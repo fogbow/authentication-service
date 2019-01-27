@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cloud.fogbow.common.exceptions.InvalidParameterException;
+import cloud.fogbow.common.models.CloudToken;
 import cloud.fogbow.common.util.connectivity.HttpRequestClientUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
 import org.apache.http.client.HttpResponseException;
@@ -25,9 +26,9 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     public static final String PASSWORD = "password";
     public static final String DOMAIN = "domain";
 
-    private String tokenProviderId;
-    private String cloudStackUrl;
     private HttpRequestClientUtil client;
+    private String cloudStackUrl;
+    private String tokenProviderId;
 
     public CloudStackTokenGeneratorPlugin() {
         this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID);
@@ -36,6 +37,12 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
                 ConfigurationConstants.HTTP_REQUEST_TIMEOUT, DefaultConfigurationConstants.HTTP_REQUEST_TIMEOUT);
         Integer timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
         this.client = new HttpRequestClientUtil(timeoutHttpRequest);
+    }
+
+    public CloudStackTokenGeneratorPlugin(HttpRequestClientUtil client, String cloudStackUrl, String tokenProviderId) {
+        this.client = client;
+        this.cloudStackUrl = cloudStackUrl;
+        this.tokenProviderId = tokenProviderId;
     }
 
     @Override
@@ -82,7 +89,7 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
         String jsonResponse = null;
         try {
             // NOTE(pauloewerton): passing a placeholder as there is no need to pass a valid token in this request
-            jsonResponse = this.client.doGetRequest(request.getUriBuilder().toString(), "CloudStackTokenValue");
+            jsonResponse = this.client.doGetRequest(request.getUriBuilder().toString(), new CloudToken("provider", "id",  "value"));
         } catch (HttpResponseException e) {
             HttpToFogbowAsExceptionMapper.map(e);
         }

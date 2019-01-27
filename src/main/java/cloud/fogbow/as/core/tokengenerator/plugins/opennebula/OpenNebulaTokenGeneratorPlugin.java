@@ -30,6 +30,11 @@ public class OpenNebulaTokenGeneratorPlugin implements TokenGeneratorPlugin {
         this.factory = new OpenNebulaClientFactory();
     }
 
+    public OpenNebulaTokenGeneratorPlugin(OpenNebulaClientFactory factory, String provider) {
+        this.factory = factory;
+        this.provider = provider;
+    }
+
     /*
      * The userId is the same as the userName, because the userName is unique in Opennebula
      */

@@ -20,6 +20,10 @@ public class OpenNebulaClientFactory {
 		this.endpoint = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.OPENNEBULA_ENDPOINT);
 	}
 
+	public OpenNebulaClientFactory(String endpoint) {
+		this.endpoint = endpoint;
+	}
+
 	public Client createClient(String federationTokenValue) throws UnexpectedException {
 		try {
 			return new Client(federationTokenValue, this.endpoint);

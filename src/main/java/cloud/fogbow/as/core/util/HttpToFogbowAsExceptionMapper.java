@@ -6,7 +6,7 @@ import org.apache.http.client.HttpResponseException;
 
 public class HttpToFogbowAsExceptionMapper {
 
-    public static void map(HttpResponseException e) throws FogbowException, UnexpectedException {
+    public static void map(HttpResponseException e) throws FogbowException {
         switch (e.getStatusCode()) {
             case HttpStatus.SC_FORBIDDEN:
             case HttpStatus.SC_UNAUTHORIZED:
