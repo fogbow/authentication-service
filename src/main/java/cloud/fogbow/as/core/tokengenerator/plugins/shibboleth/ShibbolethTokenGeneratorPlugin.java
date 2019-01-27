@@ -44,7 +44,7 @@ public class ShibbolethTokenGeneratorPlugin implements TokenGeneratorPlugin {
 	private SecretManager secretManager;
 
 	public ShibbolethTokenGeneratorPlugin() {
-		this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID);
+		this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
         try {
 			this.asPrivateKey = ServiceAsymmetricKeysHolder.getInstance().getPrivateKey();
         } catch (IOException | GeneralSecurityException e) {
@@ -151,7 +151,7 @@ public class ShibbolethTokenGeneratorPlugin implements TokenGeneratorPlugin {
 	}
 	
     protected RSAPublicKey getShibbolethApplicationPublicKey() throws IOException, GeneralSecurityException {
-        String filename = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.SHIB_PUBLIC_FILE_PATH);
+        String filename = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.SHIB_PUBLIC_FILE_PATH_KEY);
         LOGGER.debug("Shibboleth application public key path: " + filename);
         String publicKeyPEM = RSAUtil.getKey(filename);
         LOGGER.debug("Shibboleth application Public key: " + publicKeyPEM);

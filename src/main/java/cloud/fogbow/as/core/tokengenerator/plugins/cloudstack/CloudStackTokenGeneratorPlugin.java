@@ -3,6 +3,7 @@ package cloud.fogbow.as.core.tokengenerator.plugins.cloudstack;
 import java.util.HashMap;
 import java.util.Map;
 
+import cloud.fogbow.common.constants.CloudStackConstants;
 import cloud.fogbow.common.exceptions.InvalidParameterException;
 import cloud.fogbow.common.models.CloudToken;
 import cloud.fogbow.common.util.connectivity.HttpRequestClientUtil;
@@ -22,19 +23,15 @@ import cloud.fogbow.as.core.util.HttpToFogbowAsExceptionMapper;
 public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private static final Logger LOGGER = Logger.getLogger(CloudStackTokenGeneratorPlugin.class);
 
-    public static final String USERNAME = "username";
-    public static final String PASSWORD = "password";
-    public static final String DOMAIN = "domain";
-
     private HttpRequestClientUtil client;
     private String cloudStackUrl;
     private String tokenProviderId;
 
     public CloudStackTokenGeneratorPlugin() {
-        this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID);
-        this.cloudStackUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.CLOUDSTACK_ENDPOINT);
+        this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
+        this.cloudStackUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.CLOUDSTACK_ENDPOINT_KEY);
         String timeoutRequestStr = PropertiesHolder.getInstance().getProperty(
-                ConfigurationConstants.HTTP_REQUEST_TIMEOUT, DefaultConfigurationConstants.HTTP_REQUEST_TIMEOUT);
+                ConfigurationConstants.HTTP_REQUEST_TIMEOUT_KEY, DefaultConfigurationConstants.HTTP_REQUEST_TIMEOUT);
         Integer timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
         this.client = new HttpRequestClientUtil(timeoutHttpRequest);
     }
@@ -47,8 +44,9 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
 
     @Override
     public String createTokenValue(Map<String, String> credentials) throws FogbowException, UnexpectedException {
-        if ((credentials == null) || (credentials.get(USERNAME) == null) || (credentials.get(PASSWORD) == null) ||
-                credentials.get(DOMAIN) == null) {
+        if ((credentials == null) || (credentials.get(CloudStackConstants.Identity.USERNAME_KEY_JSON) == null) ||
+                (credentials.get(CloudStackConstants.Identity.PASSWORD_KEY_JSON) == null) ||
+                credentials.get(CloudStackConstants.Identity.DOMAIN_KEY_JSON) == null) {
             throw new InvalidParameterException(Messages.Exception.NO_USER_CREDENTIALS);
         }
 
@@ -68,9 +66,9 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     }
 
     private LoginRequest createLoginRequest(Map<String, String> credentials) throws InvalidParameterException {
-        String userId = credentials.get(USERNAME);
-        String password = credentials.get(PASSWORD);
-        String domain = credentials.get(DOMAIN);
+        String userId = credentials.get(CloudStackConstants.Identity.USERNAME_KEY_JSON);
+        String password = credentials.get(CloudStackConstants.Identity.PASSWORD_KEY_JSON);
+        String domain = credentials.get(CloudStackConstants.Identity.DOMAIN_KEY_JSON);
 
         LoginRequest loginRequest = new LoginRequest.Builder()
                 .username(userId)
@@ -100,8 +98,8 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
             // NOTE(pauloewerton): considering only one account/user per request
             ListAccountsResponse.User user = response.getAccounts().get(0).getUsers().get(0);
 
-            // NOTE(pauloewerton): keeping a colon as separator as expected by the other cloudstack plugins
-            String tokenValue = user.getApiKey() + ":" + user.getSecretKey();
+            // NOTE(pauloewerton): keeping the token-value separator as expected by the other cloudstack plugins
+            String tokenValue = user.getApiKey() + CloudStackConstants.KEY_VALUE_SEPARATOR + user.getSecretKey();
             String userId = user.getId();
             String firstName = user.getFirstName();
             String lastName = user.getLastName();

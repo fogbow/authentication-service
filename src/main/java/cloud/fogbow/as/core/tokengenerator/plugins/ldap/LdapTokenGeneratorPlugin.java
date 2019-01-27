@@ -41,10 +41,10 @@ public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private String encryptType;
 
     public LdapTokenGeneratorPlugin() {
-        this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID);
-        this.ldapBase = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LDAP_BASE);
-        this.ldapUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LDAP_ENDPOINT);
-        this.encryptType = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LDAP_ENCRYPT_TYPE);
+        this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
+        this.ldapBase = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LDAP_BASE_KEY);
+        this.ldapUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LDAP_ENDPOINT_KEY);
+        this.encryptType = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LDAP_ENCRYPT_TYPE_KEY);
     }
 
     @Override

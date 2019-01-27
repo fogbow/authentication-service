@@ -3,7 +3,7 @@ package cloud.fogbow.as.core.tokengenerator.plugins.cloudstack;
 import cloud.fogbow.common.util.GsonHolder;
 import com.google.gson.annotations.SerializedName;
 
-import static cloud.fogbow.common.constants.CloudStackRestApiConstants.Identity.*;
+import static cloud.fogbow.common.constants.CloudStackConstants.Identity.*;
 
 /**
  * Documentation: https://cloudstack.apache.org/api/apidocs-4.9/apis/login.html

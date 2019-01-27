@@ -3,7 +3,7 @@ package cloud.fogbow.as.core.tokengenerator.plugins.openstack.v3;
 import cloud.fogbow.common.util.GsonHolder;
 import com.google.gson.annotations.SerializedName;
 
-import static cloud.fogbow.common.constants.OpenStackRestApiConstants.Identity.*;
+import static cloud.fogbow.common.constants.OpenStackConstants.Identity.*;
 
 /**
  * Documentation: https://developer.openstack.org/api-ref/identity/v3/

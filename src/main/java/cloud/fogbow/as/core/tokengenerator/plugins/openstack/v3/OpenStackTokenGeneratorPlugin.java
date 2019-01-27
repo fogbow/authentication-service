@@ -3,7 +3,7 @@ package cloud.fogbow.as.core.tokengenerator.plugins.openstack.v3;
 import java.util.HashMap;
 import java.util.Map;
 
-import cloud.fogbow.common.constants.OpenStackRestApiConstants;
+import cloud.fogbow.common.constants.OpenStackConstants;
 import cloud.fogbow.common.util.connectivity.HttpRequestClientUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
 import org.apache.http.Header;
@@ -28,15 +28,15 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private String tokenProviderId;
 
     public OpenStackTokenGeneratorPlugin() throws FatalErrorException {
-        this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID);
+        this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
 
 
-        String identityUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.OPENSTACK_KEYSTONE_V3_ENDPOINT);
+        String identityUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.OPENSTACK_KEYSTONE_V3_ENDPOINT_KEY);
         if (isUrlValid(identityUrl)) {
-            this.v3TokensEndpoint = identityUrl + OpenStackRestApiConstants.Identity.V3_TOKENS_ENDPOINT_PATH;
+            this.v3TokensEndpoint = identityUrl + OpenStackConstants.Identity.V3_TOKENS_ENDPOINT_PATH;
         }
         String timeoutRequestStr = PropertiesHolder.getInstance().getProperty(
-                ConfigurationConstants.HTTP_REQUEST_TIMEOUT, DefaultConfigurationConstants.HTTP_REQUEST_TIMEOUT);
+                ConfigurationConstants.HTTP_REQUEST_TIMEOUT_KEY, DefaultConfigurationConstants.HTTP_REQUEST_TIMEOUT);
         Integer timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
         this.client = new HttpRequestClientUtil(timeoutHttpRequest);
     }
@@ -75,7 +75,7 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
         String tokenValue = null;
         Header[] headers = response.getHeaders();
         for (Header header : headers) {
-            if (header.getName().equals(OpenStackRestApiConstants.X_SUBJECT_TOKEN)) {
+            if (header.getName().equals(OpenStackConstants.X_SUBJECT_TOKEN)) {
                 tokenValue = header.getValue();
             }
         }
@@ -93,7 +93,7 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
             attributes.put(FogbowConstants.PROVIDER_ID_KEY, this.tokenProviderId);
             attributes.put(FogbowConstants.USER_ID_KEY, userId);
             attributes.put(FogbowConstants.USER_NAME_KEY, userName);
-            attributes.put(OpenStackRestApiConstants.Identity.PROJECT_KEY_JSON, projectId);
+            attributes.put(OpenStackConstants.Identity.PROJECT_KEY_JSON, projectId);
             attributes.put(FogbowConstants.TOKEN_VALUE_KEY, tokenValue);
             return AttributeJoiner.join(attributes);
         } catch (Exception e) {
@@ -103,10 +103,10 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     }
 
     private String mountJsonBody(Map<String, String> credentials) {
-        String projectName = credentials.get(OpenStackRestApiConstants.Identity.PROJECT_NAME_KEY_JSON);
-        String password = credentials.get(OpenStackRestApiConstants.Identity.PASSWORD_KEY_JSON);
-        String domain = credentials.get(OpenStackRestApiConstants.Identity.DOMAIN_KEY_JSON);
-        String userName = credentials.get(OpenStackRestApiConstants.Identity.USER_NAME_KEY_JSON);
+        String projectName = credentials.get(OpenStackConstants.Identity.PROJECT_NAME_KEY_JSON);
+        String password = credentials.get(OpenStackConstants.Identity.PASSWORD_KEY_JSON);
+        String domain = credentials.get(OpenStackConstants.Identity.DOMAIN_KEY_JSON);
+        String userName = credentials.get(OpenStackConstants.Identity.USER_NAME_KEY_JSON);
 
         CreateTokenRequest createTokenRequest = new CreateTokenRequest.Builder()
                 .projectName(projectName)

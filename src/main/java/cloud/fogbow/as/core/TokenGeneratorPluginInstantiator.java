@@ -8,7 +8,7 @@ public class TokenGeneratorPluginInstantiator {
     private static PluginFactory pluginFactory = new PluginFactory();
 
     public static TokenGeneratorPlugin getTokenGeneratorPlugin() {
-        String className = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.TOKEN_GENERATOR_PLUGIN_CLASS);
+        String className = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.TOKEN_GENERATOR_PLUGIN_CLASS_KEY);
         return (TokenGeneratorPlugin) TokenGeneratorPluginInstantiator.pluginFactory.createPluginInstance(className);
     }
 }

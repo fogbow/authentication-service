@@ -27,7 +27,7 @@ public class ApplicationFacade {
     private TokenGeneratorPluginDecorator tokenGeneratorPluginDecorator;
 
     private ApplicationFacade() {
-        this.buildNumber = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.BUILD_NUMBER,
+        this.buildNumber = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.BUILD_NUMBER_KEY,
                 DefaultConfigurationConstants.BUILD_NUMBER);
     }
 
@@ -69,7 +69,7 @@ public class ApplicationFacade {
     // Used for testing
     protected void setBuildNumber(String fileName) {
         Properties properties = PropertiesUtil.readProperties(fileName);
-        this.buildNumber = properties.getProperty(ConfigurationConstants.BUILD_NUMBER,
+        this.buildNumber = properties.getProperty(ConfigurationConstants.BUILD_NUMBER_KEY,
                 DefaultConfigurationConstants.BUILD_NUMBER);
     }
 }

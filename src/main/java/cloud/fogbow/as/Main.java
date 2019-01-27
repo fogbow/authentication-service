@@ -21,7 +21,7 @@ public class Main implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         try {
             // Setting the name of the local member
-            String localMemberId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID);
+            String localMemberId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
 
             // Setting up asymmetric cryptography
             String publicKeyFilePath = PropertiesHolder.getInstance().getProperty(FogbowConstants.PUBLIC_KEY_FILE_PATH);

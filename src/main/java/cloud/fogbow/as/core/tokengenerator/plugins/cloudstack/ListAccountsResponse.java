@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import static cloud.fogbow.common.constants.CloudStackRestApiConstants.Identity.*;
+import static cloud.fogbow.common.constants.CloudStackConstants.Identity.*;
 
 /**
  * Documentation: https://cloudstack.apache.org/api/apidocs-4.9/apis/listAccounts.html

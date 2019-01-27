@@ -1,6 +1,7 @@
 package cloud.fogbow.as.core.tokengenerator.plugins.opennebula;
 
 import cloud.fogbow.common.constants.Messages;
+import cloud.fogbow.common.constants.OpenNebulaConstants;
 import cloud.fogbow.common.exceptions.*;
 import cloud.fogbow.as.core.PropertiesHolder;
 import org.apache.log4j.Logger;
@@ -18,15 +19,11 @@ import java.util.Map;
 public class OpenNebulaTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private static final Logger LOGGER = Logger.getLogger(OpenNebulaTokenGeneratorPlugin.class);
 
-    public static final String USERNAME = "username";
-    public static final String PASSWORD = "password";
-    public static final String OPENNEBULA_TOKEN_VALUE_SEPARATOR = ":";
-
     private OpenNebulaClientFactory factory;
     private String provider;
 
     public OpenNebulaTokenGeneratorPlugin() throws FatalErrorException {
-        this.provider = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID);
+        this.provider = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
         this.factory = new OpenNebulaClientFactory();
     }
 
@@ -40,14 +37,14 @@ public class OpenNebulaTokenGeneratorPlugin implements TokenGeneratorPlugin {
      */
     @Override
     public String createTokenValue(Map<String, String> userCredentials) throws FogbowException {
-        String username = userCredentials.get(USERNAME);
-        String password = userCredentials.get(PASSWORD);
+        String username = userCredentials.get(OpenNebulaConstants.Identity.USERNAME);
+        String password = userCredentials.get(OpenNebulaConstants.Identity.PASSWORD);
 
         if (userCredentials == null || username == null || password == null) {
             throw new InvalidParameterException(cloud.fogbow.as.core.constants.Messages.Exception.NO_USER_CREDENTIALS);
         }
 
-        String openNebulaTokenValue = username + OPENNEBULA_TOKEN_VALUE_SEPARATOR + password;
+        String openNebulaTokenValue = username + OpenNebulaConstants.TOKEN_VALUE_SEPARATOR + password;
         if (!isAuthenticated(openNebulaTokenValue)) {
             LOGGER.error(Messages.Exception.AUTHENTICATION_ERROR);
             throw new UnauthenticatedUserException();
