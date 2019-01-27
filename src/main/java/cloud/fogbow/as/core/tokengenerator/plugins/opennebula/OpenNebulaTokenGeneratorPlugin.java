@@ -37,8 +37,8 @@ public class OpenNebulaTokenGeneratorPlugin implements TokenGeneratorPlugin {
      */
     @Override
     public String createTokenValue(Map<String, String> userCredentials) throws FogbowException {
-        String username = userCredentials.get(OpenNebulaConstants.Identity.USERNAME);
-        String password = userCredentials.get(OpenNebulaConstants.Identity.PASSWORD);
+        String username = userCredentials.get(OpenNebulaConstants.USERNAME);
+        String password = userCredentials.get(OpenNebulaConstants.PASSWORD);
 
         if (userCredentials == null || username == null || password == null) {
             throw new InvalidParameterException(cloud.fogbow.as.core.constants.Messages.Exception.NO_USER_CREDENTIALS);
