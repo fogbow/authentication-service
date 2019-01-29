@@ -47,7 +47,7 @@ public class ApplicationFacade {
     }
 
     public String createTokenValue(Map<String, String> userCredentials, String publicKey)
-            throws UnexpectedException, FogbowException {
+            throws FogbowException {
         // There is no need to authenticate the user or authorize this operation
         return this.tokenGeneratorPluginDecorator.createTokenValue(userCredentials, publicKey);
     }

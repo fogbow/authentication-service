@@ -30,7 +30,6 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     public OpenStackTokenGeneratorPlugin() throws FatalErrorException {
         this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
 
-
         String identityUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.OPENSTACK_KEYSTONE_V3_ENDPOINT_KEY);
         if (isUrlValid(identityUrl)) {
             this.v3TokensEndpoint = identityUrl + OpenStackConstants.Identity.V3_TOKENS_ENDPOINT_PATH;

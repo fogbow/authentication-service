@@ -34,7 +34,7 @@ public class ShibbolethTokenGeneratorPlugin implements TokenGeneratorPlugin {
 	private static final String KEY_SIGNATURE_CREDENTIAL = "keySignature";
 	private static final String KEY_CREDENTIAL = "key";
 	// Shib-specific token constants
-	public static final String SHIB_TOKEN_STRING_SEPARATOR = "!#!";
+	public static final String SHIB_TOKEN_STRING_SEPARATOR = ":";
 	public static final String ASSERTION_URL_ATTR_SHIB_KEY = "assertionUrl";
 	public static final String SAML_ATTRIBUTES_ATTR_SHIB_KEY = "samlAttributes";
 
