@@ -17,7 +17,7 @@ public class OpenNebulaClientFactory {
     private String endpoint;
 
 	public OpenNebulaClientFactory() {
-		this.endpoint = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.OPENNEBULA_ENDPOINT_KEY);
+		this.endpoint = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.OPENNEBULA_URL_KEY);
 	}
 
 	public OpenNebulaClientFactory(String endpoint) {

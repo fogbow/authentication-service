@@ -29,7 +29,7 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
 
     public CloudStackTokenGeneratorPlugin() {
         this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
-        this.cloudStackUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.CLOUDSTACK_ENDPOINT_KEY);
+        this.cloudStackUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.CLOUDSTACK_URL_KEY);
         String timeoutRequestStr = PropertiesHolder.getInstance().getProperty(
                 ConfigurationConstants.HTTP_REQUEST_TIMEOUT_KEY, DefaultConfigurationConstants.HTTP_REQUEST_TIMEOUT);
         Integer timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
