@@ -1,6 +1,17 @@
 package cloud.fogbow.as.constants;
 
 public class ApiDocumentation {
+    public static class ApiInfo {
+        public static final String API_TITLE = "Fogbow Authentication Service API";
+        public static final String API_DESCRIPTION =
+                "This documentation introduces readers to Fogbow AS REST API, provides guidelines on\n" +
+                        "how to use it, and describes the available features accessible from it.";
+
+        public static final String CONTACT_NAME = "Fogbow";
+        public static final String CONTACT_URL = "https://www.fogbow.cloud";
+        public static final String CONTACT_EMAIL = "contact@fogbow.cloud";
+    }
+
     public static class Token {
         public static final String API = "Creates tokens for the users of the federation.";
         public static final String CREATE_OPERATION = "Creates a token.";
