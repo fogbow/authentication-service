@@ -2,9 +2,9 @@ package cloud.fogbow.as.core;
 
 import cloud.fogbow.common.util.PropertiesUtil;
 import cloud.fogbow.common.util.RSAUtil;
-import cloud.fogbow.as.core.constants.ConfigurationConstants;
-import cloud.fogbow.as.core.constants.DefaultConfigurationConstants;
-import cloud.fogbow.as.core.constants.SystemConstants;
+import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
+import cloud.fogbow.as.constants.ConfigurationPropertyDefaults;
+import cloud.fogbow.as.constants.SystemConstants;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
@@ -27,8 +27,8 @@ public class ApplicationFacade {
     private TokenGeneratorPluginDecorator tokenGeneratorPluginDecorator;
 
     private ApplicationFacade() {
-        this.buildNumber = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.BUILD_NUMBER_KEY,
-                DefaultConfigurationConstants.BUILD_NUMBER);
+        this.buildNumber = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.BUILD_NUMBER_KEY,
+                ConfigurationPropertyDefaults.BUILD_NUMBER);
     }
 
     public static ApplicationFacade getInstance() {
@@ -69,7 +69,7 @@ public class ApplicationFacade {
     // Used for testing
     protected void setBuildNumber(String fileName) {
         Properties properties = PropertiesUtil.readProperties(fileName);
-        this.buildNumber = properties.getProperty(ConfigurationConstants.BUILD_NUMBER_KEY,
-                DefaultConfigurationConstants.BUILD_NUMBER);
+        this.buildNumber = properties.getProperty(ConfigurationPropertyKeys.BUILD_NUMBER_KEY,
+                ConfigurationPropertyDefaults.BUILD_NUMBER);
     }
 }

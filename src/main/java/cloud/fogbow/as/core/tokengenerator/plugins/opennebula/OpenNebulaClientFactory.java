@@ -2,8 +2,8 @@ package cloud.fogbow.as.core.tokengenerator.plugins.opennebula;
 
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.as.core.PropertiesHolder;
-import cloud.fogbow.as.core.constants.ConfigurationConstants;
-import cloud.fogbow.as.core.constants.Messages;
+import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
+import cloud.fogbow.as.constants.Messages;
 import org.apache.log4j.Logger;
 import org.opennebula.client.*;
 import org.opennebula.client.group.GroupPool;
@@ -17,7 +17,7 @@ public class OpenNebulaClientFactory {
     private String endpoint;
 
 	public OpenNebulaClientFactory() {
-		this.endpoint = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.OPENNEBULA_URL_KEY);
+		this.endpoint = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.OPENNEBULA_URL_KEY);
 	}
 
 	public OpenNebulaClientFactory(String endpoint) {

@@ -8,7 +8,7 @@ import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
-import cloud.fogbow.as.core.constants.ConfigurationConstants;
+import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class Main implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         try {
             // Setting the name of the local member
-            String localMemberId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
+            String localMemberId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
 
             // Setting up asymmetric cryptography
             String publicKeyFilePath = PropertiesHolder.getInstance().getProperty(FogbowConstants.PUBLIC_KEY_FILE_PATH);

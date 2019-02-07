@@ -3,7 +3,7 @@ package cloud.fogbow.as.core;
 import cloud.fogbow.common.util.PropertiesUtil;
 import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.common.util.HomeDir;
-import cloud.fogbow.as.core.constants.SystemConstants;
+import cloud.fogbow.as.constants.SystemConstants;
 
 import java.util.ArrayList;
 import java.util.List;

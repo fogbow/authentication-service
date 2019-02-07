@@ -13,9 +13,9 @@ import org.apache.log4j.Logger;
 import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
-import cloud.fogbow.as.core.constants.ConfigurationConstants;
-import cloud.fogbow.as.core.constants.DefaultConfigurationConstants;
-import cloud.fogbow.as.core.constants.Messages;
+import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
+import cloud.fogbow.as.constants.ConfigurationPropertyDefaults;
+import cloud.fogbow.as.constants.Messages;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import cloud.fogbow.as.core.tokengenerator.plugins.AttributeJoiner;
 import cloud.fogbow.as.core.util.HttpToFogbowAsExceptionMapper;
@@ -28,10 +28,10 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private String tokenProviderId;
 
     public CloudStackTokenGeneratorPlugin() {
-        this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
-        this.cloudStackUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.CLOUDSTACK_URL_KEY);
+        this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
+        this.cloudStackUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.CLOUDSTACK_URL_KEY);
         String timeoutRequestStr = PropertiesHolder.getInstance().getProperty(
-                ConfigurationConstants.HTTP_REQUEST_TIMEOUT_KEY, DefaultConfigurationConstants.HTTP_REQUEST_TIMEOUT);
+                ConfigurationPropertyKeys.HTTP_REQUEST_TIMEOUT_KEY, ConfigurationPropertyDefaults.HTTP_REQUEST_TIMEOUT);
         Integer timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
         this.client = new HttpRequestClientUtil(timeoutHttpRequest);
     }

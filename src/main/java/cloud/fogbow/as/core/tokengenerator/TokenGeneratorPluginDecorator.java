@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import cloud.fogbow.common.util.TokenValueProtector;
-import cloud.fogbow.as.core.constants.Messages;
+import cloud.fogbow.as.constants.Messages;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

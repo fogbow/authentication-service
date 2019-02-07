@@ -1,4 +1,4 @@
-package cloud.fogbow.as.core.constants;
+package cloud.fogbow.as.constants;
 
 public class Messages {
 

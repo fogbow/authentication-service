@@ -25,7 +25,7 @@ import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 
-import cloud.fogbow.as.core.constants.ConfigurationConstants;
+import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import cloud.fogbow.as.core.tokengenerator.plugins.AttributeJoiner;
 
@@ -41,10 +41,10 @@ public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private String encryptType;
 
     public LdapTokenGeneratorPlugin() {
-        this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
-        this.ldapBase = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LDAP_BASE_KEY);
-        this.ldapUrl = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LDAP_ENDPOINT_KEY);
-        this.encryptType = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LDAP_ENCRYPT_TYPE_KEY);
+        this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
+        this.ldapBase = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_BASE_KEY);
+        this.ldapUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_ENDPOINT_KEY);
+        this.encryptType = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_ENCRYPT_TYPE_KEY);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
 
             if (dn == null || enm.hasMore()) {
                 // uid not found or not unique
-                throw new InvalidUserCredentialsException(cloud.fogbow.as.core.constants.Messages.Exception.UNABLE_TO_LOAD_LDAP_ACCOUNT);
+                throw new InvalidUserCredentialsException(cloud.fogbow.as.constants.Messages.Exception.UNABLE_TO_LOAD_LDAP_ACCOUNT);
             }
 
             // Bind with found DN and given password
@@ -117,7 +117,7 @@ public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
         } catch (AuthenticationException e0) {
             throw new UnauthenticatedUserException(Messages.Exception.AUTHENTICATION_ERROR);
         } catch (NamingException e1) {
-            throw new InvalidParameterException(cloud.fogbow.as.core.constants.Messages.Exception.LDAP_URL_MISSING, e1);
+            throw new InvalidParameterException(cloud.fogbow.as.constants.Messages.Exception.LDAP_URL_MISSING, e1);
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e2) {
             throw new UnexpectedException(e2.getMessage(), e2);
         }

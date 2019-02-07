@@ -1,4 +1,4 @@
-package cloud.fogbow.as.core.constants;
+package cloud.fogbow.as.constants;
 
 public class SystemConstants {
     public static final String API_VERSION_NUMBER = "1.0.0";

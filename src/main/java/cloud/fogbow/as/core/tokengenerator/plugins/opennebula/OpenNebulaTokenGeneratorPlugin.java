@@ -6,7 +6,7 @@ import cloud.fogbow.common.exceptions.*;
 import cloud.fogbow.as.core.PropertiesHolder;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.constants.FogbowConstants;
-import cloud.fogbow.as.core.constants.ConfigurationConstants;
+import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import cloud.fogbow.as.core.tokengenerator.plugins.AttributeJoiner;
 import org.opennebula.client.Client;
@@ -23,7 +23,7 @@ public class OpenNebulaTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private String provider;
 
     public OpenNebulaTokenGeneratorPlugin() throws FatalErrorException {
-        this.provider = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
+        this.provider = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
         this.factory = new OpenNebulaClientFactory();
     }
 
@@ -41,7 +41,7 @@ public class OpenNebulaTokenGeneratorPlugin implements TokenGeneratorPlugin {
         String password = userCredentials.get(OpenNebulaConstants.PASSWORD);
 
         if (userCredentials == null || username == null || password == null) {
-            throw new InvalidParameterException(cloud.fogbow.as.core.constants.Messages.Exception.NO_USER_CREDENTIALS);
+            throw new InvalidParameterException(cloud.fogbow.as.constants.Messages.Exception.NO_USER_CREDENTIALS);
         }
 
         String openNebulaTokenValue = username + OpenNebulaConstants.TOKEN_VALUE_SEPARATOR + password;

@@ -16,7 +16,7 @@ import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
-import cloud.fogbow.as.core.constants.ConfigurationConstants;
+import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import cloud.fogbow.as.core.tokengenerator.plugins.AttributeJoiner;
 
@@ -44,18 +44,18 @@ public class ShibbolethTokenGeneratorPlugin implements TokenGeneratorPlugin {
 	private SecretManager secretManager;
 
 	public ShibbolethTokenGeneratorPlugin() {
-		this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.LOCAL_MEMBER_ID_KEY);
+		this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
         try {
 			this.asPrivateKey = ServiceAsymmetricKeysHolder.getInstance().getPrivateKey();
         } catch (IOException | GeneralSecurityException e) {
             throw new FatalErrorException(
-            		String.format(cloud.fogbow.as.core.constants.Messages.Fatal.ERROR_READING_PRIVATE_KEY_FILE, e.getMessage()));
+            		String.format(cloud.fogbow.as.constants.Messages.Fatal.ERROR_READING_PRIVATE_KEY_FILE, e.getMessage()));
         }
 		try {
 			this.shibAppPublicKey = getShibbolethApplicationPublicKey();
 		} catch (IOException | GeneralSecurityException e) {
 			throw new FatalErrorException(
-					String.format(cloud.fogbow.as.core.constants.Messages.Fatal.ERROR_READING_PUBLIC_KEY_FILE, e.getMessage()));
+					String.format(cloud.fogbow.as.constants.Messages.Fatal.ERROR_READING_PUBLIC_KEY_FILE, e.getMessage()));
 		}
 		this.secretManager = new SecretManager();
 	}
@@ -151,7 +151,7 @@ public class ShibbolethTokenGeneratorPlugin implements TokenGeneratorPlugin {
 	}
 	
     protected RSAPublicKey getShibbolethApplicationPublicKey() throws IOException, GeneralSecurityException {
-        String filename = PropertiesHolder.getInstance().getProperty(ConfigurationConstants.SHIB_PUBLIC_FILE_PATH_KEY);
+        String filename = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.SHIB_PUBLIC_FILE_PATH_KEY);
         LOGGER.debug("Shibboleth application public key path: " + filename);
         String publicKeyPEM = RSAUtil.getKey(filename);
         LOGGER.debug("Shibboleth application Public key: " + publicKeyPEM);

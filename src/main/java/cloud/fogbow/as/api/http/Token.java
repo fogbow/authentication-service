@@ -7,7 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.log4j.Logger;
-import cloud.fogbow.as.core.constants.ApiDocumentation;
+import cloud.fogbow.as.constants.ApiDocumentation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,7 @@ public class Token {
             throws FogbowException {
 
         try {
-            LOGGER.info(String.format(cloud.fogbow.as.core.constants.Messages.Info.RECEIVING_CREATE_TOKEN_REQUEST, userCredentials.size()));
+            LOGGER.info(String.format(cloud.fogbow.as.constants.Messages.Info.RECEIVING_CREATE_TOKEN_REQUEST, userCredentials.size()));
             String tokenValue = ApplicationFacade.getInstance().createTokenValue(userCredentials, publicKey);
             return new ResponseEntity<String>(tokenValue, HttpStatus.CREATED);
         } catch (Exception e) {
