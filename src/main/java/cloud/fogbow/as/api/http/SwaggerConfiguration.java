@@ -15,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 public class SwaggerConfiguration {
 
-    public static final String BASE_PACKAGE = "org.fogbowcloud.as";
+    public static final String BASE_PACKAGE = "cloud.fogbow.as";
 
     public static final String API_TITLE = "Fogbow Authentication Service API";
     public static final String API_DESCRIPTION =
@@ -23,8 +23,8 @@ public class SwaggerConfiguration {
             "how to use it, and describes the available features accessible from it.";
 
     public static final String CONTACT_NAME = "Fogbow";
-    public static final String CONTACT_URL = "https://www.fogbowcloud.org";
-    public static final String CONTACT_EMAIL = "contact@fogbowcloud.org";
+    public static final String CONTACT_URL = "https://www.fogbow.cloud";
+    public static final String CONTACT_EMAIL = "contact@fogbow.cloud";
     public static final Contact CONTACT = new Contact(
         CONTACT_NAME,
         CONTACT_URL,
