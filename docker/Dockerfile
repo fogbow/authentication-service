@@ -19,7 +19,11 @@ ENV HOME /root
 # Define working directory.
 WORKDIR /root
 
-# Installing Manager
+# Installing Common
+RUN \
+  git clone https://github.com/fogbow/common.git && \
+  (cd common && git checkout $BRANCH && mvn install -Dmaven.test.skip=true)
+
 RUN \
   git clone https://github.com/fogbow/authentication-service.git && \
   (cd authentication-service && git checkout $BRANCH)
