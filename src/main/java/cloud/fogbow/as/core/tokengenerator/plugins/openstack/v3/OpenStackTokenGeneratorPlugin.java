@@ -60,7 +60,7 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
         String jsonBody = mountJsonBody(credentials);
 
         HashMap<String, String> body = GsonHolder.getInstance().fromJson(jsonBody, HashMap.class);
-        GenericRequestHttpResponse response = this.client.doGenericRequest("POST", this.v3TokensEndpoint, new HashMap<>(), body, null);
+        GenericRequestHttpResponse response = this.client.doGenericRequest("POST", this.v3TokensEndpoint, new HashMap<>(), body);
 
         String tokenString = getTokenFromJson(response);
         return tokenString;

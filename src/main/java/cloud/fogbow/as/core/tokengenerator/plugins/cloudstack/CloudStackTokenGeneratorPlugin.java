@@ -56,7 +56,7 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
         // NOTE(pauloewerton): since all cloudstack requests params are passed via url args, we do not need to
         // send a valid json body in the post request
         GenericRequestHttpResponse response = this.client.doGenericRequest("POST",
-                request.getUriBuilder().toString(), new HashMap<>(), new HashMap<>(), null);
+                request.getUriBuilder().toString(), new HashMap<>(), new HashMap<>());
 
         if (response.getHttpCode() > HttpStatus.SC_OK) {
             HttpResponseException exception = new HttpResponseException(response.getHttpCode(), response.getContent());
@@ -89,7 +89,7 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
                 .build(this.cloudStackUrl);
 
         GenericRequestHttpResponse response = this.client.doGenericRequest("GET",
-                request.getUriBuilder().toString(), new HashMap<>(), new HashMap<>(), null);
+                request.getUriBuilder().toString(), new HashMap<>(), new HashMap<>());
 
         if (response.getHttpCode() > HttpStatus.SC_OK) {
             HttpResponseException exception = new HttpResponseException(response.getHttpCode(), response.getContent());
