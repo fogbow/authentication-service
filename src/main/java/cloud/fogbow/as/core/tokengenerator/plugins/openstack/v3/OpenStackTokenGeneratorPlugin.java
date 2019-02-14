@@ -1,11 +1,16 @@
 package cloud.fogbow.as.core.tokengenerator.plugins.openstack.v3;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cloud.fogbow.common.constants.OpenStackConstants;
+import cloud.fogbow.common.util.GsonHolder;
+import cloud.fogbow.common.util.connectivity.GenericRequestHttpResponse;
 import cloud.fogbow.common.util.connectivity.HttpRequestClientUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
+import com.google.gson.reflect.TypeToken;
 import org.apache.http.Header;
 import org.apache.http.client.HttpResponseException;
 import org.apache.log4j.Logger;
@@ -59,23 +64,22 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
 
         String jsonBody = mountJsonBody(credentials);
 
-        HttpRequestClientUtil.Response response = null;
-        try {
-            response = this.client.doPostRequest(this.v3TokensEndpoint, jsonBody);
-        } catch (HttpResponseException e) {
-            HttpToFogbowAsExceptionMapper.map(e);
-        }
+        HashMap<String, String> body = GsonHolder.getInstance().fromJson(jsonBody, HashMap.class);
+        GenericRequestHttpResponse response = this.client.doGenericRequest("POST", this.v3TokensEndpoint, new HashMap<>(), body, null);
+
         String tokenString = getTokenFromJson(response);
         return tokenString;
     }
 
-    private String getTokenFromJson(HttpRequestClientUtil.Response response) throws UnexpectedException {
-
+    private String getTokenFromJson(GenericRequestHttpResponse response) throws UnexpectedException {
         String tokenValue = null;
-        Header[] headers = response.getHeaders();
-        for (Header header : headers) {
-            if (header.getName().equals(OpenStackConstants.X_SUBJECT_TOKEN)) {
-                tokenValue = header.getValue();
+        Map<String, List<String>> headers = response.getHeaders();
+        if (headers.get(OpenStackConstants.X_SUBJECT_TOKEN) != null) {
+            List<String> headerValues = headers.get(OpenStackConstants.X_SUBJECT_TOKEN);
+            if (!headerValues.isEmpty()) {
+                tokenValue = headerValues.get(0);
+            } else {
+                tokenValue = null;
             }
         }
 
