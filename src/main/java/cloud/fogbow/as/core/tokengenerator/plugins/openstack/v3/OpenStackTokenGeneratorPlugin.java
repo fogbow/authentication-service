@@ -1,6 +1,5 @@
 package cloud.fogbow.as.core.tokengenerator.plugins.openstack.v3;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +9,6 @@ import cloud.fogbow.common.util.GsonHolder;
 import cloud.fogbow.common.util.connectivity.GenericRequestHttpResponse;
 import cloud.fogbow.common.util.connectivity.HttpRequestClientUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
-import com.google.gson.reflect.TypeToken;
-import org.apache.http.Header;
-import org.apache.http.client.HttpResponseException;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.FatalErrorException;
@@ -23,7 +19,6 @@ import cloud.fogbow.as.constants.ConfigurationPropertyDefaults;
 import cloud.fogbow.as.constants.Messages;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import cloud.fogbow.as.core.tokengenerator.plugins.AttributeJoiner;
-import cloud.fogbow.as.core.util.HttpToFogbowAsExceptionMapper;
 
 public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private static final Logger LOGGER = Logger.getLogger(OpenStackTokenGeneratorPlugin.class);
@@ -42,7 +37,7 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
         String timeoutRequestStr = PropertiesHolder.getInstance().getProperty(
                 ConfigurationPropertyKeys.HTTP_REQUEST_TIMEOUT_KEY, ConfigurationPropertyDefaults.HTTP_REQUEST_TIMEOUT);
         Integer timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
-        this.client = new HttpRequestClientUtil(timeoutHttpRequest);
+        this.client = new HttpRequestClientUtil();
     }
 
     public OpenStackTokenGeneratorPlugin(HttpRequestClientUtil client, String v3TokensEndpoint, String tokenProviderId) {

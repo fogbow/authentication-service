@@ -5,7 +5,6 @@ import java.util.Map;
 
 import cloud.fogbow.common.constants.CloudStackConstants;
 import cloud.fogbow.common.exceptions.InvalidParameterException;
-import cloud.fogbow.common.models.CloudToken;
 import cloud.fogbow.common.util.connectivity.GenericRequestHttpResponse;
 import cloud.fogbow.common.util.connectivity.HttpRequestClientUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
@@ -35,7 +34,7 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
         String timeoutRequestStr = PropertiesHolder.getInstance().getProperty(
                 ConfigurationPropertyKeys.HTTP_REQUEST_TIMEOUT_KEY, ConfigurationPropertyDefaults.HTTP_REQUEST_TIMEOUT);
         Integer timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
-        this.client = new HttpRequestClientUtil(timeoutHttpRequest);
+        this.client = new HttpRequestClientUtil();
     }
 
     public CloudStackTokenGeneratorPlugin(HttpRequestClientUtil client, String cloudStackUrl, String tokenProviderId) {
