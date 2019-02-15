@@ -20,6 +20,7 @@ import cloud.fogbow.as.constants.Messages;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import cloud.fogbow.as.core.tokengenerator.plugins.AttributeJoiner;
 import cloud.fogbow.as.core.util.HttpToFogbowAsExceptionMapper;
+import org.springframework.http.HttpMethod;
 
 public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private static final Logger LOGGER = Logger.getLogger(CloudStackTokenGeneratorPlugin.class);
@@ -55,7 +56,7 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
 
         // NOTE(pauloewerton): since all cloudstack requests params are passed via url args, we do not need to
         // send a valid json body in the post request
-        GenericRequestHttpResponse response = this.client.doGenericRequest("POST",
+        GenericRequestHttpResponse response = this.client.doGenericRequest(HttpMethod.POST,
                 request.getUriBuilder().toString(), new HashMap<>(), new HashMap<>());
 
         if (response.getHttpCode() > HttpStatus.SC_OK) {
@@ -88,7 +89,7 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
                 .sessionKey(sessionKey)
                 .build(this.cloudStackUrl);
 
-        GenericRequestHttpResponse response = this.client.doGenericRequest("GET",
+        GenericRequestHttpResponse response = this.client.doGenericRequest(HttpMethod.GET,
                 request.getUriBuilder().toString(), new HashMap<>(), new HashMap<>());
 
         if (response.getHttpCode() > HttpStatus.SC_OK) {

@@ -9,6 +9,7 @@ import cloud.fogbow.common.util.GsonHolder;
 import cloud.fogbow.common.util.connectivity.GenericRequestHttpResponse;
 import cloud.fogbow.common.util.connectivity.HttpRequestClientUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
+import cloud.fogbow.common.util.connectivity.HttpRequestUtil;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.FatalErrorException;
@@ -19,6 +20,7 @@ import cloud.fogbow.as.constants.ConfigurationPropertyDefaults;
 import cloud.fogbow.as.constants.Messages;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import cloud.fogbow.as.core.tokengenerator.plugins.AttributeJoiner;
+import org.springframework.http.HttpMethod;
 
 public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private static final Logger LOGGER = Logger.getLogger(OpenStackTokenGeneratorPlugin.class);
@@ -60,7 +62,10 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
         String jsonBody = mountJsonBody(credentials);
 
         HashMap<String, String> body = GsonHolder.getInstance().fromJson(jsonBody, HashMap.class);
-        GenericRequestHttpResponse response = this.client.doGenericRequest("POST", this.v3TokensEndpoint, new HashMap<>(), body);
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put(HttpRequestUtil.CONTENT_TYPE_KEY, HttpRequestUtil.JSON_CONTENT_TYPE_KEY);
+        headers.put(HttpRequestUtil.ACCEPT_KEY, HttpRequestUtil.JSON_CONTENT_TYPE_KEY);
+        GenericRequestHttpResponse response = this.client.doGenericRequest(HttpMethod.POST, this.v3TokensEndpoint, headers, body);
 
         String tokenString = getTokenFromJson(response);
         return tokenString;
