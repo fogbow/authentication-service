@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cloud.fogbow.common.constants.CloudStackConstants;
+import cloud.fogbow.common.constants.HttpMethod;
 import cloud.fogbow.common.exceptions.InvalidParameterException;
-import cloud.fogbow.common.util.connectivity.GenericRequestHttpResponse;
+import cloud.fogbow.common.util.connectivity.HttpResponse;
 import cloud.fogbow.common.util.connectivity.HttpRequestClientUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
 import org.apache.http.HttpStatus;
@@ -20,7 +21,6 @@ import cloud.fogbow.as.constants.Messages;
 import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import cloud.fogbow.as.core.tokengenerator.plugins.AttributeJoiner;
 import cloud.fogbow.as.core.util.HttpToFogbowAsExceptionMapper;
-import org.springframework.http.HttpMethod;
 
 public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private static final Logger LOGGER = Logger.getLogger(CloudStackTokenGeneratorPlugin.class);
@@ -56,7 +56,7 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
 
         // NOTE(pauloewerton): since all cloudstack requests params are passed via url args, we do not need to
         // send a valid json body in the post request
-        GenericRequestHttpResponse response = this.client.doGenericRequest(HttpMethod.POST,
+        HttpResponse response = this.client.doGenericRequest(HttpMethod.POST,
                 request.getUriBuilder().toString(), new HashMap<>(), new HashMap<>());
 
         if (response.getHttpCode() > HttpStatus.SC_OK) {
@@ -89,7 +89,7 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
                 .sessionKey(sessionKey)
                 .build(this.cloudStackUrl);
 
-        GenericRequestHttpResponse response = this.client.doGenericRequest(HttpMethod.GET,
+        HttpResponse response = this.client.doGenericRequest(HttpMethod.GET,
                 request.getUriBuilder().toString(), new HashMap<>(), new HashMap<>());
 
         if (response.getHttpCode() > HttpStatus.SC_OK) {
