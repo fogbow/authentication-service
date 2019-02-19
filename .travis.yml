@@ -1,7 +1,7 @@
 language: java
 jdk:
 - oraclejdk8
-- openjdk8
+#- openjdk8
 
 cache:
   directories:
@@ -9,19 +9,18 @@ cache:
   - $HOME/.m2
 
 before_install:
-  - sudo add-apt-repository ppa:deadsnakes/ppa
+  - sudo add-apt-repository ppa:deadsnakes/ppa -y
   - sudo apt-get update
-  - sudo apt-get install python2.7
-  - pwd
+  - sudo apt-get install python2.7 -y
   - cd ..
   - git clone https://github.com/fogbow/quality-assurance.git
 
 install:
-  - pwd
-  - python2 ../quality-assurance/scripts/quality-assurance.py src/main/resources/dependencies.properties
+  - cd $TRAVIS_BUILD_DIR
+  - python2 ../quality-assurance/scripts/install-dependencies.properities.py src/main/resources/dependencies.properties
 
 script:
-  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 notifications:
   slack: fogbow:STADNJdZ8M5dszVw545vNXbW
