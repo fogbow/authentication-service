@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cloud.fogbow.common.constants.CloudStackConstants;
+import cloud.fogbow.common.constants.HttpMethod;
 import cloud.fogbow.common.exceptions.InvalidParameterException;
-import cloud.fogbow.common.models.CloudToken;
+import cloud.fogbow.common.util.connectivity.HttpResponse;
 import cloud.fogbow.common.util.connectivity.HttpRequestClientUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpResponseException;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.constants.FogbowConstants;
@@ -33,7 +35,7 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
         String timeoutRequestStr = PropertiesHolder.getInstance().getProperty(
                 ConfigurationPropertyKeys.HTTP_REQUEST_TIMEOUT_KEY, ConfigurationPropertyDefaults.HTTP_REQUEST_TIMEOUT);
         Integer timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
-        this.client = new HttpRequestClientUtil(timeoutHttpRequest);
+        this.client = new HttpRequestClientUtil();
     }
 
     public CloudStackTokenGeneratorPlugin(HttpRequestClientUtil client, String cloudStackUrl, String tokenProviderId) {
@@ -51,18 +53,21 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
         }
 
         LoginRequest request = createLoginRequest(credentials);
-        HttpRequestClientUtil.Response jsonResponse = null;
-        try {
-            // NOTE(pauloewerton): since all cloudstack requests params are passed via url args, we do not need to
-            // send a valid json body in the post request
-            jsonResponse = this.client.doPostRequest(request.getUriBuilder().toString(), "data");
-        } catch (HttpResponseException e) {
-            HttpToFogbowAsExceptionMapper.map(e);
-        }
 
-        LoginResponse response = LoginResponse.fromJson(jsonResponse.getContent());
-        String tokenValue = getTokenValue(response.getSessionKey());
-        return tokenValue;
+        // NOTE(pauloewerton): since all cloudstack requests params are passed via url args, we do not need to
+        // send a valid json body in the post request
+        HttpResponse response = this.client.doGenericRequest(HttpMethod.POST,
+                request.getUriBuilder().toString(), new HashMap<>(), new HashMap<>());
+
+        if (response.getHttpCode() > HttpStatus.SC_OK) {
+            HttpResponseException exception = new HttpResponseException(response.getHttpCode(), response.getContent());
+            HttpToFogbowAsExceptionMapper.map(exception);
+            return null;
+        } else {
+            LoginResponse loginResponse = LoginResponse.fromJson(response.getContent());
+            String tokenValue = getTokenValue(loginResponse.getSessionKey());
+            return tokenValue;
+        }
     }
 
     private LoginRequest createLoginRequest(Map<String, String> credentials) throws InvalidParameterException {
@@ -84,36 +89,36 @@ public class CloudStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
                 .sessionKey(sessionKey)
                 .build(this.cloudStackUrl);
 
-        String jsonResponse = null;
-        try {
-            // NOTE(pauloewerton): passing a placeholder as there is no need to pass a valid token in this request
-            jsonResponse = this.client.doGetRequest(request.getUriBuilder().toString(), new CloudToken("provider", "id",  "value"));
-        } catch (HttpResponseException e) {
-            HttpToFogbowAsExceptionMapper.map(e);
-        }
+        HttpResponse response = this.client.doGenericRequest(HttpMethod.GET,
+                request.getUriBuilder().toString(), new HashMap<>(), new HashMap<>());
 
-        String tokenString = null;
-        try {
-            ListAccountsResponse response = ListAccountsResponse.fromJson(jsonResponse);
-            // NOTE(pauloewerton): considering only one account/user per request
-            ListAccountsResponse.User user = response.getAccounts().get(0).getUsers().get(0);
+        if (response.getHttpCode() > HttpStatus.SC_OK) {
+            HttpResponseException exception = new HttpResponseException(response.getHttpCode(), response.getContent());
+            HttpToFogbowAsExceptionMapper.map(exception);
+            return null;
+        } else {
+            try {
+                ListAccountsResponse listAccountsResponse = ListAccountsResponse.fromJson(response.getContent());
+                // NOTE(pauloewerton): considering only one account/user per request
+                ListAccountsResponse.User user = listAccountsResponse.getAccounts().get(0).getUsers().get(0);
 
-            // NOTE(pauloewerton): keeping the token-value separator as expected by the other cloudstack plugins
-            String tokenValue = user.getApiKey() + CloudStackConstants.KEY_VALUE_SEPARATOR + user.getSecretKey();
-            String userId = user.getId();
-            String firstName = user.getFirstName();
-            String lastName = user.getLastName();
-            String userName = (firstName != null && lastName != null) ? firstName + " " + lastName : user.getUsername();
+                // NOTE(pauloewerton): keeping the token-value separator as expected by the other cloudstack plugins
+                String tokenValue = user.getApiKey() + CloudStackConstants.KEY_VALUE_SEPARATOR + user.getSecretKey();
+                String userId = user.getId();
+                String firstName = user.getFirstName();
+                String lastName = user.getLastName();
+                String userName = (firstName != null && lastName != null) ? firstName + " " + lastName : user.getUsername();
 
-            Map<String, String> attributes = new HashMap<>();
-            attributes.put(FogbowConstants.PROVIDER_ID_KEY, this.tokenProviderId);
-            attributes.put(FogbowConstants.USER_ID_KEY, userId);
-            attributes.put(FogbowConstants.USER_NAME_KEY, userName);
-            attributes.put(FogbowConstants.TOKEN_VALUE_KEY, tokenValue);
-            return AttributeJoiner.join(attributes);
-        } catch (Exception e) {
-            LOGGER.error(Messages.Error.UNABLE_TO_GET_TOKEN_FROM_JSON, e);
-            throw new UnexpectedException(Messages.Error.UNABLE_TO_GET_TOKEN_FROM_JSON, e);
+                Map<String, String> attributes = new HashMap<>();
+                attributes.put(FogbowConstants.PROVIDER_ID_KEY, this.tokenProviderId);
+                attributes.put(FogbowConstants.USER_ID_KEY, userId);
+                attributes.put(FogbowConstants.USER_NAME_KEY, userName);
+                attributes.put(FogbowConstants.TOKEN_VALUE_KEY, tokenValue);
+                return AttributeJoiner.join(attributes);
+            } catch (Exception e) {
+                LOGGER.error(Messages.Error.UNABLE_TO_GET_TOKEN_FROM_JSON, e);
+                throw new UnexpectedException(Messages.Error.UNABLE_TO_GET_TOKEN_FROM_JSON, e);
+            }
         }
     }
 
