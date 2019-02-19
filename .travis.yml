@@ -1,0 +1,27 @@
+language: java
+jdk:
+- oraclejdk8
+- openjdk8
+
+cache:
+  directories:
+  - .autoconf
+  - $HOME/.m2
+
+before_install:
+  - sudo add-apt-repository ppa:deadsnakes/ppa
+  - sudo apt-get update
+  - sudo apt-get install python2.7
+  - pwd
+  - cd ..
+  - git clone https://github.com/fogbow/quality-assurance.git
+
+install:
+  - pwd
+  - python2 ../quality-assurance/scripts/quality-assurance.py src/main/resources/dependencies.properties
+
+script:
+  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+notifications:
+  slack: fogbow:STADNJdZ8M5dszVw545vNXbW
