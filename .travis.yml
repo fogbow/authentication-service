@@ -19,8 +19,5 @@ install:
   - cd $TRAVIS_BUILD_DIR
   - python2 ../quality-assurance/scripts/install-dependencies.properities.py src/main/resources/dependencies.properties
 
-script:
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-
 notifications:
   slack: fogbow:STADNJdZ8M5dszVw545vNXbW
