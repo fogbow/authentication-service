@@ -26,7 +26,7 @@ public class Token {
 
     @ApiOperation(value = ApiDocumentation.Token.CREATE_OPERATION)
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> createTokenValue(
+    public ResponseEntity<cloud.fogbow.as.core.models.Token> createTokenValue(
             @ApiParam(value = ApiDocumentation.Token.CREATE_REQUEST_BODY)
             @RequestBody HashMap<String, String> userCredentials,
             @ApiParam(value = ApiDocumentation.Token.PUBLIC_KEY)
@@ -36,7 +36,8 @@ public class Token {
         try {
             LOGGER.info(String.format(cloud.fogbow.as.constants.Messages.Info.RECEIVING_CREATE_TOKEN_REQUEST, userCredentials.size()));
             String tokenValue = ApplicationFacade.getInstance().createTokenValue(userCredentials, publicKey);
-            return new ResponseEntity<String>(tokenValue, HttpStatus.CREATED);
+            cloud.fogbow.as.core.models.Token token = new cloud.fogbow.as.core.models.Token(tokenValue);
+            return new ResponseEntity<>(token, HttpStatus.CREATED);
         } catch (Exception e) {
             LOGGER.info(String.format(
                     Messages.Exception.GENERIC_EXCEPTION, e.getMessage()), e);

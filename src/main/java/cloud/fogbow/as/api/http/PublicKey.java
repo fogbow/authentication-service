@@ -22,10 +22,11 @@ public class PublicKey {
 
     @ApiOperation(value = ApiDocumentation.PublicKey.GET_OPERATION)
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<String> getPublicKey() throws UnexpectedException {
+    public ResponseEntity<cloud.fogbow.as.core.models.PublicKey> getPublicKey() throws UnexpectedException {
         try {
             LOGGER.info(Messages.Info.RECEIVING_GET_PUBLIC_KEY_REQUEST);
-            String publicKey = ApplicationFacade.getInstance().getPublicKey();
+            String publicKeyValue = ApplicationFacade.getInstance().getPublicKey();
+            cloud.fogbow.as.core.models.PublicKey publicKey = new cloud.fogbow.as.core.models.PublicKey(publicKeyValue);
             return new ResponseEntity<>(publicKey, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.info(String.format(

@@ -25,10 +25,11 @@ public class Version {
 
     @ApiOperation(value = ApiDocumentation.Version.GET_OPERATION)
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<String> getVersion() {
+    public ResponseEntity<cloud.fogbow.as.core.models.Version> getVersion() {
 
         LOGGER.info(Messages.Info.RECEIVING_GET_VERSION_REQUEST);
         String versionNumber = ApplicationFacade.getInstance().getVersionNumber();
-        return new ResponseEntity<>(versionNumber, HttpStatus.OK);
+        cloud.fogbow.as.core.models.Version version = new cloud.fogbow.as.core.models.Version(versionNumber);
+        return new ResponseEntity<>(version, HttpStatus.OK);
     }
 }
