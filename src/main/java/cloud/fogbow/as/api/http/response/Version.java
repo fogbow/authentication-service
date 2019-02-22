@@ -1,4 +1,4 @@
-package cloud.fogbow.as.core.models;
+package cloud.fogbow.as.api.http.response;
 
 public class Version {
     private String version;
