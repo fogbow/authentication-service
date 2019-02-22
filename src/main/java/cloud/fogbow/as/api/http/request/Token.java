@@ -1,5 +1,6 @@
 package cloud.fogbow.as.api.http.request;
 
+import cloud.fogbow.as.api.parameters.UserCredentials;
 import cloud.fogbow.common.constants.Messages;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.as.core.ApplicationFacade;
@@ -20,7 +21,6 @@ import java.util.HashMap;
 @Api(description = ApiDocumentation.Token.API)
 public class Token {
     public static final String TOKEN_ENDPOINT = "tokens";
-    public static final String PUBLIC_KEY_KEY = "publicKey";
 
     private final Logger LOGGER = Logger.getLogger(Token.class);
 
@@ -28,14 +28,14 @@ public class Token {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<cloud.fogbow.as.api.http.response.Token> createTokenValue(
             @ApiParam(value = ApiDocumentation.Token.CREATE_REQUEST_BODY)
-            @RequestBody HashMap<String, String> userCredentials,
-            @ApiParam(value = ApiDocumentation.Token.PUBLIC_KEY)
-            @RequestHeader(required = false, value = PUBLIC_KEY_KEY) String publicKey)
+            @RequestBody UserCredentials userCredentials)
             throws FogbowException {
 
         try {
-            LOGGER.info(String.format(cloud.fogbow.as.constants.Messages.Info.RECEIVING_CREATE_TOKEN_REQUEST, userCredentials.size()));
-            String tokenValue = ApplicationFacade.getInstance().createTokenValue(userCredentials, publicKey);
+            LOGGER.info(String.format(cloud.fogbow.as.constants.Messages.Info.RECEIVING_CREATE_TOKEN_REQUEST,
+                    userCredentials.getCredentials().size()));
+            String tokenValue = ApplicationFacade.getInstance().createTokenValue(
+                    userCredentials.getCredentials(), userCredentials.getPublicKey());
             cloud.fogbow.as.api.http.response.Token token = new cloud.fogbow.as.api.http.response.Token(tokenValue);
             return new ResponseEntity<>(token, HttpStatus.CREATED);
         } catch (Exception e) {
