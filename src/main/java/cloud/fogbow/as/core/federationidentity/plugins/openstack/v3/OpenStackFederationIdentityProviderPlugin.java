@@ -1,48 +1,44 @@
-package cloud.fogbow.as.core.tokengenerator.plugins.openstack.v3;
+package cloud.fogbow.as.core.federationidentity.plugins.openstack.v3;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cloud.fogbow.as.core.federationidentity.FederationIdentityProviderPlugin;
 import cloud.fogbow.common.constants.HttpConstants;
 import cloud.fogbow.common.constants.HttpMethod;
 import cloud.fogbow.common.constants.OpenStackConstants;
+import cloud.fogbow.common.models.FederationUser;
 import cloud.fogbow.common.util.GsonHolder;
 import cloud.fogbow.common.util.connectivity.HttpResponse;
 import cloud.fogbow.common.util.connectivity.HttpRequestClientUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
 import org.apache.log4j.Logger;
-import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.as.constants.ConfigurationPropertyDefaults;
 import cloud.fogbow.as.constants.Messages;
-import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
-import cloud.fogbow.as.core.tokengenerator.plugins.AttributeJoiner;
 
-public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
-    private static final Logger LOGGER = Logger.getLogger(OpenStackTokenGeneratorPlugin.class);
+public class OpenStackFederationIdentityProviderPlugin implements FederationIdentityProviderPlugin {
+    private static final Logger LOGGER = Logger.getLogger(OpenStackFederationIdentityProviderPlugin.class);
 
     private HttpRequestClientUtil client;
     private String v3TokensEndpoint;
     private String tokenProviderId;
 
-    public OpenStackTokenGeneratorPlugin() throws FatalErrorException {
+    public OpenStackFederationIdentityProviderPlugin() throws FatalErrorException {
         this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
 
         String identityUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.OPENSTACK_KEYSTONE_V3_URL_KEY);
         if (isUrlValid(identityUrl)) {
             this.v3TokensEndpoint = identityUrl + OpenStackConstants.Identity.V3_TOKENS_ENDPOINT_PATH;
         }
-        String timeoutRequestStr = PropertiesHolder.getInstance().getProperty(
-                ConfigurationPropertyKeys.HTTP_REQUEST_TIMEOUT_KEY, ConfigurationPropertyDefaults.HTTP_REQUEST_TIMEOUT);
-        Integer timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
         this.client = new HttpRequestClientUtil();
     }
 
-    public OpenStackTokenGeneratorPlugin(HttpRequestClientUtil client, String v3TokensEndpoint, String tokenProviderId) {
+    public OpenStackFederationIdentityProviderPlugin(HttpRequestClientUtil client, String v3TokensEndpoint, String tokenProviderId) {
         this.client = client;
         this.v3TokensEndpoint = v3TokensEndpoint;
         this.tokenProviderId = tokenProviderId;
@@ -56,8 +52,7 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
     }
 
     @Override
-    public String createTokenValue(Map<String, String> credentials) throws FogbowException,
-            UnexpectedException {
+    public FederationUser getFederationUser(Map<String, String> credentials) throws FogbowException {
 
         String jsonBody = mountJsonBody(credentials);
 
@@ -67,11 +62,10 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
         headers.put(HttpConstants.ACCEPT_KEY, HttpConstants.JSON_CONTENT_TYPE_KEY);
         HttpResponse response = this.client.doGenericRequest(HttpMethod.POST, this.v3TokensEndpoint, headers, body);
 
-        String tokenString = getTokenFromJson(response);
-        return tokenString;
+        return getFederationUserFromJson(response);
     }
 
-    private String getTokenFromJson(HttpResponse response) throws UnexpectedException {
+    private FederationUser getFederationUserFromJson(HttpResponse response) throws UnexpectedException {
         String tokenValue = null;
         Map<String, List<String>> headers = response.getHeaders();
         if (headers.get(OpenStackConstants.X_SUBJECT_TOKEN) != null) {
@@ -92,13 +86,10 @@ public class OpenStackTokenGeneratorPlugin implements TokenGeneratorPlugin {
             CreateTokenResponse.Project projectTokenResponse = createTokenResponse.getProject();
             String projectId = projectTokenResponse.getId();
 
-            Map<String, String> attributes = new HashMap<>();
-            attributes.put(FogbowConstants.PROVIDER_ID_KEY, this.tokenProviderId);
-            attributes.put(FogbowConstants.USER_ID_KEY, userId);
-            attributes.put(FogbowConstants.USER_NAME_KEY, userName);
-            attributes.put(OpenStackConstants.Identity.PROJECT_KEY_JSON, projectId);
-            attributes.put(FogbowConstants.TOKEN_VALUE_KEY, tokenValue);
-            return AttributeJoiner.join(attributes);
+            Map<String, String> extraAttributes = new HashMap<>();
+            extraAttributes.put(OpenStackConstants.Identity.PROJECT_KEY_JSON, projectId);
+
+            return new FederationUser(this.tokenProviderId, userId, userName, tokenValue, extraAttributes);
         } catch (Exception e) {
             LOGGER.error(Messages.Error.UNABLE_TO_GET_TOKEN_FROM_JSON, e);
             throw new UnexpectedException(Messages.Error.UNABLE_TO_GET_TOKEN_FROM_JSON, e);

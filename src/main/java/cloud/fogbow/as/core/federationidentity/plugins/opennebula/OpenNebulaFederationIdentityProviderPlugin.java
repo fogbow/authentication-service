@@ -1,14 +1,13 @@
-package cloud.fogbow.as.core.tokengenerator.plugins.opennebula;
+package cloud.fogbow.as.core.federationidentity.plugins.opennebula;
 
+import cloud.fogbow.as.core.federationidentity.FederationIdentityProviderPlugin;
 import cloud.fogbow.common.constants.Messages;
 import cloud.fogbow.common.constants.OpenNebulaConstants;
 import cloud.fogbow.common.exceptions.*;
 import cloud.fogbow.as.core.PropertiesHolder;
+import cloud.fogbow.common.models.FederationUser;
 import org.apache.log4j.Logger;
-import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
-import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
-import cloud.fogbow.as.core.tokengenerator.plugins.AttributeJoiner;
 import org.opennebula.client.Client;
 import org.opennebula.client.OneResponse;
 import org.opennebula.client.user.UserPool;
@@ -16,27 +15,27 @@ import org.opennebula.client.user.UserPool;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OpenNebulaTokenGeneratorPlugin implements TokenGeneratorPlugin {
-    private static final Logger LOGGER = Logger.getLogger(OpenNebulaTokenGeneratorPlugin.class);
+public class OpenNebulaFederationIdentityProviderPlugin implements FederationIdentityProviderPlugin {
+    private static final Logger LOGGER = Logger.getLogger(OpenNebulaFederationIdentityProviderPlugin.class);
 
     private OpenNebulaClientFactory factory;
-    private String provider;
+    private String tokenProviderId;
 
-    public OpenNebulaTokenGeneratorPlugin() throws FatalErrorException {
-        this.provider = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
+    public OpenNebulaFederationIdentityProviderPlugin() throws FatalErrorException {
+        this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
         this.factory = new OpenNebulaClientFactory();
     }
 
-    public OpenNebulaTokenGeneratorPlugin(OpenNebulaClientFactory factory, String provider) {
+    public OpenNebulaFederationIdentityProviderPlugin(OpenNebulaClientFactory factory, String tokenProviderId) {
         this.factory = factory;
-        this.provider = provider;
+        this.tokenProviderId = tokenProviderId;
     }
 
     /*
      * The userId is the same as the userName, because the userName is unique in Opennebula
      */
     @Override
-    public String createTokenValue(Map<String, String> userCredentials) throws FogbowException {
+    public FederationUser getFederationUser(Map<String, String> userCredentials) throws FogbowException {
         if (userCredentials == null) {
             throw new InvalidParameterException(cloud.fogbow.as.constants.Messages.Exception.NO_USER_CREDENTIALS);
         }
@@ -54,12 +53,7 @@ public class OpenNebulaTokenGeneratorPlugin implements TokenGeneratorPlugin {
             throw new UnauthenticatedUserException();
         }
 
-        Map<String, String> attributes = new HashMap<>();
-        attributes.put(FogbowConstants.PROVIDER_ID_KEY, this.provider);
-        attributes.put(FogbowConstants.USER_ID_KEY, username);
-        attributes.put(FogbowConstants.USER_NAME_KEY, username);
-        attributes.put(FogbowConstants.TOKEN_VALUE_KEY, openNebulaTokenValue);
-        return AttributeJoiner.join(attributes);
+        return new FederationUser(this.tokenProviderId, username, username, openNebulaTokenValue, new HashMap<>());
     }
 
     /*

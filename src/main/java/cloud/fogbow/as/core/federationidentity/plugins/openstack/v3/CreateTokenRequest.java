@@ -1,4 +1,4 @@
-package cloud.fogbow.as.core.tokengenerator.plugins.openstack.v3;
+package cloud.fogbow.as.core.federationidentity.plugins.openstack.v3;
 
 import cloud.fogbow.common.util.GsonHolder;
 import cloud.fogbow.common.util.JsonSerializable;

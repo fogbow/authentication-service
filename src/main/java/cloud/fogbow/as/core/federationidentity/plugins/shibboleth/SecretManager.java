@@ -1,4 +1,4 @@
-package cloud.fogbow.as.core.tokengenerator.plugins.shibboleth;
+package cloud.fogbow.as.core.federationidentity.plugins.shibboleth;
 
 import java.util.Date;
 import java.util.HashMap;

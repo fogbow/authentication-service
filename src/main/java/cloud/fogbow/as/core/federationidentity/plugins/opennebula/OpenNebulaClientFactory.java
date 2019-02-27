@@ -1,4 +1,4 @@
-package cloud.fogbow.as.core.tokengenerator.plugins.opennebula;
+package cloud.fogbow.as.core.federationidentity.plugins.opennebula;
 
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.as.core.PropertiesHolder;

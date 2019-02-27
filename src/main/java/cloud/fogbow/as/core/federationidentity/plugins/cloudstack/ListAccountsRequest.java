@@ -1,4 +1,4 @@
-package cloud.fogbow.as.core.tokengenerator.plugins.cloudstack;
+package cloud.fogbow.as.core.federationidentity.plugins.cloudstack;
 
 import cloud.fogbow.common.exceptions.InvalidParameterException;
 import cloud.fogbow.as.core.util.cloud.CloudStackRequest;
