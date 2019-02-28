@@ -1,5 +1,5 @@
 #!/bin/bash
 
 sudo docker build --build-arg BRANCH_AS=master \
- --build-arg BRANCH_COMMON=master --no-cache -t fogbow/authentication-service:master
+ --build-arg BRANCH_COMMON=master --no-cache -t fogbow/authentication-service:master .
 
