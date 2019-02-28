@@ -1,4 +1,0 @@
-#!/bin/bash
-
-./push fogbow/authentication-service:develop
-
