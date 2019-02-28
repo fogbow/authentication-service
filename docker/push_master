@@ -1,7 +1,0 @@
-#!/bin/bash
-
-./push fogbow/authentication-service:latest
-
-sudo docker tag fogbow/authentication-service:latest fogbow/authentication-service:buzios
-./push fogbow/authentication-service:buzios
-
