@@ -1,7 +1,7 @@
 package cloud.fogbow.as.core.federationidentity.plugins.cloudstack;
 
 import cloud.fogbow.common.exceptions.InvalidParameterException;
-import cloud.fogbow.as.core.util.cloud.CloudStackRequest;
+import cloud.fogbow.common.util.cloud.cloudstack.CloudStackRequest;
 
 public class ListAccountsRequest extends CloudStackRequest {
     public static final String LIST_ACCOUNTS_COMMAND = "listAccounts";

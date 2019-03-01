@@ -1,7 +1,7 @@
 package cloud.fogbow.as.core.federationidentity.plugins.cloudstack;
 
 import cloud.fogbow.common.exceptions.InvalidParameterException;
-import cloud.fogbow.as.core.util.cloud.CloudStackRequest;
+import cloud.fogbow.common.util.cloud.cloudstack.CloudStackRequest;
 
 public class LoginRequest extends CloudStackRequest {
     public static final String LOGIN_COMMAND = "login";
