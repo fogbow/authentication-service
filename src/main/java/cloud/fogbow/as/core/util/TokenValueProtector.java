@@ -2,7 +2,7 @@ package cloud.fogbow.as.core.util;
 
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
-import cloud.fogbow.common.util.RSAUtil;
+import cloud.fogbow.common.util.CryptoUtil;
 import org.apache.commons.lang.StringUtils;
 
 import java.security.Key;
@@ -16,9 +16,9 @@ public class TokenValueProtector {
         String encryptedToken;
         String encryptedKey;
         try {
-            randomKey = RSAUtil.generateAESKey();
-            encryptedToken = RSAUtil.encryptAES(randomKey.getBytes("UTF-8"), unprotectedString);
-            encryptedKey = RSAUtil.encrypt(randomKey, key);
+            randomKey = CryptoUtil.generateAESKey();
+            encryptedToken = CryptoUtil.encryptAES(randomKey.getBytes("UTF-8"), unprotectedString);
+            encryptedKey = CryptoUtil.encrypt(randomKey, key);
             return encryptedKey + tokenSeparator + encryptedToken;
         } catch (Exception e) {
             throw new UnexpectedException();
@@ -33,8 +33,8 @@ public class TokenValueProtector {
         String[] tokenParts = StringUtils.splitByWholeSeparator(protectedString, tokenSeparator);
 
         try {
-            randomKey = RSAUtil.decrypt(tokenParts[0], key);
-            decryptedToken = RSAUtil.decryptAES(randomKey.getBytes("UTF-8"), tokenParts[1]);
+            randomKey = CryptoUtil.decrypt(tokenParts[0], key);
+            decryptedToken = CryptoUtil.decryptAES(randomKey.getBytes("UTF-8"), tokenParts[1]);
             return decryptedToken;
         } catch (Exception e) {
             throw new UnauthenticatedUserException();

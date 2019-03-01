@@ -2,7 +2,7 @@ package cloud.fogbow.as.core;
 
 import cloud.fogbow.as.core.federationidentity.FederationIdentityProviderPlugin;
 import cloud.fogbow.common.util.PropertiesUtil;
-import cloud.fogbow.common.util.RSAUtil;
+import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.as.constants.ConfigurationPropertyDefaults;
 import cloud.fogbow.as.constants.SystemConstants;
@@ -55,7 +55,7 @@ public class ApplicationFacade {
     public String getPublicKey() throws UnexpectedException {
         // There is no need to authenticate the user or authorize this operation
         try {
-            return RSAUtil.savePublicKey(ServiceAsymmetricKeysHolder.getInstance().getPublicKey());
+            return CryptoUtil.savePublicKey(ServiceAsymmetricKeysHolder.getInstance().getPublicKey());
         } catch (IOException | GeneralSecurityException e) {
             throw new UnexpectedException(e.getMessage(), e);
         }

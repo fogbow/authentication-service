@@ -6,7 +6,7 @@ import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.models.FederationUser;
 import cloud.fogbow.common.util.HomeDir;
-import cloud.fogbow.common.util.RSAUtil;
+import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,10 +33,10 @@ public class AuthenticationUtilTest {
         ServiceAsymmetricKeysHolder.getInstance().setPublicKeyFilePath(pubKeyPath);
         ServiceAsymmetricKeysHolder.getInstance().setPrivateKeyFilePath(privKeyPath);
 
-        this.publicKey = RSAUtil.getPublicKey(pubKeyPath);
-        this.privateKey = RSAUtil.getPrivateKey(privKeyPath);
+        this.publicKey = CryptoUtil.getPublicKey(pubKeyPath);
+        this.privateKey = CryptoUtil.getPrivateKey(privKeyPath);
 
-        this.publicKeyString = RSAUtil.getKey(pubKeyPath);
+        this.publicKeyString = CryptoUtil.getKey(pubKeyPath);
         this.tokenGenerator = new StubTokenGenerator();
     }
 
@@ -65,9 +65,9 @@ public class AuthenticationUtilTest {
     @Test(expected = UnauthenticatedUserException.class)
     public void testInvalidSignature() throws FogbowException, GeneralSecurityException {
         // set up
-        KeyPair keyPair = RSAUtil.generateKeyPair();
+        KeyPair keyPair = CryptoUtil.generateKeyPair();
         PublicKey differentKey = keyPair.getPublic();
-        String differentKeyString = RSAUtil.savePublicKey(differentKey);
+        String differentKeyString = CryptoUtil.savePublicKey(differentKey);
         String tokenValue = tokenGenerator.createTokenValue(differentKeyString, 1);
 
         // exercise

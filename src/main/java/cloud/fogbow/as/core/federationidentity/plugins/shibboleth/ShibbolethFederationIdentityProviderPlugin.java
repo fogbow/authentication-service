@@ -11,7 +11,7 @@ import java.util.Map;
 import cloud.fogbow.as.core.federationidentity.FederationIdentityProviderPlugin;
 import cloud.fogbow.common.constants.Messages;
 import cloud.fogbow.common.models.FederationUser;
-import cloud.fogbow.common.util.RSAUtil;
+import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
@@ -115,7 +115,7 @@ public class ShibbolethFederationIdentityProviderPlugin implements FederationIde
 
 	protected void verifyShibAppKeyAuthenticity(String signature, String message) throws UnauthenticatedUserException {
 		try {
-			RSAUtil.verify(this.shibAppPublicKey, message, signature);
+			CryptoUtil.verify(this.shibAppPublicKey, message, signature);
 		} catch (Exception e) {
         	String errorMsg = String.format(Messages.Exception.AUTHENTICATION_ERROR);
         	LOGGER.error(errorMsg, e);
@@ -126,7 +126,7 @@ public class ShibbolethFederationIdentityProviderPlugin implements FederationIde
 	protected String decryptTokenShib(String keyShib, String rasToken) throws UnauthenticatedUserException {
 		String tokenShibApp = null;
 		try {
-			tokenShibApp = RSAUtil.decryptAES(keyShib.getBytes(RSAUtil.UTF_8), rasToken);
+			tokenShibApp = CryptoUtil.decryptAES(keyShib.getBytes(CryptoUtil.UTF_8), rasToken);
 		} catch (Exception e) {
         	String errorMsg = String.format(Messages.Exception.AUTHENTICATION_ERROR);
         	LOGGER.error(errorMsg, e);
@@ -138,7 +138,7 @@ public class ShibbolethFederationIdentityProviderPlugin implements FederationIde
 	protected String decryptKeyShib(String keyShibAppEncrypted) throws UnauthenticatedUserException {
 		String keyShibApp = null;
 		try {
-			keyShibApp = RSAUtil.decrypt(keyShibAppEncrypted, this.asPrivateKey);
+			keyShibApp = CryptoUtil.decrypt(keyShibAppEncrypted, this.asPrivateKey);
 		} catch (Exception e) {
         	String errorMsg = String.format(Messages.Exception.AUTHENTICATION_ERROR);
         	LOGGER.error(errorMsg, e);
@@ -150,8 +150,8 @@ public class ShibbolethFederationIdentityProviderPlugin implements FederationIde
     protected RSAPublicKey getShibbolethApplicationPublicKey() throws IOException, GeneralSecurityException {
         String filename = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.SHIB_PUBLIC_FILE_PATH_KEY);
         LOGGER.debug("Shibboleth application public key path: " + filename);
-        String publicKeyPEM = RSAUtil.getKey(filename);
+        String publicKeyPEM = CryptoUtil.getKey(filename);
         LOGGER.debug("Shibboleth application Public key: " + publicKeyPEM);
-        return RSAUtil.getPublicKeyFromString(publicKeyPEM);
+        return CryptoUtil.getPublicKeyFromString(publicKeyPEM);
     }
 }

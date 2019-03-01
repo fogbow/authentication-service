@@ -5,7 +5,7 @@ import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.util.HomeDir;
-import cloud.fogbow.common.util.RSAUtil;
+import cloud.fogbow.common.util.CryptoUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,8 +31,8 @@ public class TokenValueProtectorTest {
         String privKeyPath = keysPath + "private.key";
 
         String originalMessage = "This is one more message to be encrypted and decrypted";
-        PublicKey localPubKey = RSAUtil.getPublicKey(pubKeyPath);
-        PrivateKey localPrivKey = RSAUtil.getPrivateKey(privKeyPath);
+        PublicKey localPubKey = CryptoUtil.getPublicKey(pubKeyPath);
+        PrivateKey localPrivKey = CryptoUtil.getPrivateKey(privKeyPath);
 
         // exercise
         String encryptedMessage = TokenValueProtector.encrypt(localPubKey, originalMessage, tokenSeparator);
@@ -50,13 +50,13 @@ public class TokenValueProtectorTest {
         String pubKeyPath = keysPath + "public.key";
         String privKeyPath = keysPath + "private.key";
 
-        PublicKey localPubKey = RSAUtil.getPublicKey(pubKeyPath);
-        PrivateKey localPrivKey = RSAUtil.getPrivateKey(privKeyPath);
+        PublicKey localPubKey = CryptoUtil.getPublicKey(pubKeyPath);
+        PrivateKey localPrivKey = CryptoUtil.getPrivateKey(privKeyPath);
 
         String originalMessage = "This is a second more message to be encrypted and decrypted";
         String protectedString = TokenValueProtector.encrypt(localPubKey, originalMessage, tokenSeparator);
 
-        KeyPair forwardKeyPair = RSAUtil.generateKeyPair();
+        KeyPair forwardKeyPair = CryptoUtil.generateKeyPair();
         PublicKey forwardPubKey = forwardKeyPair.getPublic();
         PrivateKey forwardPrivKey = forwardKeyPair.getPrivate();
 

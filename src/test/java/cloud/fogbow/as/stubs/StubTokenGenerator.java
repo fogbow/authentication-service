@@ -7,7 +7,7 @@ import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.models.FederationUser;
 import cloud.fogbow.common.util.FederationUserUtil;
 import cloud.fogbow.common.util.HomeDir;
-import cloud.fogbow.common.util.RSAUtil;
+import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.as.core.util.TokenValueProtector;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class StubTokenGenerator {
         String keysPath = HomeDir.getPath();
         String privKeyPath = keysPath + "private.key";
 
-        this.privateKey = RSAUtil.getPrivateKey(privKeyPath);
+        this.privateKey = CryptoUtil.getPrivateKey(privKeyPath);
     }
 
     public String createTokenValue(String publicKeyString, int duration)
@@ -43,9 +43,9 @@ public class StubTokenGenerator {
         RSAPublicKey publicKey;
         String signedUnprotectedToken;
         try {
-            signature = RSAUtil.sign(this.privateKey, payload);
+            signature = CryptoUtil.sign(this.privateKey, payload);
             signedUnprotectedToken = payload + FogbowConstants.TOKEN_SEPARATOR + signature;
-            publicKey = RSAUtil.getPublicKeyFromString(publicKeyString);
+            publicKey = CryptoUtil.getPublicKeyFromString(publicKeyString);
         } catch (UnsupportedEncodingException | GeneralSecurityException e) {
             throw new UnexpectedException();
         }

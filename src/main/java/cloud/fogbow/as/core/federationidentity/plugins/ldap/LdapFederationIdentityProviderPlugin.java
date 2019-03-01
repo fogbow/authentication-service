@@ -21,10 +21,8 @@ import cloud.fogbow.common.constants.Messages;
 import cloud.fogbow.common.exceptions.InvalidParameterException;
 import cloud.fogbow.common.exceptions.InvalidUserCredentialsException;
 import cloud.fogbow.common.models.FederationUser;
-import cloud.fogbow.common.util.FederationUserUtil;
-import cloud.fogbow.common.util.RSAUtil;
+import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
-import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 
@@ -137,7 +135,7 @@ public class LdapFederationIdentityProviderPlugin implements FederationIdentityP
         }
 
         MessageDigest algorithm = MessageDigest.getInstance(this.encryptType);
-        byte messageDigest[] = algorithm.digest(password.getBytes(RSAUtil.UTF_8));
+        byte messageDigest[] = algorithm.digest(password.getBytes(CryptoUtil.UTF_8));
 
         StringBuilder hexString = new StringBuilder();
         for (byte b : messageDigest) {

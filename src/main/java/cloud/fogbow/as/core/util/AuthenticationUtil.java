@@ -7,7 +7,7 @@ import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.models.FederationUser;
 import cloud.fogbow.common.util.FederationUserUtil;
-import cloud.fogbow.common.util.RSAUtil;
+import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.commons.lang.StringUtils;
 
@@ -50,9 +50,9 @@ public class AuthenticationUtil {
         String expirationTime = generateExpirationTime();
         String payload = tokenAttributes + FogbowConstants.PAYLOAD_SEPARATOR + expirationTime;
         try {
-            String signature = RSAUtil.sign(privateKey, payload);
+            String signature = CryptoUtil.sign(privateKey, payload);
             String signedUnprotectedToken = payload + FogbowConstants.TOKEN_SEPARATOR + signature;
-            RSAPublicKey publicKey = RSAUtil.getPublicKeyFromString(publicKeyString);
+            RSAPublicKey publicKey = CryptoUtil.getPublicKeyFromString(publicKeyString);
             return TokenValueProtector.encrypt(publicKey, signedUnprotectedToken, FogbowConstants.TOKEN_STRING_SEPARATOR);
         } catch (UnsupportedEncodingException | GeneralSecurityException e) {
             throw new UnexpectedException();
@@ -63,7 +63,7 @@ public class AuthenticationUtil {
             throws UnauthenticatedUserException {
 
         try {
-            if (!RSAUtil.verify(publicKey, payload, signature)) {
+            if (!CryptoUtil.verify(publicKey, payload, signature)) {
                 throw new UnauthenticatedUserException(Messages.Exception.INVALID_TOKEN);
             }
         } catch (SignatureException | NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException e) {
