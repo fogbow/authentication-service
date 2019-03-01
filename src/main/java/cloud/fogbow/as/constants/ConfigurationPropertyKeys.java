@@ -9,7 +9,7 @@ public class ConfigurationPropertyKeys {
     // Plugins
     public static final String TOKEN_GENERATOR_PLUGIN_CLASS_KEY = "token_generator_plugin_class";
 
-    // Token Generator Plugins configurations
+    // Federation Identity Plugins configurations
     public static final String CLOUDSTACK_URL_KEY = "cloudstack_url";
     public static final String LDAP_BASE_KEY = "ldap_base";
     public static final String LDAP_ENDPOINT_KEY = "ldap_endpoint";

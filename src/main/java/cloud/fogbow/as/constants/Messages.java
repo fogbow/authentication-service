@@ -8,7 +8,6 @@ public class Messages {
         public static final String LDAP_URL_MISSING = "No LDAP url in configuration file.";
         public static final String NO_USER_CREDENTIALS = "No user credentials given.";
         public static final String UNABLE_TO_LOAD_LDAP_ACCOUNT = "Unable to load account summary from LDAP Network.";
-        public static final String WRONG_URI_SYNTAX = "Wrong syntax for endpoint %s.";
     }
 
     public static class Fatal {
