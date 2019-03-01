@@ -1,10 +1,9 @@
 package cloud.fogbow.as.core.federationidentity;
 
+import cloud.fogbow.as.core.util.AuthenticationUtil;
 import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.common.exceptions.FogbowException;
-import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.models.FederationUser;
-import cloud.fogbow.common.util.AuthenticationUtil;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import cloud.fogbow.as.constants.Messages;
