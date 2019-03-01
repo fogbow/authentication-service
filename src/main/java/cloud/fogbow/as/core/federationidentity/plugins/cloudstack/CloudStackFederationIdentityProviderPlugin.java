@@ -14,32 +14,24 @@ import cloud.fogbow.as.core.PropertiesHolder;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpResponseException;
 import org.apache.log4j.Logger;
-import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
-import cloud.fogbow.as.constants.ConfigurationPropertyDefaults;
 import cloud.fogbow.as.constants.Messages;
 import cloud.fogbow.as.core.util.HttpToFogbowAsExceptionMapper;
 
 public class CloudStackFederationIdentityProviderPlugin implements FederationIdentityProviderPlugin {
     private static final Logger LOGGER = Logger.getLogger(CloudStackFederationIdentityProviderPlugin.class);
 
-    private HttpRequestClientUtil client;
     private String cloudStackUrl;
     private String tokenProviderId;
 
     public CloudStackFederationIdentityProviderPlugin() {
         this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
         this.cloudStackUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.CLOUDSTACK_URL_KEY);
-        String timeoutRequestStr = PropertiesHolder.getInstance().getProperty(
-                ConfigurationPropertyKeys.HTTP_REQUEST_TIMEOUT_KEY, ConfigurationPropertyDefaults.HTTP_REQUEST_TIMEOUT);
-        Integer timeoutHttpRequest = Integer.parseInt(timeoutRequestStr);
-        this.client = new HttpRequestClientUtil();
     }
 
-    public CloudStackFederationIdentityProviderPlugin(HttpRequestClientUtil client, String cloudStackUrl, String tokenProviderId) {
-        this.client = client;
+    public CloudStackFederationIdentityProviderPlugin(String cloudStackUrl, String tokenProviderId) {
         this.cloudStackUrl = cloudStackUrl;
         this.tokenProviderId = tokenProviderId;
     }
@@ -56,7 +48,7 @@ public class CloudStackFederationIdentityProviderPlugin implements FederationIde
 
         // NOTE(pauloewerton): since all cloudstack requests params are passed via url args, we do not need to
         // send a valid json body in the post request
-        HttpResponse response = this.client.doGenericRequest(HttpMethod.POST,
+        HttpResponse response = HttpRequestClientUtil.doGenericRequest(HttpMethod.POST,
                 request.getUriBuilder().toString(), new HashMap<>(), new HashMap<>());
 
         if (response.getHttpCode() > HttpStatus.SC_OK) {
@@ -88,7 +80,7 @@ public class CloudStackFederationIdentityProviderPlugin implements FederationIde
                 .sessionKey(sessionKey)
                 .build(this.cloudStackUrl);
 
-        HttpResponse response = this.client.doGenericRequest(HttpMethod.GET,
+        HttpResponse response = HttpRequestClientUtil.doGenericRequest(HttpMethod.GET,
                 request.getUriBuilder().toString(), new HashMap<>(), new HashMap<>());
 
         if (response.getHttpCode() > HttpStatus.SC_OK) {
@@ -118,10 +110,5 @@ public class CloudStackFederationIdentityProviderPlugin implements FederationIde
         String firstName = user.getFirstName();
         String lastName = user.getLastName();
         return (firstName != null && lastName != null) ? firstName + " " + lastName : user.getUsername();
-    }
-
-    // Used for testing
-    public void setClient(HttpRequestClientUtil client) {
-        this.client = client;
     }
 }

@@ -3,7 +3,6 @@ package cloud.fogbow.as.constants;
 public class ConfigurationPropertyKeys {
     // Service configuration
     public static final String LOCAL_MEMBER_ID_KEY = "xmpp_jid";
-    public static final String HTTP_REQUEST_TIMEOUT_KEY = "http_request_timeout";
     public static final String BUILD_NUMBER_KEY = "build_number";
 
     // Plugins

@@ -18,13 +18,11 @@ import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
-import cloud.fogbow.as.constants.ConfigurationPropertyDefaults;
 import cloud.fogbow.as.constants.Messages;
 
 public class OpenStackFederationIdentityProviderPlugin implements FederationIdentityProviderPlugin {
     private static final Logger LOGGER = Logger.getLogger(OpenStackFederationIdentityProviderPlugin.class);
 
-    private HttpRequestClientUtil client;
     private String v3TokensEndpoint;
     private String tokenProviderId;
 
@@ -35,11 +33,9 @@ public class OpenStackFederationIdentityProviderPlugin implements FederationIden
         if (isUrlValid(identityUrl)) {
             this.v3TokensEndpoint = identityUrl + OpenStackConstants.Identity.V3_TOKENS_ENDPOINT_PATH;
         }
-        this.client = new HttpRequestClientUtil();
     }
 
-    public OpenStackFederationIdentityProviderPlugin(HttpRequestClientUtil client, String v3TokensEndpoint, String tokenProviderId) {
-        this.client = client;
+    public OpenStackFederationIdentityProviderPlugin(String v3TokensEndpoint, String tokenProviderId) {
         this.v3TokensEndpoint = v3TokensEndpoint;
         this.tokenProviderId = tokenProviderId;
     }
@@ -60,7 +56,7 @@ public class OpenStackFederationIdentityProviderPlugin implements FederationIden
         HashMap<String, String> headers = new HashMap<>();
         headers.put(HttpConstants.CONTENT_TYPE_KEY, HttpConstants.JSON_CONTENT_TYPE_KEY);
         headers.put(HttpConstants.ACCEPT_KEY, HttpConstants.JSON_CONTENT_TYPE_KEY);
-        HttpResponse response = this.client.doGenericRequest(HttpMethod.POST, this.v3TokensEndpoint, headers, body);
+        HttpResponse response = HttpRequestClientUtil.doGenericRequest(HttpMethod.POST, this.v3TokensEndpoint, headers, body);
 
         return getFederationUserFromJson(response);
     }
@@ -110,10 +106,5 @@ public class OpenStackFederationIdentityProviderPlugin implements FederationIden
                 .build();
 
         return createTokenRequest.toJson();
-    }
-
-    // Used in testing
-    public void setClient(HttpRequestClientUtil client) {
-        this.client = client;
     }
 }
