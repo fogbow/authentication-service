@@ -3,6 +3,8 @@ package cloud.fogbow.as.constants;
 public class Messages {
 
     public static class Exception {
+        public static final String EXPIRED_TOKEN = "Expired token.";
+        public static final String INVALID_TOKEN = "Invalid token value.";
         public static final String LDAP_URL_MISSING = "No LDAP url in configuration file.";
         public static final String NO_USER_CREDENTIALS = "No user credentials given.";
         public static final String UNABLE_TO_LOAD_LDAP_ACCOUNT = "Unable to load account summary from LDAP Network.";

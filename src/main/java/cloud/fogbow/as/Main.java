@@ -1,10 +1,10 @@
 package cloud.fogbow.as;
 
+import cloud.fogbow.as.core.federationidentity.FederationIdentityProviderPlugin;
 import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.as.core.ApplicationFacade;
 import cloud.fogbow.as.core.PropertiesHolder;
 import cloud.fogbow.as.core.TokenGeneratorPluginInstantiator;
-import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
@@ -30,11 +30,11 @@ public class Main implements ApplicationRunner {
             ServiceAsymmetricKeysHolder.getInstance().setPrivateKeyFilePath(privateKeyFilePath);
 
             // Setting up plugin
-            TokenGeneratorPlugin tokenGeneratorPlugin = TokenGeneratorPluginInstantiator.getTokenGeneratorPlugin();
+            FederationIdentityProviderPlugin federationIdentityProviderPlugin = TokenGeneratorPluginInstantiator.getTokenGeneratorPlugin();
 
             // Setting up application facade
             ApplicationFacade applicationFacade = ApplicationFacade.getInstance();
-            applicationFacade.setTokenGeneratorPlugin(tokenGeneratorPlugin);
+            applicationFacade.setTokenGeneratorPlugin(federationIdentityProviderPlugin);
         } catch (FatalErrorException errorException) {
             LOGGER.fatal(errorException.getMessage(), errorException);
             tryExit();

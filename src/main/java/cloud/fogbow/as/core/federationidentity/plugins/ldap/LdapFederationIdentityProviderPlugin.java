@@ -1,4 +1,4 @@
-package cloud.fogbow.as.core.tokengenerator.plugins.ldap;
+package cloud.fogbow.as.core.federationidentity.plugins.ldap;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -16,9 +16,12 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
+import cloud.fogbow.as.core.federationidentity.FederationIdentityProviderPlugin;
 import cloud.fogbow.common.constants.Messages;
 import cloud.fogbow.common.exceptions.InvalidParameterException;
 import cloud.fogbow.common.exceptions.InvalidUserCredentialsException;
+import cloud.fogbow.common.models.FederationUser;
+import cloud.fogbow.common.util.FederationUserUtil;
 import cloud.fogbow.common.util.RSAUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
 import cloud.fogbow.common.constants.FogbowConstants;
@@ -26,10 +29,8 @@ import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
-import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
-import cloud.fogbow.as.core.tokengenerator.plugins.AttributeJoiner;
 
-public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
+public class LdapFederationIdentityProviderPlugin implements FederationIdentityProviderPlugin {
     public static final String CRED_USERNAME = "username";
     public static final String CRED_PASSWORD = "password";
     private static final String ENCRYPT_TYPE = ":TYPE:";
@@ -40,7 +41,7 @@ public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
     private String ldapUrl;
     private String encryptType;
 
-    public LdapTokenGeneratorPlugin() {
+    public LdapFederationIdentityProviderPlugin() {
         this.tokenProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
         this.ldapBase = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_BASE_KEY);
         this.ldapUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_ENDPOINT_KEY);
@@ -48,7 +49,7 @@ public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
     }
 
     @Override
-    public String createTokenValue(Map<String, String> userCredentials) throws InvalidUserCredentialsException,
+    public FederationUser getFederationUser(Map<String, String> userCredentials) throws InvalidUserCredentialsException,
             UnexpectedException, InvalidParameterException, UnauthenticatedUserException {
 
         String userId = userCredentials.get(CRED_USERNAME);
@@ -57,11 +58,7 @@ public class LdapTokenGeneratorPlugin implements TokenGeneratorPlugin {
         String name = null;
         name = ldapAuthenticate(userId, password);
 
-        Map<String, String> attributes = new HashMap<>();
-        attributes.put(FogbowConstants.PROVIDER_ID_KEY, this.tokenProviderId);
-        attributes.put(FogbowConstants.USER_ID_KEY, userId);
-        attributes.put(FogbowConstants.USER_NAME_KEY, name);
-        return AttributeJoiner.join(attributes);
+        return new FederationUser(this.tokenProviderId, userId, name, null, new HashMap<>());
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

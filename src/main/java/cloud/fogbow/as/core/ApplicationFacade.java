@@ -1,5 +1,6 @@
 package cloud.fogbow.as.core;
 
+import cloud.fogbow.as.core.federationidentity.FederationIdentityProviderPlugin;
 import cloud.fogbow.common.util.PropertiesUtil;
 import cloud.fogbow.common.util.RSAUtil;
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
@@ -9,8 +10,7 @@ import org.apache.log4j.Logger;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
-import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
-import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPluginDecorator;
+import cloud.fogbow.as.core.federationidentity.TokenGenerator;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -24,7 +24,7 @@ public class ApplicationFacade {
 
     private String buildNumber;
 
-    private TokenGeneratorPluginDecorator tokenGeneratorPluginDecorator;
+    private TokenGenerator tokenGenerator;
 
     private ApplicationFacade() {
         this.buildNumber = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.BUILD_NUMBER_KEY,
@@ -40,16 +40,16 @@ public class ApplicationFacade {
         }
     }
 
-    public void setTokenGeneratorPlugin(TokenGeneratorPlugin tokenGeneratorPlugin) {
+    public void setTokenGeneratorPlugin(FederationIdentityProviderPlugin federationIdentityProviderPlugin) {
         // The token generator plugin generates a raw token; the wrapper adds an expiration time,
         // a signature, and encrypts the token using the public key provided by the client.
-        this.tokenGeneratorPluginDecorator = new TokenGeneratorPluginDecorator(tokenGeneratorPlugin);
+        this.tokenGenerator = new TokenGenerator(federationIdentityProviderPlugin);
     }
 
     public String createTokenValue(Map<String, String> userCredentials, String publicKey)
             throws FogbowException {
         // There is no need to authenticate the user or authorize this operation
-        return this.tokenGeneratorPluginDecorator.createTokenValue(userCredentials, publicKey);
+        return this.tokenGenerator.createTokenValue(userCredentials, publicKey);
     }
 
     public String getPublicKey() throws UnexpectedException {

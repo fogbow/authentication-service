@@ -1,13 +1,13 @@
 package cloud.fogbow.as.core;
 
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
-import cloud.fogbow.as.core.tokengenerator.TokenGeneratorPlugin;
+import cloud.fogbow.as.core.federationidentity.FederationIdentityProviderPlugin;
 
 public class TokenGeneratorPluginInstantiator {
     private static PluginFactory pluginFactory = new PluginFactory();
 
-    public static TokenGeneratorPlugin getTokenGeneratorPlugin() {
+    public static FederationIdentityProviderPlugin getTokenGeneratorPlugin() {
         String className = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.TOKEN_GENERATOR_PLUGIN_CLASS_KEY);
-        return (TokenGeneratorPlugin) TokenGeneratorPluginInstantiator.pluginFactory.createPluginInstance(className);
+        return (FederationIdentityProviderPlugin) TokenGeneratorPluginInstantiator.pluginFactory.createPluginInstance(className);
     }
 }
