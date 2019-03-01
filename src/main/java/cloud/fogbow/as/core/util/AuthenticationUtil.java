@@ -9,7 +9,6 @@ import cloud.fogbow.common.models.FederationUser;
 import cloud.fogbow.common.util.FederationUserUtil;
 import cloud.fogbow.common.util.RSAUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
-import cloud.fogbow.common.util.TokenValueProtector;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;

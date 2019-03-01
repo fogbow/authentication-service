@@ -8,7 +8,7 @@ import cloud.fogbow.common.models.FederationUser;
 import cloud.fogbow.common.util.FederationUserUtil;
 import cloud.fogbow.common.util.HomeDir;
 import cloud.fogbow.common.util.RSAUtil;
-import cloud.fogbow.common.util.TokenValueProtector;
+import cloud.fogbow.as.core.util.TokenValueProtector;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
