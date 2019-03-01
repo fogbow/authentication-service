@@ -58,10 +58,6 @@ public class LdapFederationIdentityProviderPlugin implements FederationIdentityP
         String name = null;
         name = ldapAuthenticate(userId, password);
 
-        Map<String, String> attributes = new HashMap<>();
-        attributes.put(FogbowConstants.PROVIDER_ID_KEY, this.tokenProviderId);
-        attributes.put(FogbowConstants.USER_ID_KEY, userId);
-        attributes.put(FogbowConstants.USER_NAME_KEY, name);
         return new FederationUser(this.tokenProviderId, userId, name, null, new HashMap<>());
     }
 
