@@ -1,6 +1,6 @@
 package cloud.fogbow.as.core;
 
-import cloud.fogbow.as.core.federationidentity.FederationIdentityProviderPlugin;
+import cloud.fogbow.as.core.systemidp.SystemIdentityProviderPlugin;
 import cloud.fogbow.common.util.PropertiesUtil;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
-import cloud.fogbow.as.core.federationidentity.TokenGenerator;
+import cloud.fogbow.as.core.systemidp.FogbowTokenGenerator;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -24,7 +24,7 @@ public class ApplicationFacade {
 
     private String buildNumber;
 
-    private TokenGenerator tokenGenerator;
+    private FogbowTokenGenerator fogbowTokenGenerator;
 
     private ApplicationFacade() {
         this.buildNumber = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.BUILD_NUMBER_KEY,
@@ -40,16 +40,15 @@ public class ApplicationFacade {
         }
     }
 
-    public void setTokenGeneratorPlugin(FederationIdentityProviderPlugin federationIdentityProviderPlugin) {
+    public void initializeFogbowTokenGenerator(SystemIdentityProviderPlugin systemIdentityProviderPlugin) {
         // The token generator plugin generates a raw token; the wrapper adds an expiration time,
         // a signature, and encrypts the token using the public key provided by the client.
-        this.tokenGenerator = new TokenGenerator(federationIdentityProviderPlugin);
+        this.fogbowTokenGenerator = new FogbowTokenGenerator(systemIdentityProviderPlugin);
     }
 
-    public String createTokenValue(Map<String, String> userCredentials, String publicKey)
-            throws FogbowException {
+    public String createToken(Map<String, String> userCredentials, String publicKey) throws FogbowException {
         // There is no need to authenticate the user or authorize this operation
-        return this.tokenGenerator.createTokenValue(userCredentials, publicKey);
+        return this.fogbowTokenGenerator.createToken(userCredentials, publicKey);
     }
 
     public String getPublicKey() throws UnexpectedException {

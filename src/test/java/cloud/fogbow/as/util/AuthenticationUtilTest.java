@@ -1,24 +1,21 @@
 package cloud.fogbow.as.util;
 
 import cloud.fogbow.as.core.util.AuthenticationUtil;
-import cloud.fogbow.as.stubs.StubTokenGenerator;
+import cloud.fogbow.as.stubs.StubFogbowTokenGenerator;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
-import cloud.fogbow.common.models.FederationUser;
+import cloud.fogbow.common.models.SystemUser;
 import cloud.fogbow.common.util.HomeDir;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
 import java.security.*;
-
 import static org.junit.Assert.*;
 
 public class AuthenticationUtilTest {
 
-    private StubTokenGenerator tokenGenerator;
+    private StubFogbowTokenGenerator tokenGenerator;
     private String publicKeyString;
     private PublicKey publicKey;
     private PrivateKey privateKey;
@@ -37,29 +34,29 @@ public class AuthenticationUtilTest {
         this.privateKey = CryptoUtil.getPrivateKey(privKeyPath);
 
         this.publicKeyString = CryptoUtil.getKey(pubKeyPath);
-        this.tokenGenerator = new StubTokenGenerator();
+        this.tokenGenerator = new StubFogbowTokenGenerator();
     }
 
     @Test
-    public void testSuccessfulAuthentication() throws IOException, GeneralSecurityException, FogbowException {
+    public void testSuccessfulAuthentication() throws FogbowException {
         // set up
-        String tokenValue = tokenGenerator.createTokenValue(publicKeyString, 1);
+        String token = tokenGenerator.createToken(publicKeyString, 1);
 
         // exercise
-        FederationUser federationUser = AuthenticationUtil.authenticate(publicKey, tokenValue);
+        SystemUser systemUser = AuthenticationUtil.authenticate(publicKey, token);
 
         // verify
-        assertNotEquals(null, federationUser);
+        assertNotEquals(null, systemUser);
     }
 
     @Test(expected = UnauthenticatedUserException.class)
     public void testExpiredToken() throws InterruptedException, FogbowException {
         // set up
-        String tokenValue = tokenGenerator.createTokenValue(publicKeyString, 0);
+        String token = tokenGenerator.createToken(publicKeyString, 0);
         Thread.sleep(2000);
 
         // exercise
-        FederationUser federationUser = AuthenticationUtil.authenticate(publicKey, tokenValue);
+        SystemUser systemUser = AuthenticationUtil.authenticate(publicKey, token);
     }
 
     @Test(expected = UnauthenticatedUserException.class)
@@ -68,10 +65,10 @@ public class AuthenticationUtilTest {
         KeyPair keyPair = CryptoUtil.generateKeyPair();
         PublicKey differentKey = keyPair.getPublic();
         String differentKeyString = CryptoUtil.savePublicKey(differentKey);
-        String tokenValue = tokenGenerator.createTokenValue(differentKeyString, 1);
+        String token = tokenGenerator.createToken(differentKeyString, 1);
 
         // exercise
         // Try to verify the signature of a different key
-        FederationUser federationUser = AuthenticationUtil.authenticate(publicKey, tokenValue);
+        SystemUser systemUser = AuthenticationUtil.authenticate(publicKey, token);
     }
 }

@@ -5,8 +5,8 @@ import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.InvalidTokenException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
-import cloud.fogbow.common.models.FederationUser;
-import cloud.fogbow.common.util.FederationUserUtil;
+import cloud.fogbow.common.models.SystemUser;
+import cloud.fogbow.common.util.SystemUserUtil;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.commons.lang.StringUtils;
@@ -17,18 +17,16 @@ import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class AuthenticationUtil {
     private static final long EXPIRATION_INTERVAL = TimeUnit.DAYS.toMillis(1); // One day
 
-    public static FederationUser authenticate(PublicKey asPublicKey, String encryptedTokenValue)
-            throws UnauthenticatedUserException, InvalidTokenException {
+    public static SystemUser authenticate(PublicKey asPublicKey, String encryptedTokenValue)
+            throws UnauthenticatedUserException, InvalidTokenException, UnexpectedException {
         try {
             RSAPrivateKey privateKey = ServiceAsymmetricKeysHolder.getInstance().getPrivateKey();
-            String plainTokenValue = TokenValueProtector.decrypt(privateKey, encryptedTokenValue,
+            String plainTokenValue = TokenProtector.decrypt(privateKey, encryptedTokenValue,
                     FogbowConstants.TOKEN_STRING_SEPARATOR);
             String[] tokenFields = StringUtils.splitByWholeSeparator(plainTokenValue, FogbowConstants.TOKEN_SEPARATOR);
             String payload = tokenFields[0];
@@ -38,22 +36,22 @@ public class AuthenticationUtil {
             String federationUserString = payloadFields[0];
             String expirationTime = payloadFields[1];
             checkIfTokenHasNotExprired(expirationTime);
-            return FederationUserUtil.deserialize(federationUserString);
+            return SystemUserUtil.deserialize(federationUserString);
         } catch (IOException | GeneralSecurityException e) {
             throw new InvalidTokenException();
         }
     }
 
-    public static String createFogbowToken(FederationUser federationUser, RSAPrivateKey privateKey, String publicKeyString)
+    public static String createFogbowToken(SystemUser systemUser, RSAPrivateKey privateKey, String publicKeyString)
             throws UnexpectedException {
-        String tokenAttributes = FederationUserUtil.serialize(federationUser);
+        String tokenAttributes = SystemUserUtil.serialize(systemUser);
         String expirationTime = generateExpirationTime();
         String payload = tokenAttributes + FogbowConstants.PAYLOAD_SEPARATOR + expirationTime;
         try {
             String signature = CryptoUtil.sign(privateKey, payload);
             String signedUnprotectedToken = payload + FogbowConstants.TOKEN_SEPARATOR + signature;
             RSAPublicKey publicKey = CryptoUtil.getPublicKeyFromString(publicKeyString);
-            return TokenValueProtector.encrypt(publicKey, signedUnprotectedToken, FogbowConstants.TOKEN_STRING_SEPARATOR);
+            return TokenProtector.encrypt(publicKey, signedUnprotectedToken, FogbowConstants.TOKEN_STRING_SEPARATOR);
         } catch (UnsupportedEncodingException | GeneralSecurityException e) {
             throw new UnexpectedException();
         }
@@ -77,18 +75,6 @@ public class AuthenticationUtil {
         if (expirationDate.before(currentDate)) {
             throw new UnauthenticatedUserException(Messages.Exception.EXPIRED_TOKEN);
         }
-    }
-
-    public static Map<String, String> getAttributes(String attributeString) {
-        Map<String, String> attributes = new HashMap<>();
-        String attributePairs[] = StringUtils.splitByWholeSeparator(attributeString, FogbowConstants.ATTRIBUTE_SEPARATOR);
-        for (String pair : attributePairs){
-            String[] pairFields = StringUtils.splitByWholeSeparator(pair, FogbowConstants.KEY_VALUE_SEPARATOR);
-            String key = pairFields[0];
-            String value = pairFields[1];
-            attributes.put(key, value);
-        }
-        return attributes;
     }
 
     private static String generateExpirationTime() {

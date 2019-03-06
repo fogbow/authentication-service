@@ -6,7 +6,7 @@ public class ConfigurationPropertyKeys {
     public static final String BUILD_NUMBER_KEY = "build_number";
 
     // Plugins
-    public static final String TOKEN_GENERATOR_PLUGIN_CLASS_KEY = "token_generator_plugin_class";
+    public static final String SYSTEM_IDENTITY_PROVIDER_PLUGIN_CLASS_KEY = "system_identity_provider_plugin_class";
 
     // Federation Identity Plugins configurations
     public static final String CLOUDSTACK_URL_KEY = "cloudstack_url";
