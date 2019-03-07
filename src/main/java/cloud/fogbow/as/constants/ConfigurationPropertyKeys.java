@@ -3,13 +3,12 @@ package cloud.fogbow.as.constants;
 public class ConfigurationPropertyKeys {
     // Service configuration
     public static final String LOCAL_MEMBER_ID_KEY = "xmpp_jid";
-    public static final String HTTP_REQUEST_TIMEOUT_KEY = "http_request_timeout";
     public static final String BUILD_NUMBER_KEY = "build_number";
 
     // Plugins
-    public static final String TOKEN_GENERATOR_PLUGIN_CLASS_KEY = "token_generator_plugin_class";
+    public static final String SYSTEM_IDENTITY_PROVIDER_PLUGIN_CLASS_KEY = "system_identity_provider_plugin_class";
 
-    // Token Generator Plugins configurations
+    // Federation Identity Plugins configurations
     public static final String CLOUDSTACK_URL_KEY = "cloudstack_url";
     public static final String LDAP_BASE_KEY = "ldap_base";
     public static final String LDAP_ENDPOINT_KEY = "ldap_endpoint";

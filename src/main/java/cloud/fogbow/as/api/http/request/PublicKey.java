@@ -30,7 +30,7 @@ public class PublicKey {
             return new ResponseEntity<>(publicKey, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.info(String.format(
-                    cloud.fogbow.common.constants.Messages.Exception.GENERIC_EXCEPTION, e.getMessage()), e);
+                    cloud.fogbow.common.constants.Messages.Exception.OPERATION_RETURNED_ERROR_S, e.getMessage()), e);
             throw e;
         }
     }
