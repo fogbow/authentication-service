@@ -13,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-
 @CrossOrigin
 @RestController
 @RequestMapping(value = Token.TOKEN_ENDPOINT)
@@ -32,15 +30,15 @@ public class Token {
             throws FogbowException {
 
         try {
-            LOGGER.info(String.format(cloud.fogbow.as.constants.Messages.Info.RECEIVING_CREATE_TOKEN_REQUEST,
+            LOGGER.info(String.format(cloud.fogbow.as.constants.Messages.Info.CREATE_TOKEN_REQUEST_RECEIVED_S,
                     userCredentials.getCredentials().size()));
-            String tokenValue = ApplicationFacade.getInstance().createTokenValue(
+            String tokenValue = ApplicationFacade.getInstance().createToken(
                     userCredentials.getCredentials(), userCredentials.getPublicKey());
             cloud.fogbow.as.api.http.response.Token token = new cloud.fogbow.as.api.http.response.Token(tokenValue);
             return new ResponseEntity<>(token, HttpStatus.CREATED);
         } catch (Exception e) {
             LOGGER.info(String.format(
-                    Messages.Exception.GENERIC_EXCEPTION, e.getMessage()), e);
+                    Messages.Exception.OPERATION_RETURNED_ERROR_S, e.getMessage()), e);
             throw e;
         }
     }
