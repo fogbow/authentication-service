@@ -5,14 +5,14 @@ import cloud.fogbow.common.models.CloudStackUser;
 import java.util.HashMap;
 
 public class CloudStackSystemUser extends OneToOneMappableSystemUser {
-    private HashMap<String, String> cookieHeader;
+    private HashMap<String, String> cookieHeaders;
 
     public CloudStackSystemUser(String identityProviderId, CloudStackUser cloudUser) {
         super(cloudUser.getId(), cloudUser.getName(), identityProviderId, cloudUser.getToken());
-        this.cookieHeader = cloudUser.getCookieHeader();
+        this.cookieHeaders = cloudUser.getCookieHeaders();
     }
 
-    public HashMap<String, String> getCookieHeader() {
-        return cookieHeader;
+    public HashMap<String, String> getCookieHeaders() {
+        return cookieHeaders;
     }
 }
