@@ -6,6 +6,8 @@ import cloud.fogbow.common.util.SystemUserUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.HashMap;
+
 public class CloudStackSystemUserTest {
     // Test if an CloudStackSystemUser is correctly seralized and later deserialized
     @Test
@@ -22,7 +24,8 @@ public class CloudStackSystemUserTest {
     }
 
     private CloudStackSystemUser createUser() {
-        CloudStackUser cloudUser = new CloudStackUser("fakeUserId", "fakeUserName", "fakeToken");
+        CloudStackUser cloudUser = new CloudStackUser("fakeUserId", "fakeUserName", "fakeToken",
+                new HashMap<>());
         return new CloudStackSystemUser("fakeProviderId", cloudUser);
     }
 }
