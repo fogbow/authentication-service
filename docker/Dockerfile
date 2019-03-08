@@ -1,7 +1,7 @@
 FROM openjdk:8
 
-ARG BRANCH_COMMON
-ARG BRANCH_AS
+ARG COMMON_BRANCH
+ARG AS_BRANCH
 
 # Install.
 RUN \
@@ -23,21 +23,21 @@ WORKDIR /root
 # Installing Common
 RUN \
   git clone https://github.com/fogbow/common.git && \
-  (cd common && git checkout $BRANCH_COMMON && mvn install -Dmaven.test.skip=true)
+  (cd common && git checkout $COMMON_BRANCH && mvn install -Dmaven.test.skip=true)
 
 # Downloading Authentication service
 RUN \
   git clone https://github.com/fogbow/authentication-service.git && \
-  (cd authentication-service && git checkout $BRANCH_AS)
+  (cd authentication-service && git checkout $AS_BRANCH)
 
 # Define working directory.
 WORKDIR /root/authentication-service
 
 # Generates the build number based on the commit checksum
 RUN \
-    (build_number=$(git rev-parse --short 'HEAD') && \
+    (as_build_number=$(git rev-parse --short 'HEAD') && \
     cd ../common && common_build_number=$(git rev-parse --short 'HEAD') && \
-    echo "build_number=as-$build_number-common-$common_build_number" > build)
+    echo "build_number=as-$as_build_number-common-$common_build_number" > build)
 
 RUN \
   mvn dependency:sources
