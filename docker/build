@@ -1,17 +1,17 @@
 #!/bin/bash
 
 if [ "$#" -ne 2 ]; then
-  echo "Usage: $0 <git branch_as> <docker tag>"
+  echo "Usage: $0 <git as_branch> <docker_tag>"
   exit 1
 fi
 
 dependecies_properties_path=../src/main/resources/dependencies.properties
 common_pattern="common.git\="
 
-branch_as=$1
-tag=$2
-branch_common=$(grep $common_pattern $dependecies_properties_path | awk '{split($0,a,"$common_pattern"); print a[2]}')
+as_branch=$1
+docker_tag=$2
+common_branch=$(grep $common_pattern $dependecies_properties_path | awk '{split($0,a,"$common_pattern"); print a[2]}')
 
-sudo docker build --build-arg BRANCH_AS=$branch_as --build-arg \
- --build-arg BRANCH_COMMON=$branch_common --no-cache -t fogbow/authentication-service:$tag .
+sudo docker build --build-arg AS_BRANCH=$as_branch --build-arg \
+ --build-arg COMMON_BRANCH=$common_branch --no-cache -t fogbow/authentication-service:$docker_tag .
 
