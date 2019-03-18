@@ -11,7 +11,7 @@ cache:
 before_install:
   - sudo add-apt-repository ppa:deadsnakes/ppa -y
   - sudo apt-get update
-  - sudo apt-get install python2.7 -y
+  - sudo apt-get install python2.6 -y
   - cd ..
   - git clone https://github.com/fogbow/quality-assurance.git
 
