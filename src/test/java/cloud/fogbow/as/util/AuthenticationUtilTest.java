@@ -5,45 +5,57 @@ import cloud.fogbow.as.stubs.StubFogbowTokenGenerator;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.models.SystemUser;
-import cloud.fogbow.common.util.HomeDir;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.runners.MethodSorters;
+
 import java.security.*;
+
 import static org.junit.Assert.*;
 
-public class AuthenticationUtilTest {
-
+// Tests are executed by order of their names
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class AuthenticationUtilTest extends ConfigureRSAKeyTest {
     private StubFogbowTokenGenerator tokenGenerator;
+
     private String publicKeyString;
     private PublicKey publicKey;
     private PrivateKey privateKey;
 
     @Before
     public void setUp() throws Exception {
+        super.init();
 
-        String keysPath = HomeDir.getPath();
-        String pubKeyPath = keysPath + "public.key";
-        String privKeyPath = keysPath + "private.key";
+        ServiceAsymmetricKeysHolder.getInstance().setPublicKeyFilePath(super.publicKeyPath);
+        ServiceAsymmetricKeysHolder.getInstance().setPrivateKeyFilePath(super.privateKeyPath);
 
-        ServiceAsymmetricKeysHolder.getInstance().setPublicKeyFilePath(pubKeyPath);
-        ServiceAsymmetricKeysHolder.getInstance().setPrivateKeyFilePath(privKeyPath);
+        this.publicKey = CryptoUtil.getPublicKey(super.publicKeyPath);
+        this.privateKey = CryptoUtil.getPrivateKey(super.privateKeyPath);
 
-        this.publicKey = CryptoUtil.getPublicKey(pubKeyPath);
-        this.privateKey = CryptoUtil.getPrivateKey(privKeyPath);
-
-        this.publicKeyString = CryptoUtil.getKey(pubKeyPath);
+        this.publicKeyString = CryptoUtil.getKey(super.publicKeyPath);
         this.tokenGenerator = new StubFogbowTokenGenerator();
     }
 
+    @After
+    public void tearDown(){
+        super.tearDown();
+    }
+
     @Test
-    public void testSuccessfulAuthentication() throws FogbowException {
+    public void testAuthenticationSuccessful() throws FogbowException {
         // set up
         String token = tokenGenerator.createToken(publicKeyString, 1);
 
         // exercise
-        SystemUser systemUser = AuthenticationUtil.authenticate(publicKey, token);
+        SystemUser systemUser = null;
+        try {
+            systemUser = AuthenticationUtil.authenticate(publicKey, token);
+        } catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+
+        }
 
         // verify
         assertNotEquals(null, systemUser);
@@ -53,9 +65,8 @@ public class AuthenticationUtilTest {
     public void testExpiredToken() throws InterruptedException, FogbowException {
         // set up
         String token = tokenGenerator.createToken(publicKeyString, 0);
-        Thread.sleep(2000);
 
-        // exercise
+        // exercise/verify
         SystemUser systemUser = AuthenticationUtil.authenticate(publicKey, token);
     }
 
