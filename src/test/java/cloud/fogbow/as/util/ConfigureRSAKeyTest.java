@@ -14,11 +14,11 @@ import java.security.PublicKey;
 
 public abstract class ConfigureRSAKeyTest {
 
-    protected String privateKeyPath;
-    protected String publicKeyPath;
+    protected static String privateKeyPath;
+    protected static String publicKeyPath;
 
 
-    protected void init() throws FogbowException, GeneralSecurityException, IOException {
+    protected static void init() throws FogbowException, GeneralSecurityException, IOException {
         String keysPath = HomeDir.getPath();
         publicKeyPath = keysPath + "public.key";
         privateKeyPath = keysPath + "private.key";
@@ -31,7 +31,8 @@ public abstract class ConfigureRSAKeyTest {
         saveKeyToFile(privateKeyPath, CryptoUtil.savePrivateKey(privateKey));
     }
 
-    private static void saveKeyToFile(String path, String key) throws IOException {File file = new File(path);
+    private static void saveKeyToFile(String path, String key) throws IOException {
+        File file = new File(path);
         file.getParentFile().mkdirs();
         FileOutputStream stream = new FileOutputStream(file);
         stream.write(key.getBytes());
@@ -43,7 +44,7 @@ public abstract class ConfigureRSAKeyTest {
         file.delete();
     }
 
-    protected void tearDown() {
+    protected static void tearDown() {
         deleteKey(publicKeyPath);
         deleteKey(privateKeyPath);
     }

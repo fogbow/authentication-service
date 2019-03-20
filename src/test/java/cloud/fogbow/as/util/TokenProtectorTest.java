@@ -16,19 +16,19 @@ import java.security.*;
 
 import static org.junit.Assert.*;
 
-public class TokenProtectorTest extends ConfigureRSAKeyTest {
+public class TokenProtectorTest {
 
     private String tokenSeparator;
 
     @Before
     public void setup() throws FogbowException, GeneralSecurityException, IOException {
-        super.init();
+        ConfigureRSAKeyTest.init();
         this.tokenSeparator = FogbowConstants.TOKEN_SEPARATOR;
     }
 
     @After
     public void tearDown(){
-        super.tearDown();
+        ConfigureRSAKeyTest.tearDown();
     }
 
     @Test
