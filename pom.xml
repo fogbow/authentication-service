@@ -220,7 +220,7 @@
         </resources>
         <testResources>
             <testResource>
-                <directory>src/test/resources</directory>
+                <directory>src/test/resources/</directory>
             </testResource>
         </testResources>
         <plugins>

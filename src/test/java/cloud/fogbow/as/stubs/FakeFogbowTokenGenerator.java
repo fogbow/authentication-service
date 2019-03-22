@@ -17,12 +17,12 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class StubFogbowTokenGenerator {
+public class FakeFogbowTokenGenerator {
 
     private String provider;
     private PrivateKey privateKey;
 
-    public StubFogbowTokenGenerator() throws IOException, GeneralSecurityException {
+    public FakeFogbowTokenGenerator() throws IOException, GeneralSecurityException {
         this.provider = "fake-provider";
 
         String keysPath = HomeDir.getPath();
