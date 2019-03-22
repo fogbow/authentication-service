@@ -37,6 +37,7 @@ WORKDIR /root/authentication-service
 RUN \
     (as_build_number=$(git rev-parse --short 'HEAD') && \
     cd ../common && common_build_number=$(git rev-parse --short 'HEAD') && \
+    cd /root/authentication-service && \
     echo "build_number=as-$as_build_number-common-$common_build_number" > build)
 
 RUN \
