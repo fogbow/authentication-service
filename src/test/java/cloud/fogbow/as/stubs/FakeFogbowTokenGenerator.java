@@ -58,7 +58,7 @@ public class FakeFogbowTokenGenerator {
         return System.currentTimeMillis();
     }
 
-    public String createToken() {
+    public String createToken() throws UnexpectedException {
         String userId = "fake-userid";
         String userName = "fake-username";
 
