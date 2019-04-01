@@ -25,7 +25,7 @@ public class CloudStackSystemUserTest {
 
     private CloudStackSystemUser createUser() {
         CloudStackUser cloudUser = new CloudStackUser("fakeUserId", "fakeUserName", "fakeToken",
-                new HashMap<>());
+                "fake-domain", new HashMap<>());
         return new CloudStackSystemUser("fakeProviderId", cloudUser);
     }
 }
