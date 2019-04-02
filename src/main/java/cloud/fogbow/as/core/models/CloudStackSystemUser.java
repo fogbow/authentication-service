@@ -4,7 +4,7 @@ import cloud.fogbow.common.models.CloudStackUser;
 
 import java.util.HashMap;
 
-public class CloudStackSystemUser extends CloudProvidedSystemUser implements OneToOneMappableSystemUser {
+public class CloudStackSystemUser extends CloudProvidedSystemUser implements OneToOneMappableSystemUser<CloudStackUser> {
     private String domain;
     private HashMap<String, String> cookieHeaders;
 

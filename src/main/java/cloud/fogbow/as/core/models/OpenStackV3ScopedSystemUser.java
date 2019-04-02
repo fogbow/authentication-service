@@ -2,7 +2,7 @@ package cloud.fogbow.as.core.models;
 
 import cloud.fogbow.common.models.OpenStackV3User;
 
-public class OpenStackV3ScopedSystemUser extends OpenStackV3SystemUser implements OneToOneMappableSystemUser {
+public class OpenStackV3ScopedSystemUser extends OpenStackV3SystemUser implements OneToOneMappableSystemUser<OpenStackV3User> {
     private String projectId;
 
     public OpenStackV3ScopedSystemUser(String identityProviderId, OpenStackV3User cloudUser) {
