@@ -2,10 +2,12 @@ package cloud.fogbow.as.util;
 
 import cloud.fogbow.as.core.util.TokenProtector;
 import cloud.fogbow.common.constants.FogbowConstants;
+import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.util.HomeDir;
 import cloud.fogbow.common.util.CryptoUtil;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,8 +21,14 @@ public class TokenProtectorTest {
     private String tokenSeparator;
 
     @Before
-    public void setup(){
+    public void setup() throws FogbowException, GeneralSecurityException, IOException {
+        ConfigureRSAKeyTest.init();
         this.tokenSeparator = FogbowConstants.TOKEN_SEPARATOR;
+    }
+
+    @After
+    public void tearDown(){
+        ConfigureRSAKeyTest.tearDown();
     }
 
     @Test

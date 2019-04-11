@@ -1,61 +1,73 @@
 package cloud.fogbow.as.util;
 
 import cloud.fogbow.as.core.util.AuthenticationUtil;
-import cloud.fogbow.as.stubs.StubFogbowTokenGenerator;
+import cloud.fogbow.as.stubs.FakeFogbowTokenGenerator;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.models.SystemUser;
-import cloud.fogbow.common.util.HomeDir;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+
+import java.io.IOException;
 import java.security.*;
+
 import static org.junit.Assert.*;
 
 public class AuthenticationUtilTest {
+    private FakeFogbowTokenGenerator tokenGenerator;
 
-    private StubFogbowTokenGenerator tokenGenerator;
     private String publicKeyString;
     private PublicKey publicKey;
     private PrivateKey privateKey;
 
+    @BeforeClass
+    public static void setUp() throws Exception {
+        ConfigureRSAKeyTest.init();
+
+        ServiceAsymmetricKeysHolder.getInstance().setPublicKeyFilePath(ConfigureRSAKeyTest.publicKeyPath);
+        ServiceAsymmetricKeysHolder.getInstance().setPrivateKeyFilePath(ConfigureRSAKeyTest.privateKeyPath);
+    }
+
     @Before
-    public void setUp() throws Exception {
+    public void before() throws IOException, GeneralSecurityException {
+        this.publicKey = CryptoUtil.getPublicKey(ConfigureRSAKeyTest.publicKeyPath);
+        this.privateKey = CryptoUtil.getPrivateKey(ConfigureRSAKeyTest.privateKeyPath);
 
-        String keysPath = HomeDir.getPath();
-        String pubKeyPath = keysPath + "public.key";
-        String privKeyPath = keysPath + "private.key";
+        this.publicKeyString = CryptoUtil.getKey(ConfigureRSAKeyTest.publicKeyPath);
+        this.tokenGenerator = new FakeFogbowTokenGenerator();
+    }
 
-        ServiceAsymmetricKeysHolder.getInstance().setPublicKeyFilePath(pubKeyPath);
-        ServiceAsymmetricKeysHolder.getInstance().setPrivateKeyFilePath(privKeyPath);
-
-        this.publicKey = CryptoUtil.getPublicKey(pubKeyPath);
-        this.privateKey = CryptoUtil.getPrivateKey(privKeyPath);
-
-        this.publicKeyString = CryptoUtil.getKey(pubKeyPath);
-        this.tokenGenerator = new StubFogbowTokenGenerator();
+    @AfterClass
+    public static void tearDown(){
+        ConfigureRSAKeyTest.tearDown();
     }
 
     @Test
-    public void testSuccessfulAuthentication() throws FogbowException {
+    public void testAuthenticationSuccessful() throws FogbowException {
         // set up
         String token = tokenGenerator.createToken(publicKeyString, 1);
 
         // exercise
-        SystemUser systemUser = AuthenticationUtil.authenticate(publicKey, token);
+        SystemUser systemUser = null;
+        try {
+            systemUser = AuthenticationUtil.authenticate(publicKey, token);
+        } catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+
+        }
 
         // verify
         assertNotEquals(null, systemUser);
     }
 
     @Test(expected = UnauthenticatedUserException.class)
-    public void testExpiredToken() throws InterruptedException, FogbowException {
+    public void testExpiredToken() throws FogbowException {
         // set up
         String token = tokenGenerator.createToken(publicKeyString, 0);
-        Thread.sleep(2000);
 
-        // exercise
+        // exercise/verify
         SystemUser systemUser = AuthenticationUtil.authenticate(publicKey, token);
     }
 
