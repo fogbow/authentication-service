@@ -16,9 +16,9 @@ public class IdpEmulatorSystemIdentityProviderPlugin implements SystemIdentityPr
 
     private final Logger LOGGER = Logger.getLogger(IdpEmulatorSystemIdentityProviderPlugin.class);;
 
-    private final String FOGBOW_ALLOWED_USER = "fogbow";
-    private final String USER_NAME_FIELD = "username";
-    private String identityProviderId;
+    private static final String FOGBOW_ALLOWED_USER = "fogbow";
+    private static final String USER_NAME_FIELD = "username";
+    private static String identityProviderId;
 
     public IdpEmulatorSystemIdentityProviderPlugin() {
         this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
