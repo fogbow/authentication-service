@@ -14,13 +14,13 @@ import java.util.Map;
 
 public class IdpEmulatorSystemIdentityProviderPlugin implements SystemIdentityProviderPlugin<SystemUser> {
 
-    private final Logger LOGGER;
+    private final Logger LOGGER = Logger.getLogger(IdpEmulatorSystemIdentityProviderPlugin.class);;
 
+    private final String FOGBOW_ALLOWED_USER = "fogbow";
     private final String USER_NAME_FIELD = "username";
-    private final String identityProviderId;
+    private String identityProviderId;
 
     public IdpEmulatorSystemIdentityProviderPlugin() {
-        this.LOGGER = Logger.getLogger(IdpEmulatorSystemIdentityProviderPlugin.class);
         this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
     }
 
@@ -41,6 +41,6 @@ public class IdpEmulatorSystemIdentityProviderPlugin implements SystemIdentityPr
     }
 
     private boolean isAuthenticated(String username) {
-        return username.equals("fogbow");
+        return username.equals(FOGBOW_ALLOWED_USER);
     }
 }
