@@ -3,6 +3,7 @@ package cloud.fogbow.as.constants;
 public class Messages {
 
     public static class Exception {
+        public static final String GENERIC_EXCEPTION = "Operation returned error: %s";
         public static final String EXPIRED_TOKEN = "Expired token.";
         public static final String INVALID_CREDENTIALS = "Invalid credentials.";
         public static final String INVALID_TOKEN = "Invalid token value.";
@@ -20,6 +21,7 @@ public class Messages {
         public static final String CREATE_TOKEN_REQUEST_RECEIVED_S = "Create token request received with a credentials map of size %s.";
         public static final String RECEIVING_GET_PUBLIC_KEY_REQUEST = "Get public key received.";
         public static final String RECEIVING_GET_VERSION_REQUEST = "Get request for version received.";
+        public static final String REDIRECT_SWAGGER_DOCUMENTATION = "Redirecting swagger documentation to fixed location.";
     }
 
     public static class Error {

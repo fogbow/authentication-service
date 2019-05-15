@@ -1,5 +1,6 @@
 package cloud.fogbow.as.api.http.request;
 
+import cloud.fogbow.as.constants.SystemConstants;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.as.core.ApplicationFacade;
 import cloud.fogbow.as.constants.ApiDocumentation;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = PublicKey.PUBLIC_KEY_ENDPOINT)
 @Api(description = ApiDocumentation.PublicKey.API)
 public class PublicKey {
-    public static final String PUBLIC_KEY_ENDPOINT = "publicKey";
+    public static final String PUBLIC_KEY_ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "publicKey";
 
     private final Logger LOGGER = Logger.getLogger(PublicKey.class);
 

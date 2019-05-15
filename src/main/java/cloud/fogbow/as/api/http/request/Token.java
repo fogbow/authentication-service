@@ -1,6 +1,7 @@
 package cloud.fogbow.as.api.http.request;
 
 import cloud.fogbow.as.api.parameters.UserCredentials;
+import cloud.fogbow.as.constants.SystemConstants;
 import cloud.fogbow.common.constants.Messages;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.as.core.ApplicationFacade;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = Token.TOKEN_ENDPOINT)
 @Api(description = ApiDocumentation.Token.API)
 public class Token {
-    public static final String TOKEN_ENDPOINT = "tokens";
+    public static final String TOKEN_ENDPOINT = SystemConstants.SERVICE_BASE_ENDPOINT + "tokens";
 
     private final Logger LOGGER = Logger.getLogger(Token.class);
 
