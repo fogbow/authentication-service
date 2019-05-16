@@ -96,9 +96,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
+           <groupId>org.apache.httpcomponents</groupId>
+           <artifactId>httpclient</artifactId>
+           <version>4.5.5</version>
+       	</dependency>
+       	<dependency>
+           <groupId>org.apache.httpcomponents</groupId>
+           <artifactId>httpcore</artifactId>
+           <version>4.4.9</version>
+       	</dependency>
         <dependency>
             <groupId>net.schmizz</groupId>
             <artifactId>sshj</artifactId>
