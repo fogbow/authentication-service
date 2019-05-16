@@ -21,7 +21,6 @@ public class Messages {
         public static final String CREATE_TOKEN_REQUEST_RECEIVED_S = "Create token request received with a credentials map of size %s.";
         public static final String RECEIVING_GET_PUBLIC_KEY_REQUEST = "Get public key received.";
         public static final String RECEIVING_GET_VERSION_REQUEST = "Get request for version received.";
-        public static final String REDIRECT_SWAGGER_DOCUMENTATION = "Redirecting swagger documentation to fixed location.";
     }
 
     public static class Error {
