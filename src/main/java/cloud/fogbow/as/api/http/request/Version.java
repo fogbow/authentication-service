@@ -2,10 +2,10 @@ package cloud.fogbow.as.api.http.request;
 
 import cloud.fogbow.as.constants.SystemConstants;
 import cloud.fogbow.as.core.ApplicationFacade;
+import cloud.fogbow.common.constants.ApiDocumentation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
-import cloud.fogbow.as.constants.ApiDocumentation;
 import cloud.fogbow.as.constants.Messages;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

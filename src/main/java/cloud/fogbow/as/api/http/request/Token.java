@@ -1,6 +1,6 @@
 package cloud.fogbow.as.api.http.request;
 
-import cloud.fogbow.as.api.parameters.UserCredentials;
+import cloud.fogbow.as.api.parameters.TokenParameters;
 import cloud.fogbow.as.constants.SystemConstants;
 import cloud.fogbow.common.constants.Messages;
 import cloud.fogbow.common.exceptions.FogbowException;
@@ -27,14 +27,14 @@ public class Token {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<cloud.fogbow.as.api.http.response.Token> createTokenValue(
             @ApiParam(value = ApiDocumentation.Token.CREATE_REQUEST_BODY)
-            @RequestBody UserCredentials userCredentials)
+            @RequestBody TokenParameters request)
             throws FogbowException {
 
         try {
             LOGGER.info(String.format(cloud.fogbow.as.constants.Messages.Info.CREATE_TOKEN_REQUEST_RECEIVED_S,
-                    userCredentials.getCredentials().size()));
+                    request.getCredentials().size()));
             String tokenValue = ApplicationFacade.getInstance().createToken(
-                    userCredentials.getCredentials(), userCredentials.getPublicKey());
+                    request.getCredentials(), request.getPublicKey());
             cloud.fogbow.as.api.http.response.Token token = new cloud.fogbow.as.api.http.response.Token(tokenValue);
             return new ResponseEntity<>(token, HttpStatus.CREATED);
         } catch (Exception e) {

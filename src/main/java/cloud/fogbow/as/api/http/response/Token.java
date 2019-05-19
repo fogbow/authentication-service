@@ -1,6 +1,10 @@
 package cloud.fogbow.as.api.http.response;
 
+import cloud.fogbow.as.constants.ApiDocumentation;
+import io.swagger.annotations.ApiModelProperty;
+
 public class Token {
+    @ApiModelProperty(example = ApiDocumentation.Model.TOKEN)
     private String token;
 
     public Token() {}
