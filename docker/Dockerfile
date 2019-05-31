@@ -28,7 +28,7 @@ RUN \
 # Downloading Authentication service
 RUN \
   git clone https://github.com/fogbow/authentication-service.git && \
-  (cd authentication-service && git checkout $AS_BRANCH)
+  (cd authentication-service && git checkout $AS_BRANCH && mvn install -DskipTests)
 
 # Define working directory.
 WORKDIR /root/authentication-service
