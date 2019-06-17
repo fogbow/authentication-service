@@ -35,7 +35,7 @@ public class ShibbolethSystemIdentityProviderPlugin implements SystemIdentityPro
 	private static final String KEY_CREDENTIAL = "key";
 
 	// Shib-specific token constants
-	public static final String SHIB_TOKEN_STRING_SEPARATOR = ":";
+	public static final String SHIB_TOKEN_STRING_SEPARATOR = "!#!";
 
 	private String identityProviderId;
 	private RSAPrivateKey asPrivateKey;
