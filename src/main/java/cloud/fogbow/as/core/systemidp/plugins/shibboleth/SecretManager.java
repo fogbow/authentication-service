@@ -30,7 +30,7 @@ public class SecretManager {
 		if (!isValidSecret(secret)) {
 			return false;
 		}
-		
+		LOGGER.debug(Messages.Info.SECRET_VALIDATED);
 		Long validity = getNow() + EXPIRATION_INTERVAL;
 		this.secrets.put(secret, validity);
 		return true;

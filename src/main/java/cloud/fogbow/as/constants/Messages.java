@@ -24,6 +24,7 @@ public class Messages {
         public static final String RECEIVING_GET_VERSION_REQUEST = "Get request for version received.";
         public static final String SECRET_ALREADY_EXISTS = "Secret already exists.";
         public static final String SECRET_CREATED_BEFORE_AS_START_TIME = "Secret was created before the start time of the AS service.";
+        public static final String SECRET_VALIDATED = "Valid secret received.";
     }
 
     public static class Error {
