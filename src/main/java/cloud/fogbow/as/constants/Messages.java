@@ -19,8 +19,11 @@ public class Messages {
 
     public static class Info {
         public static final String CREATE_TOKEN_REQUEST_RECEIVED_S = "Create token request received with a credentials map of size %s.";
+        public static final String INVALID_FORMAT_SECRET = "Invalid format for the secret.";
         public static final String RECEIVING_GET_PUBLIC_KEY_REQUEST = "Get public key received.";
         public static final String RECEIVING_GET_VERSION_REQUEST = "Get request for version received.";
+        public static final String SECRET_ALREADY_EXISTS = "Secret already exists.";
+        public static final String SECRET_CREATED_BEFORE_AS_START_TIME = "Secret was created before the start time of the AS service.";
     }
 
     public static class Error {

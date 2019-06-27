@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import cloud.fogbow.as.constants.Messages;
 import org.apache.log4j.Logger;
 
 public class SecretManager {
@@ -42,16 +43,18 @@ public class SecretManager {
 	protected boolean isValidSecret(String secret) {
 		boolean alreadyExists = this.secrets.containsKey(secret);
 		if (alreadyExists) {
+			LOGGER.debug(Messages.Info.SECRET_ALREADY_EXISTS);
 			return false;
 		}
 		 
 		try {
 			Date secretCreationTime = new Date(Long.parseLong(secret));
 			if (secretCreationTime.before(this.asStartingTime)) {
+				LOGGER.info(Messages.Info.SECRET_CREATED_BEFORE_AS_START_TIME);
 				return false;
 			}		
 		} catch (NumberFormatException e) {
-			LOGGER.warn("Secret format is invalid.", e);
+			LOGGER.debug(Messages.Info.INVALID_FORMAT_SECRET, e);
 			return false;
 		}
 		
@@ -59,7 +62,7 @@ public class SecretManager {
 	}
 	
 	// check when exceed the map size
-	protected synchronized void cleanSecrets() {
+	protected void cleanSecrets() {
 		if (this.secrets.size() < MAXIMUM_MAP_SIZE) {
 			return;
 		}
@@ -74,13 +77,5 @@ public class SecretManager {
 				this.secrets.remove(key);
 			}
 		}
-	}
-	
-	protected void setSecrets(Map<String, Long> secrets) {
-		this.secrets = secrets;
-	}
-	
-	protected Map<String, Long> getSecrets() {
-		return secrets;
 	}
 }

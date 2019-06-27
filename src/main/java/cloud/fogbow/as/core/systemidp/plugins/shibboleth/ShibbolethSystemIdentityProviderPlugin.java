@@ -72,7 +72,7 @@ public class ShibbolethSystemIdentityProviderPlugin implements SystemIdentityPro
 		String[] tokenShibAppParameters = tokenShib.split(SHIB_TOKEN_STRING_SEPARATOR);
 		checkTokenFormat(tokenShibAppParameters);
 		
-		//verifySecretShibAppToken(tokenShibAppParameters);
+		verifySecretShibAppToken(tokenShibAppParameters);
 		
 		return createShibbolethSystemUser(tokenShibAppParameters);
 	}
