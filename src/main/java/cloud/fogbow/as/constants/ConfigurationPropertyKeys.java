@@ -16,5 +16,5 @@ public class ConfigurationPropertyKeys {
     public static final String LDAP_ENCRYPT_TYPE_KEY = "ldap_encrypt_type";
     public static final String OPENNEBULA_URL_KEY = "opennebula_url";
     public static final String OPENSTACK_KEYSTONE_V3_URL_KEY = "openstack_keystone_v3_url";
-    public static final String SHIB_PUBLIC_FILE_PATH_KEY = "shib_public_key_file_path";
+    public static final String SHIB_PUBLIC_FILE_NAME_KEY = "shib_public_key_file_name";
 }

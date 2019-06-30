@@ -11,6 +11,7 @@ import cloud.fogbow.as.core.systemidp.SystemIdentityProviderPlugin;
 import cloud.fogbow.common.constants.Messages;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
+import cloud.fogbow.common.util.HomeDir;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import cloud.fogbow.common.exceptions.FatalErrorException;
@@ -139,8 +140,7 @@ public class ShibbolethSystemIdentityProviderPlugin implements SystemIdentityPro
 	}
 	
     protected RSAPublicKey getShibbolethApplicationPublicKey() throws IOException, GeneralSecurityException {
-        String filename = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.SHIB_PUBLIC_FILE_PATH_KEY);
-        String publicKeyPEM = CryptoUtil.getKey(filename);
-        return CryptoUtil.getPublicKeyFromString(publicKeyPEM);
+        String filename = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.SHIB_PUBLIC_FILE_NAME_KEY);
+        return CryptoUtil.getPublicKey(HomeDir.getPath() + filename);
     }
 }
