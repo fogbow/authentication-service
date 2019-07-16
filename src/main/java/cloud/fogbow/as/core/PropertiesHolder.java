@@ -5,8 +5,6 @@ import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.common.util.HomeDir;
 import cloud.fogbow.as.constants.SystemConstants;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 public class PropertiesHolder {
