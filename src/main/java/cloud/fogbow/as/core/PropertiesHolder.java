@@ -15,9 +15,8 @@ public class PropertiesHolder {
 
     private PropertiesHolder() throws FatalErrorException {
         String path = HomeDir.getPath();
-        List<String> configFilesNames = new ArrayList<>();
-        configFilesNames.add(path + SystemConstants.AS_CONF_FILE_NAME);
-        this.properties = PropertiesUtil.readProperties(configFilesNames);
+        String configFileName = path + SystemConstants.AS_CONF_FILE_NAME;
+        this.properties = PropertiesUtil.readProperties(configFileName);
     }
 
     public static synchronized PropertiesHolder getInstance() throws FatalErrorException {
