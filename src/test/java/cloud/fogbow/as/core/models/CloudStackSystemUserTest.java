@@ -2,7 +2,7 @@ package cloud.fogbow.as.core.models;
 
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.models.CloudStackUser;
-import cloud.fogbow.common.util.SystemUserUtil;
+import cloud.fogbow.common.models.SystemUser;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,8 +16,8 @@ public class CloudStackSystemUserTest {
         CloudStackSystemUser systemUser = createUser();
 
         // Exercise
-        String serializedUser = SystemUserUtil.serialize(systemUser);
-        CloudStackSystemUser recoveredSystemUser = (CloudStackSystemUser) SystemUserUtil.deserialize(serializedUser);
+        String serializedUser = SystemUser.serialize(systemUser);
+        CloudStackSystemUser recoveredSystemUser = (CloudStackSystemUser) SystemUser.deserialize(serializedUser);
 
         // Verify
         Assert.assertEquals(systemUser, recoveredSystemUser);

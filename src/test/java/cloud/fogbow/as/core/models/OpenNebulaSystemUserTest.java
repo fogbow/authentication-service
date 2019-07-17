@@ -2,7 +2,7 @@ package cloud.fogbow.as.core.models;
 
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.models.OpenNebulaUser;
-import cloud.fogbow.common.util.SystemUserUtil;
+import cloud.fogbow.common.models.SystemUser;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,8 +14,8 @@ public class OpenNebulaSystemUserTest {
         OpenNebulaSystemUser systemUser = createUser();
 
         // Exercise
-        String serializedUser = SystemUserUtil.serialize(systemUser);
-        OpenNebulaSystemUser recoveredSystemUser = (OpenNebulaSystemUser) SystemUserUtil.deserialize(serializedUser);
+        String serializedUser = SystemUser.serialize(systemUser);
+        OpenNebulaSystemUser recoveredSystemUser = (OpenNebulaSystemUser) SystemUser.deserialize(serializedUser);
 
         // Verify
         Assert.assertEquals(systemUser, recoveredSystemUser);
