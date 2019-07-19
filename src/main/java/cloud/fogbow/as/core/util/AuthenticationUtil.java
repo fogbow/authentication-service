@@ -6,7 +6,6 @@ import cloud.fogbow.common.exceptions.InvalidTokenException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.models.SystemUser;
-import cloud.fogbow.common.util.SystemUserUtil;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.commons.lang.StringUtils;
@@ -36,7 +35,7 @@ public class AuthenticationUtil {
             String federationUserString = payloadFields[0];
             String expirationTime = payloadFields[1];
             checkIfTokenHasNotExprired(expirationTime);
-            return SystemUserUtil.deserialize(federationUserString);
+            return SystemUser.deserialize(federationUserString);
         } catch (IOException | GeneralSecurityException e) {
             throw new InvalidTokenException();
         }
@@ -44,7 +43,7 @@ public class AuthenticationUtil {
 
     public static String createFogbowToken(SystemUser systemUser, RSAPrivateKey privateKey, String publicKeyString)
             throws UnexpectedException {
-        String tokenAttributes = SystemUserUtil.serialize(systemUser);
+        String tokenAttributes = SystemUser.serialize(systemUser);
         String expirationTime = generateExpirationTime();
         String payload = tokenAttributes + FogbowConstants.PAYLOAD_SEPARATOR + expirationTime;
         try {
