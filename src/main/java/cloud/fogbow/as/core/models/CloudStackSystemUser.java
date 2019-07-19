@@ -1,12 +1,12 @@
 package cloud.fogbow.as.core.models;
 
-import cloud.fogbow.common.models.CloudStackUser;
+import java.util.Map;
 
-import java.util.HashMap;
+import cloud.fogbow.common.models.CloudStackUser;
 
 public class CloudStackSystemUser extends CloudProvidedSystemUser implements OneToOneMappableSystemUser<CloudStackUser> {
     private String domain;
-    private HashMap<String, String> cookieHeaders;
+    private Map<String, String> cookieHeaders;
 
     public CloudStackSystemUser(String identityProviderId, CloudStackUser cloudUser) {
         super(identityProviderId, cloudUser);
@@ -18,7 +18,7 @@ public class CloudStackSystemUser extends CloudProvidedSystemUser implements One
         return domain;
     }
 
-    public HashMap<String, String> getCookieHeaders() {
+    public Map<String, String> getCookieHeaders() {
         return cookieHeaders;
     }
 
