@@ -1,7 +1,7 @@
 package cloud.fogbow.as.core.models;
 
 import cloud.fogbow.common.exceptions.UnexpectedException;
-import cloud.fogbow.common.util.SystemUserUtil;
+import cloud.fogbow.common.models.SystemUser;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,8 +13,8 @@ public class ShibbolethSystemUserTest {
         ShibbolethSystemUser systemUser = createUser();
 
         // Exercise
-        String serializedUser = SystemUserUtil.serialize(systemUser);
-        ShibbolethSystemUser recoveredSystemUser = (ShibbolethSystemUser) SystemUserUtil.deserialize(serializedUser);
+        String serializedUser = SystemUser.serialize(systemUser);
+        ShibbolethSystemUser recoveredSystemUser = (ShibbolethSystemUser) SystemUser.deserialize(serializedUser);
 
         // Verify
         Assert.assertEquals(systemUser, recoveredSystemUser);

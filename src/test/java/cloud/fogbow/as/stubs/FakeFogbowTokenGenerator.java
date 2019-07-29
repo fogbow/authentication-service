@@ -4,7 +4,6 @@ import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.models.SystemUser;
-import cloud.fogbow.common.util.SystemUserUtil;
 import cloud.fogbow.common.util.HomeDir;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.as.core.util.TokenProtector;
@@ -63,6 +62,6 @@ public class FakeFogbowTokenGenerator {
         String userName = "fake-username";
 
         SystemUser user = new SystemUser(userId, userName, this.provider);
-        return SystemUserUtil.serialize(user);
+        return SystemUser.serialize(user);
     }
 }
