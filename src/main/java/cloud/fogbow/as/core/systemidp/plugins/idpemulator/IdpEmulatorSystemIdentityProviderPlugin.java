@@ -21,7 +21,7 @@ public class IdpEmulatorSystemIdentityProviderPlugin implements SystemIdentityPr
     private static String identityProviderId;
 
     public IdpEmulatorSystemIdentityProviderPlugin() {
-        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
+        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MEMBER_ID_KEY);
     }
 
     @Override

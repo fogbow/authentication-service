@@ -16,7 +16,7 @@ public class AwsV2SystemIdentityProviderPlugin implements SystemIdentityProvider
     private String identityProviderId;
 
     public AwsV2SystemIdentityProviderPlugin() {
-        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
+        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MEMBER_ID_KEY);
         this.identityProviderPlugin = new AwsV2IdentityProviderPlugin();
     }
 
