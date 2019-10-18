@@ -18,7 +18,7 @@ public class CloudStackSystemIdentityProviderPlugin implements SystemIdentityPro
     private String identityProviderId;
 
     public CloudStackSystemIdentityProviderPlugin() {
-        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MEMBER_ID_KEY);
+        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.PROVIDER_ID_KEY);
         String cloudStackUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.CLOUDSTACK_URL_KEY);
         this.identityProviderPlugin = new CloudStackIdentityProviderPlugin(cloudStackUrl);
     }

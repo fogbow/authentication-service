@@ -19,7 +19,7 @@ public class OpenStackSystemIdentityProviderPlugin implements SystemIdentityProv
     private String identityProviderId;
 
     public OpenStackSystemIdentityProviderPlugin() throws FatalErrorException {
-        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MEMBER_ID_KEY);
+        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.PROVIDER_ID_KEY);
         String identityUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.OPENSTACK_KEYSTONE_V3_URL_KEY);
         this.identityProviderPlugin = new OpenStackIdentityProviderPlugin(identityUrl);
     }

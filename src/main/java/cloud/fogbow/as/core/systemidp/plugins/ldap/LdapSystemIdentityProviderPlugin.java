@@ -39,7 +39,7 @@ public class LdapSystemIdentityProviderPlugin implements SystemIdentityProviderP
     private String encryptType;
 
     public LdapSystemIdentityProviderPlugin() {
-        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MEMBER_ID_KEY);
+        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.PROVIDER_ID_KEY);
         this.ldapBase = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_BASE_KEY);
         this.ldapUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_ENDPOINT_KEY);
         this.encryptType = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_ENCRYPT_TYPE_KEY);

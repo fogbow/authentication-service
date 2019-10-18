@@ -20,7 +20,7 @@ public class OpenNebulaSystemIdentityProviderPlugin implements SystemIdentityPro
     private String identityProviderId;
 
     public OpenNebulaSystemIdentityProviderPlugin() throws FatalErrorException {
-        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.MEMBER_ID_KEY);
+        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.PROVIDER_ID_KEY);
     	String identityUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.OPENNEBULA_URL_KEY);
         this.identityProviderPlugin = new OpenNebulaIdentityProviderPlugin(identityUrl);
     }
