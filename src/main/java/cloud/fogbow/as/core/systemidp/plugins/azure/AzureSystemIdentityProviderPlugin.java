@@ -16,7 +16,7 @@ public class AzureSystemIdentityProviderPlugin implements SystemIdentityProvider
     private String identityProviderId;
     
 	public AzureSystemIdentityProviderPlugin() {
-		this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
+		this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.PROVIDER_ID_KEY);
 		this.identityProviderPlugin = new AzureIdentityProviderPlugin();
 	}
 
