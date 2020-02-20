@@ -44,7 +44,7 @@ public class ShibbolethSystemIdentityProviderPlugin implements SystemIdentityPro
 	private SecretManager secretManager;
 
 	public ShibbolethSystemIdentityProviderPlugin() {
-		this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
+		this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.PROVIDER_ID_KEY);
         try {
 			this.asPrivateKey = ServiceAsymmetricKeysHolder.getInstance().getPrivateKey();
         } catch (IOException | GeneralSecurityException e) {

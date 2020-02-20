@@ -6,13 +6,11 @@ import cloud.fogbow.common.exceptions.*;
 import cloud.fogbow.as.core.PropertiesHolder;
 import cloud.fogbow.common.models.OpenNebulaUser;
 import cloud.fogbow.common.plugins.cloudidp.opennebula.OpenNebulaIdentityProviderPlugin;
-import cloud.fogbow.common.util.PropertiesUtil;
 
 import org.apache.log4j.Logger;
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
 
 import java.util.Map;
-import java.util.Properties;
 
 public class OpenNebulaSystemIdentityProviderPlugin implements SystemIdentityProviderPlugin<OpenNebulaSystemUser> {
     
@@ -22,7 +20,7 @@ public class OpenNebulaSystemIdentityProviderPlugin implements SystemIdentityPro
     private String identityProviderId;
 
     public OpenNebulaSystemIdentityProviderPlugin() throws FatalErrorException {
-        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
+        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.PROVIDER_ID_KEY);
     	String identityUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.OPENNEBULA_URL_KEY);
         this.identityProviderPlugin = new OpenNebulaIdentityProviderPlugin(identityUrl);
     }

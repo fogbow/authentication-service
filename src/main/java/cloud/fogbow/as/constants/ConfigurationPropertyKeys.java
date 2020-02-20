@@ -2,7 +2,7 @@ package cloud.fogbow.as.constants;
 
 public class ConfigurationPropertyKeys {
     // Service configuration
-    public static final String LOCAL_MEMBER_ID_KEY = "xmpp_jid";
+    public static final String PROVIDER_ID_KEY = "provider_id";
     public static final String BUILD_NUMBER_KEY = "build_number";
 
     // Plugins

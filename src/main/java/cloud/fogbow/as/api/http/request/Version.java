@@ -6,7 +6,6 @@ import cloud.fogbow.common.constants.ApiDocumentation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
-import cloud.fogbow.as.constants.Messages;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,7 +27,6 @@ public class Version {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<cloud.fogbow.as.api.http.response.Version> getVersion() {
 
-        LOGGER.info(Messages.Info.RECEIVING_GET_VERSION_REQUEST);
         String versionNumber = ApplicationFacade.getInstance().getVersionNumber();
         cloud.fogbow.as.api.http.response.Version version = new cloud.fogbow.as.api.http.response.Version(versionNumber);
         return new ResponseEntity<>(version, HttpStatus.OK);
