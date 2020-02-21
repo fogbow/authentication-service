@@ -23,8 +23,7 @@ public class AzureSystemUserTest {
 
     private AzureSystemUser createUser() {
         AzureUser cloudUser = new AzureUser("fakeUserId", "fakeUserName", "fakeClientId",
-                "fakeTenantId", "fakeClientKey","fakeSubscriptionId",
-                "fakeResourceGroupName", "fakeRegionName");
+                "fakeTenantId", "fakeClientKey","fakeSubscriptionId");
         return new AzureSystemUser("fakeProviderId", cloudUser);
     }
 }
