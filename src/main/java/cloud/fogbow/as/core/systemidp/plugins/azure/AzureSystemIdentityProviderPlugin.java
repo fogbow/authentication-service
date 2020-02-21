@@ -12,18 +12,18 @@ import cloud.fogbow.common.plugins.cloudidp.azure.AzureIdentityProviderPlugin;
 
 public class AzureSystemIdentityProviderPlugin implements SystemIdentityProviderPlugin<AzureSystemUser> {
 
-	private AzureIdentityProviderPlugin identityProviderPlugin;
+    private AzureIdentityProviderPlugin identityProviderPlugin;
     private String identityProviderId;
-    
-	public AzureSystemIdentityProviderPlugin() {
-		this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.PROVIDER_ID_KEY);
-		this.identityProviderPlugin = new AzureIdentityProviderPlugin();
-	}
 
-	@Override
-	public AzureSystemUser getSystemUser(Map<String, String> credentials) throws FogbowException {
-		AzureUser cloudUser = this.identityProviderPlugin.getCloudUser(credentials);
+    public AzureSystemIdentityProviderPlugin() {
+        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.PROVIDER_ID_KEY);
+        this.identityProviderPlugin = new AzureIdentityProviderPlugin();
+    }
+
+    @Override
+    public AzureSystemUser getSystemUser(Map<String, String> credentials) throws FogbowException {
+        AzureUser cloudUser = this.identityProviderPlugin.getCloudUser(credentials);
         return new AzureSystemUser(this.identityProviderId, cloudUser);
-	}
+    }
 
 }
