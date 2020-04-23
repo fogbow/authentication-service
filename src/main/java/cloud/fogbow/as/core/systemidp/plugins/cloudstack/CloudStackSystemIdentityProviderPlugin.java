@@ -5,7 +5,7 @@ import java.util.Map;
 import cloud.fogbow.as.core.models.CloudStackSystemUser;
 import cloud.fogbow.as.core.systemidp.SystemIdentityProviderPlugin;
 import cloud.fogbow.common.models.CloudStackUser;
-import cloud.fogbow.common.plugins.cloudidp.cloudstack.CloudStackIdentityProviderPlugin;
+import cloud.fogbow.common.plugins.cloudidp.cloudstack.v4_9.CloudStackIdentityProviderPlugin;
 import cloud.fogbow.as.core.PropertiesHolder;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.exceptions.FogbowException;

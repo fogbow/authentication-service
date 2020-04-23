@@ -5,7 +5,7 @@ import cloud.fogbow.as.core.systemidp.SystemIdentityProviderPlugin;
 import cloud.fogbow.common.exceptions.*;
 import cloud.fogbow.as.core.PropertiesHolder;
 import cloud.fogbow.common.models.OpenNebulaUser;
-import cloud.fogbow.common.plugins.cloudidp.opennebula.OpenNebulaIdentityProviderPlugin;
+import cloud.fogbow.common.plugins.cloudidp.opennebula.v5_4.OpenNebulaIdentityProviderPlugin;
 
 import org.apache.log4j.Logger;
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
