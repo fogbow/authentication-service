@@ -26,8 +26,12 @@ import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
+import cloud.fogbow.common.util.PropertiesUtil;
+import org.apache.log4j.Logger;
 
 public class LdapSystemIdentityProviderPlugin implements SystemIdentityProviderPlugin<SystemUser> {
+    private static final Logger LOGGER = Logger.getLogger(LdapSystemIdentityProviderPlugin.class.getName());
+
     public static final String CRED_USERNAME = "username";
     public static final String CRED_PASSWORD = "password";
     private static final String ENCRYPT_TYPE = ":TYPE:";
@@ -43,6 +47,7 @@ public class LdapSystemIdentityProviderPlugin implements SystemIdentityProviderP
         this.ldapBase = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_BASE_KEY);
         this.ldapUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_ENDPOINT_KEY);
         this.encryptType = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_ENCRYPT_TYPE_KEY);
+        LOGGER.debug(String.format("p_id=[%s], base=[%s], url=[%s], encry=[%s]", identityProviderId, ldapBase, ldapUrl, encryptType));
     }
 
     @Override
