@@ -140,7 +140,7 @@ public class ShibbolethSystemIdentityProviderPlugin implements SystemIdentityPro
 	}
 	
     protected RSAPublicKey getShibbolethApplicationPublicKey() throws IOException, GeneralSecurityException {
-        String filename = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.SHIB_PUBLIC_FILE_NAME_KEY);
-        return CryptoUtil.getPublicKey(HomeDir.getPath() + filename);
+        String shibPublicKeyPath = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.SHIB_PUBLIC_FILE_PATH_KEY);
+        return CryptoUtil.getPublicKey(shibPublicKeyPath);
     }
 }
