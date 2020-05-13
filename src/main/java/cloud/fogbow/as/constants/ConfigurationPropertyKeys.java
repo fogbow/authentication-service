@@ -12,7 +12,7 @@ public class ConfigurationPropertyKeys {
     public static final String CLOUD_IDENTITY_PROVIDER_URL_KEY = "cloud_identity_provider_url";
     public static final String CLOUDSTACK_URL_KEY = "cloudstack_url";
     public static final String LDAP_BASE_KEY = "ldap_base";
-    public static final String LDAP_ENDPOINT_KEY = "ldap_endpoint";
+    public static final String LDAP_URL_KEY = "ldap_url";
     public static final String LDAP_ENCRYPT_TYPE_KEY = "ldap_encrypt_type";
     public static final String OPENNEBULA_URL_KEY = "opennebula_url";
     public static final String OPENSTACK_KEYSTONE_V3_URL_KEY = "openstack_keystone_v3_url";
