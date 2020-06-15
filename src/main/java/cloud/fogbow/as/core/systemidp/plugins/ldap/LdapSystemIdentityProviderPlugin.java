@@ -18,7 +18,6 @@ import javax.naming.directory.SearchResult;
 import cloud.fogbow.as.core.systemidp.SystemIdentityProviderPlugin;
 import cloud.fogbow.common.constants.Messages;
 import cloud.fogbow.common.exceptions.InvalidParameterException;
-import cloud.fogbow.common.exceptions.InvalidUserCredentialsException;
 import cloud.fogbow.common.models.SystemUser;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
@@ -50,8 +49,8 @@ public class LdapSystemIdentityProviderPlugin implements SystemIdentityProviderP
     }
 
     @Override
-    public SystemUser getSystemUser(Map<String, String> userCredentials) throws InvalidUserCredentialsException,
-            UnexpectedException, InvalidParameterException, UnauthenticatedUserException {
+    public SystemUser getSystemUser(Map<String, String> userCredentials) throws UnexpectedException,
+            InvalidParameterException, UnauthenticatedUserException {
 
         String userId = userCredentials.get(CRED_USERNAME);
         String password = userCredentials.get(CRED_PASSWORD);
@@ -64,7 +63,7 @@ public class LdapSystemIdentityProviderPlugin implements SystemIdentityProviderP
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public String ldapAuthenticate(String uid, String password) throws UnexpectedException, InvalidParameterException,
-            InvalidUserCredentialsException, UnauthenticatedUserException {
+            UnauthenticatedUserException {
 
         String contextFactory = "com.sun.jndi.ldap.LdapCtxFactory";
         String securityAuthentication = "simple";
@@ -99,7 +98,7 @@ public class LdapSystemIdentityProviderPlugin implements SystemIdentityProviderP
 
             if (dn == null || enm.hasMore()) {
                 // uid not found or not unique
-                throw new InvalidUserCredentialsException(cloud.fogbow.as.constants.Messages.Exception.UNABLE_TO_LOAD_LDAP_ACCOUNT);
+                throw new UnauthenticatedUserException(cloud.fogbow.as.constants.Messages.Exception.UNABLE_TO_LOAD_LDAP_ACCOUNT);
             }
 
             // Bind with found DN and given password

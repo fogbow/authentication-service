@@ -2,7 +2,6 @@ package cloud.fogbow.as.core.util;
 
 import cloud.fogbow.as.constants.Messages;
 import cloud.fogbow.common.constants.FogbowConstants;
-import cloud.fogbow.common.exceptions.InvalidTokenException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.models.SystemUser;
@@ -22,7 +21,7 @@ public class AuthenticationUtil {
     private static final long EXPIRATION_INTERVAL = TimeUnit.DAYS.toMillis(1); // One day
 
     public static SystemUser authenticate(PublicKey asPublicKey, String encryptedTokenValue)
-            throws UnauthenticatedUserException, InvalidTokenException, UnexpectedException {
+            throws UnauthenticatedUserException, UnexpectedException {
         try {
             RSAPrivateKey privateKey = ServiceAsymmetricKeysHolder.getInstance().getPrivateKey();
             String plainTokenValue = TokenProtector.decrypt(privateKey, encryptedTokenValue,
@@ -37,7 +36,7 @@ public class AuthenticationUtil {
             checkIfTokenHasNotExprired(expirationTime);
             return SystemUser.deserialize(federationUserString);
         } catch (IOException | GeneralSecurityException e) {
-            throw new InvalidTokenException();
+            throw new UnauthenticatedUserException(cloud.fogbow.common.constants.Messages.Exception.INVALID_TOKEN);
         }
     }
 
