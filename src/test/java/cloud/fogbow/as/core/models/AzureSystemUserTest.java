@@ -1,6 +1,6 @@
 package cloud.fogbow.as.core.models;
 
-import cloud.fogbow.common.exceptions.UnexpectedException;
+import cloud.fogbow.common.exceptions.InternalServerErrorException;
 import cloud.fogbow.common.models.AzureUser;
 import cloud.fogbow.common.models.SystemUser;
 import org.junit.Assert;
@@ -9,7 +9,7 @@ import org.junit.Test;
 public class AzureSystemUserTest {
     // Test if an AzureSystemUser is correctly seralized and later deserialized
     @Test
-    public void testSerializationAndDeserealizationOfAzureUserObject() throws UnexpectedException {
+    public void testSerializationAndDeserealizationOfAzureUserObject() throws InternalServerErrorException {
         // Setup
         AzureSystemUser systemUser = createUser();
 

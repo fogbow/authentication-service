@@ -1,6 +1,7 @@
 package cloud.fogbow.as.core;
 
 import cloud.fogbow.as.core.systemidp.SystemIdentityProviderPlugin;
+import cloud.fogbow.common.exceptions.InternalServerErrorException;
 import cloud.fogbow.common.util.PropertiesUtil;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
@@ -8,7 +9,6 @@ import cloud.fogbow.as.constants.ConfigurationPropertyDefaults;
 import cloud.fogbow.as.constants.SystemConstants;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.exceptions.FogbowException;
-import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import cloud.fogbow.as.core.systemidp.FogbowTokenGenerator;
 
@@ -51,12 +51,12 @@ public class ApplicationFacade {
         return this.fogbowTokenGenerator.createToken(userCredentials, publicKey);
     }
 
-    public String getPublicKey() throws UnexpectedException {
+    public String getPublicKey() throws InternalServerErrorException {
         // There is no need to authenticate the user or authorize this operation
         try {
             return CryptoUtil.toBase64(ServiceAsymmetricKeysHolder.getInstance().getPublicKey());
-        } catch (IOException | GeneralSecurityException e) {
-            throw new UnexpectedException(e.getMessage(), e);
+        } catch (GeneralSecurityException e) {
+            throw new InternalServerErrorException(e.getMessage());
         }
     }
 
