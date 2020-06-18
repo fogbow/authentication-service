@@ -1,9 +1,9 @@
 package cloud.fogbow.as.core.systemidp.plugins.idpemulator;
 
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
+import cloud.fogbow.as.constants.Messages;
 import cloud.fogbow.as.core.PropertiesHolder;
 import cloud.fogbow.as.core.systemidp.SystemIdentityProviderPlugin;
-import cloud.fogbow.common.constants.Messages;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.exceptions.InvalidParameterException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
@@ -33,7 +33,7 @@ public class IdpEmulatorSystemIdentityProviderPlugin implements SystemIdentityPr
         }
 
         if (!isAuthenticated(username)) {
-            LOGGER.error(Messages.Exception.AUTHENTICATION_ERROR);
+            LOGGER.error(Messages.Log.AUTHENTICATION_ERROR);
             throw new UnauthenticatedUserException();
         }
 

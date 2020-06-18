@@ -1,6 +1,6 @@
 package cloud.fogbow.as.core.util;
 
-import cloud.fogbow.common.exceptions.UnexpectedException;
+import cloud.fogbow.common.exceptions.InternalServerErrorException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.util.CryptoUtil;
 import org.apache.commons.lang.StringUtils;
@@ -10,7 +10,7 @@ import java.security.Key;
 public class TokenProtector {
     // Encrypts a token string so that only the possessor of a private key corresponding to the
     // public key given as parameter is able to read the token string.
-    public static String encrypt(Key key, String unprotectedToken, String tokenSeparator) throws UnexpectedException {
+    public static String encrypt(Key key, String unprotectedToken, String tokenSeparator) throws InternalServerErrorException {
         String randomKey;
         String encryptedToken;
         String encryptedKey;
@@ -20,7 +20,7 @@ public class TokenProtector {
             encryptedKey = CryptoUtil.encrypt(randomKey, key);
             return encryptedKey + tokenSeparator + encryptedToken;
         } catch (Exception e) {
-            throw new UnexpectedException();
+            throw new InternalServerErrorException();
         }
     }
 
@@ -43,7 +43,7 @@ public class TokenProtector {
     // Decrypts the token and re-encrypts it with a new publicKey; this is needed before forwarding the token
     // to another service.
     public static String rewrap(Key decryptKey, Key encryptKey, String protectedToken, String tokenSeparator)
-            throws UnauthenticatedUserException, UnexpectedException {
+            throws UnauthenticatedUserException, InternalServerErrorException {
         String unprotectedToken = decrypt(decryptKey, protectedToken, tokenSeparator);
         String newProtectedToken = encrypt(encryptKey, unprotectedToken, tokenSeparator);
         return newProtectedToken;
