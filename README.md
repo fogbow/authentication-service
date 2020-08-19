@@ -8,7 +8,6 @@ It provides a token required for build requests to the REST API of many fogbow s
 
 In this section the installation explanation will be facing a possible contributor. If you are interested in deployment, please take a look at [fogbow-deploy](https://github.com/fogbow/fogbow-deploy).
 
-
 ### Dependencies
 
 - Java 8
