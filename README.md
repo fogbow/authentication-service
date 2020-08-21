@@ -1,6 +1,6 @@
 # Authentication Service
 
-The authentication service is responsible for implementing several user authentication mechanisms in a multi-cloud environment, including implementations based on LDAP, Openstack Keystone and Shibboleth. 
+The authentication service is responsible for implementing several user authentication mechanisms in a multi-cloud environment, including implementations based on LDAP, Openstack Keystone and Shibboleth.
 
 It provides a token required for build requests to the REST API of many fogbow services.
 
@@ -22,7 +22,7 @@ First of all, create a directory to organize all fogbow modules/services then cl
 mkdir fogbow && cd fogbow
 
 git clone https://github.com/fogbow/common.git
-cd common  
+cd common
 git checkout develop && mvn install -DskipTests
 
 git clone https://github.com/fogbow/authentication-service.git
@@ -34,20 +34,29 @@ git checkout develop && mvn install -DskipTests
 
 This service requires some initial configuration. Most of them will have a template for help you to get started.
 
-First of all, you need to create a directory named *private* at `src/main/resources`, it will be holding your private settings (managed clouds, username and password for the clouds, etc.).
+First of all, you need to create a directory named _private_ at `src/main/resources`, it will be holding your private settings (managed clouds, username and password for the clouds, etc.).
 
 #### private/private.key, private/public.key
 
-:pushpin: Insert here information about public/private key.
+If you don't know how to create a public/private key, take a look at [this guide](https://docs.oracle.com/cd/E19683-01/806-4078/6jd6cjru7/index.html).
+
+After the keys are created, you must put them in `src/main/resources/private/` folder.
 
 #### private/as.conf
 
-Check out `src/main/resources/templates/as.conf` for a file template. Here you need to configurate some required fields. Let's take a look at each of them.
+Check out `src/main/resources/templates/as.conf` for a full template.
 
-- **xmpp_jid:** :pushpin: Insert here information about this field
-- **public_key_file_path:** the path to the public key
-- **private_key_file_path:** the path to the private key
-- **system_identity_provider_plugin_class:** :pushpin: Insert here information about this field
+**Example of some fields:**
+
+```conf
+...
+public_key_file_path=src/main/resources/private/public.key
+private_key_file_path=src/main/resources/private/private.key
+system_identity_provider_plugin_class=cloud.fogbow.as.core.systemidp.plugins.openstack.v3.OpenStackSystemIdentityProviderPlugin
+...
+```
+
+Note that you must complete more than these fields and the template has comments for each field.
 
 ### Starting the service
 
@@ -60,7 +69,9 @@ You can skip step 3 if you have added the authentication service and common as m
 
 ### Accessing the API documentation
 
-You can access the API docs to check the available endpoints for this service. If the service is running at localhost:8081 then you should go to <http://localhost:8081/swagger-ui.html>
+You can access the API docs to check the available endpoints for this service, the path is `/swagger-ui.html`
+
+**Example:** if the service is running at <http://localhost:8081> then you should go to <http://localhost:8081/swagger-ui.html>
 
 ### Optional tools
 
@@ -69,7 +80,3 @@ You can access the API docs to check the available endpoints for this service. I
 ## Contributing
 
 For instructions about how to contribute, check out our [contributor's guide](https://github.com/fogbow/authentication-service/blob/master/CONTRIBUTING.md).
-
-## Help
-
-:pushpin: Insert here information about how to get help when needed. Email, discord or any communication channel.
