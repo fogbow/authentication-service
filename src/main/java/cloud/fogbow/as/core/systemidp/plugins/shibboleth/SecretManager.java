@@ -30,7 +30,7 @@ public class SecretManager {
 		if (!isValidSecret(secret)) {
 			return false;
 		}
-		LOGGER.debug(Messages.Info.SECRET_VALIDATED);
+		LOGGER.debug(Messages.Log.SECRET_VALIDATED);
 		Long validity = getNow() + EXPIRATION_INTERVAL;
 		this.secrets.put(secret, validity);
 		return true;
@@ -43,18 +43,18 @@ public class SecretManager {
 	protected boolean isValidSecret(String secret) {
 		boolean alreadyExists = this.secrets.containsKey(secret);
 		if (alreadyExists) {
-			LOGGER.debug(Messages.Info.SECRET_ALREADY_EXISTS);
+			LOGGER.debug(Messages.Log.SECRET_ALREADY_EXISTS);
 			return false;
 		}
 		 
 		try {
 			Date secretCreationTime = new Date(Long.parseLong(secret));
 			if (secretCreationTime.before(this.asStartingTime)) {
-				LOGGER.info(Messages.Info.SECRET_CREATED_BEFORE_AS_START_TIME);
+				LOGGER.info(Messages.Log.SECRET_CREATED_BEFORE_AS_START_TIME);
 				return false;
 			}		
 		} catch (NumberFormatException e) {
-			LOGGER.debug(Messages.Info.INVALID_FORMAT_SECRET, e);
+			LOGGER.debug(Messages.Log.INVALID_FORMAT_SECRET, e);
 			return false;
 		}
 		

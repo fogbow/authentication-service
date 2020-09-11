@@ -2,11 +2,9 @@ package cloud.fogbow.as.core.util;
 
 import cloud.fogbow.as.constants.Messages;
 import cloud.fogbow.common.constants.FogbowConstants;
-import cloud.fogbow.common.exceptions.InvalidTokenException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
-import cloud.fogbow.common.exceptions.UnexpectedException;
+import cloud.fogbow.common.exceptions.InternalServerErrorException;
 import cloud.fogbow.common.models.SystemUser;
-import cloud.fogbow.common.util.SystemUserUtil;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.commons.lang.StringUtils;
@@ -23,9 +21,10 @@ public class AuthenticationUtil {
     private static final long EXPIRATION_INTERVAL = TimeUnit.DAYS.toMillis(1); // One day
 
     public static SystemUser authenticate(PublicKey asPublicKey, String encryptedTokenValue)
-            throws UnauthenticatedUserException, InvalidTokenException, UnexpectedException {
+            throws UnauthenticatedUserException {
+        RSAPrivateKey privateKey = null;
         try {
-            RSAPrivateKey privateKey = ServiceAsymmetricKeysHolder.getInstance().getPrivateKey();
+            privateKey = ServiceAsymmetricKeysHolder.getInstance().getPrivateKey();
             String plainTokenValue = TokenProtector.decrypt(privateKey, encryptedTokenValue,
                     FogbowConstants.TOKEN_STRING_SEPARATOR);
             String[] tokenFields = StringUtils.splitByWholeSeparator(plainTokenValue, FogbowConstants.TOKEN_SEPARATOR);
@@ -36,15 +35,15 @@ public class AuthenticationUtil {
             String federationUserString = payloadFields[0];
             String expirationTime = payloadFields[1];
             checkIfTokenHasNotExprired(expirationTime);
-            return SystemUserUtil.deserialize(federationUserString);
-        } catch (IOException | GeneralSecurityException e) {
-            throw new InvalidTokenException();
+            return SystemUser.deserialize(federationUserString);
+        } catch (InternalServerErrorException e) {
+            throw new UnauthenticatedUserException(e.getMessage());
         }
     }
 
     public static String createFogbowToken(SystemUser systemUser, RSAPrivateKey privateKey, String publicKeyString)
-            throws UnexpectedException {
-        String tokenAttributes = SystemUserUtil.serialize(systemUser);
+            throws InternalServerErrorException {
+        String tokenAttributes = SystemUser.serialize(systemUser);
         String expirationTime = generateExpirationTime();
         String payload = tokenAttributes + FogbowConstants.PAYLOAD_SEPARATOR + expirationTime;
         try {
@@ -53,7 +52,7 @@ public class AuthenticationUtil {
             RSAPublicKey publicKey = CryptoUtil.getPublicKeyFromString(publicKeyString);
             return TokenProtector.encrypt(publicKey, signedUnprotectedToken, FogbowConstants.TOKEN_STRING_SEPARATOR);
         } catch (UnsupportedEncodingException | GeneralSecurityException e) {
-            throw new UnexpectedException();
+            throw new InternalServerErrorException();
         }
     }
 
@@ -65,7 +64,7 @@ public class AuthenticationUtil {
                 throw new UnauthenticatedUserException(Messages.Exception.INVALID_TOKEN);
             }
         } catch (SignatureException | NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException e) {
-            throw new UnauthenticatedUserException(e.getMessage(), e);
+            throw new UnauthenticatedUserException(e.getMessage());
         }
     }
 

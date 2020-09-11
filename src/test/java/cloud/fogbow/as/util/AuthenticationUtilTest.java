@@ -76,7 +76,7 @@ public class AuthenticationUtilTest {
         // set up
         KeyPair keyPair = CryptoUtil.generateKeyPair();
         PublicKey differentKey = keyPair.getPublic();
-        String differentKeyString = CryptoUtil.savePublicKey(differentKey);
+        String differentKeyString = CryptoUtil.toBase64(differentKey);
         String token = tokenGenerator.createToken(differentKeyString, 1);
 
         // exercise

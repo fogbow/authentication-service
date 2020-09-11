@@ -5,8 +5,6 @@ import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.common.util.HomeDir;
 import cloud.fogbow.as.constants.SystemConstants;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 public class PropertiesHolder {
@@ -15,9 +13,8 @@ public class PropertiesHolder {
 
     private PropertiesHolder() throws FatalErrorException {
         String path = HomeDir.getPath();
-        List<String> configFilesNames = new ArrayList<>();
-        configFilesNames.add(path + SystemConstants.AS_CONF_FILE_NAME);
-        this.properties = PropertiesUtil.readProperties(configFilesNames);
+        String configFileName = path + SystemConstants.AS_CONF_FILE_NAME;
+        this.properties = PropertiesUtil.readProperties(configFileName);
     }
 
     public static synchronized PropertiesHolder getInstance() throws FatalErrorException {

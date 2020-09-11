@@ -6,12 +6,12 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Map;
 
+import cloud.fogbow.as.constants.Messages;
 import cloud.fogbow.as.core.models.ShibbolethSystemUser;
 import cloud.fogbow.as.core.systemidp.SystemIdentityProviderPlugin;
-import cloud.fogbow.common.constants.Messages;
+import cloud.fogbow.common.exceptions.InternalServerErrorException;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
-import cloud.fogbow.common.util.HomeDir;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import cloud.fogbow.common.exceptions.FatalErrorException;
@@ -44,18 +44,18 @@ public class ShibbolethSystemIdentityProviderPlugin implements SystemIdentityPro
 	private SecretManager secretManager;
 
 	public ShibbolethSystemIdentityProviderPlugin() {
-		this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
+		this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.PROVIDER_ID_KEY);
         try {
 			this.asPrivateKey = ServiceAsymmetricKeysHolder.getInstance().getPrivateKey();
-        } catch (IOException | GeneralSecurityException e) {
+        } catch (InternalServerErrorException e) {
             throw new FatalErrorException(
-            		String.format(cloud.fogbow.as.constants.Messages.Fatal.ERROR_READING_PRIVATE_KEY_FILE, e.getMessage()));
+            		String.format(Messages.Exception.ERROR_READING_PRIVATE_KEY_FILE, e.getMessage()));
         }
 		try {
 			this.shibAppPublicKey = getShibbolethApplicationPublicKey();
 		} catch (IOException | GeneralSecurityException e) {
 			throw new FatalErrorException(
-					String.format(cloud.fogbow.as.constants.Messages.Fatal.ERROR_READING_PUBLIC_KEY_FILE, e.getMessage()));
+					String.format(Messages.Exception.ERROR_READING_PUBLIC_KEY_FILE, e.getMessage()));
 		}
 		this.secretManager = new SecretManager();
 	}
@@ -82,17 +82,15 @@ public class ShibbolethSystemIdentityProviderPlugin implements SystemIdentityPro
 		String secret = tokenShibParameters[SECREC_ATTR_SHIB_INDEX];
 		boolean isValid = this.secretManager.verify(secret);
 		if (!isValid) {
-        	String errorMsg = String.format(Messages.Exception.AUTHENTICATION_ERROR);
-        	LOGGER.error(errorMsg);
-            throw new UnauthenticatedUserException(errorMsg);			
+        	LOGGER.error(Messages.Log.AUTHENTICATION_ERROR);
+            throw new UnauthenticatedUserException();
 		}
 	}
 
 	protected void checkTokenFormat(String[] tokenShibParameters) throws UnauthenticatedUserException {
 		if (tokenShibParameters.length != SHIB_TOKEN_PARAMETERS_SIZE) {
-        	String errorMsg = String.format(Messages.Exception.AUTHENTICATION_ERROR);
-        	LOGGER.error(errorMsg);
-            throw new UnauthenticatedUserException(errorMsg);
+        	LOGGER.error(Messages.Log.AUTHENTICATION_ERROR);
+            throw new UnauthenticatedUserException();
 		}
 	}
 
@@ -109,9 +107,8 @@ public class ShibbolethSystemIdentityProviderPlugin implements SystemIdentityPro
 		try {
 			CryptoUtil.verify(this.shibAppPublicKey, message, signature);
 		} catch (Exception e) {
-        	String errorMsg = String.format(Messages.Exception.AUTHENTICATION_ERROR);
-        	LOGGER.error(errorMsg, e);
-            throw new UnauthenticatedUserException(errorMsg, e);
+        	LOGGER.error(Messages.Log.AUTHENTICATION_ERROR);
+            throw new UnauthenticatedUserException(e.getMessage());
 		}
 	}
 
@@ -120,9 +117,8 @@ public class ShibbolethSystemIdentityProviderPlugin implements SystemIdentityPro
 		try {
 			tokenShibApp = CryptoUtil.decryptAES(keyShib.getBytes(CryptoUtil.UTF_8), rasToken);
 		} catch (Exception e) {
-        	String errorMsg = String.format(Messages.Exception.AUTHENTICATION_ERROR);
-        	LOGGER.error(errorMsg, e);
-            throw new UnauthenticatedUserException(errorMsg, e);
+        	LOGGER.error(Messages.Log.AUTHENTICATION_ERROR);
+            throw new UnauthenticatedUserException(e.getMessage());
 		}
 		return tokenShibApp;
 	}
@@ -132,15 +128,14 @@ public class ShibbolethSystemIdentityProviderPlugin implements SystemIdentityPro
 		try {
 			keyShibApp = CryptoUtil.decrypt(keyShibAppEncrypted, this.asPrivateKey);
 		} catch (Exception e) {
-        	String errorMsg = String.format(Messages.Exception.AUTHENTICATION_ERROR);
-        	LOGGER.error(errorMsg, e);
-            throw new UnauthenticatedUserException(errorMsg, e);
+        	LOGGER.error(Messages.Log.AUTHENTICATION_ERROR);
+            throw new UnauthenticatedUserException(e.getMessage());
 		}
 		return keyShibApp;
 	}
 	
     protected RSAPublicKey getShibbolethApplicationPublicKey() throws IOException, GeneralSecurityException {
-        String filename = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.SHIB_PUBLIC_FILE_NAME_KEY);
-        return CryptoUtil.getPublicKey(HomeDir.getPath() + filename);
+        String shibPublicKeyPath = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.SHIB_PUBLIC_FILE_PATH_KEY);
+        return CryptoUtil.getPublicKey(shibPublicKeyPath);
     }
 }

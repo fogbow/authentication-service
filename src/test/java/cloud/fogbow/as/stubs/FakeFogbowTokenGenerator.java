@@ -2,9 +2,8 @@ package cloud.fogbow.as.stubs;
 
 import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.FogbowException;
-import cloud.fogbow.common.exceptions.UnexpectedException;
+import cloud.fogbow.common.exceptions.InternalServerErrorException;
 import cloud.fogbow.common.models.SystemUser;
-import cloud.fogbow.common.util.SystemUserUtil;
 import cloud.fogbow.common.util.HomeDir;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.as.core.util.TokenProtector;
@@ -43,7 +42,7 @@ public class FakeFogbowTokenGenerator {
             signedUnprotectedToken = payload + FogbowConstants.TOKEN_SEPARATOR + signature;
             publicKey = CryptoUtil.getPublicKeyFromString(publicKeyString);
         } catch (UnsupportedEncodingException | GeneralSecurityException e) {
-            throw new UnexpectedException();
+            throw new InternalServerErrorException();
         }
         return TokenProtector.encrypt(publicKey, signedUnprotectedToken, FogbowConstants.TOKEN_STRING_SEPARATOR);
     }
@@ -58,11 +57,11 @@ public class FakeFogbowTokenGenerator {
         return System.currentTimeMillis();
     }
 
-    public String createToken() throws UnexpectedException {
+    public String createToken() throws InternalServerErrorException {
         String userId = "fake-userid";
         String userName = "fake-username";
 
         SystemUser user = new SystemUser(userId, userName, this.provider);
-        return SystemUserUtil.serialize(user);
+        return SystemUser.serialize(user);
     }
 }

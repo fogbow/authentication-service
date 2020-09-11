@@ -15,19 +15,20 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
+import cloud.fogbow.as.constants.Messages;
 import cloud.fogbow.as.core.systemidp.SystemIdentityProviderPlugin;
-import cloud.fogbow.common.constants.Messages;
-import cloud.fogbow.common.exceptions.InvalidParameterException;
-import cloud.fogbow.common.exceptions.InvalidUserCredentialsException;
+import cloud.fogbow.common.exceptions.ConfigurationErrorException;
 import cloud.fogbow.common.models.SystemUser;
 import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.as.core.PropertiesHolder;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
-import cloud.fogbow.common.exceptions.UnexpectedException;
 
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
+import org.apache.log4j.Logger;
 
 public class LdapSystemIdentityProviderPlugin implements SystemIdentityProviderPlugin<SystemUser> {
+    private static final Logger LOGGER = Logger.getLogger(LdapSystemIdentityProviderPlugin.class.getName());
+
     public static final String CRED_USERNAME = "username";
     public static final String CRED_PASSWORD = "password";
     private static final String ENCRYPT_TYPE = ":TYPE:";
@@ -39,15 +40,16 @@ public class LdapSystemIdentityProviderPlugin implements SystemIdentityProviderP
     private String encryptType;
 
     public LdapSystemIdentityProviderPlugin() {
-        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LOCAL_MEMBER_ID_KEY);
+        this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.PROVIDER_ID_KEY);
         this.ldapBase = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_BASE_KEY);
-        this.ldapUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_ENDPOINT_KEY);
+        this.ldapUrl = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_URL_KEY);
         this.encryptType = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_ENCRYPT_TYPE_KEY);
+        LOGGER.debug(String.format("p_id=[%s], base=[%s], url=[%s], encry=[%s]", identityProviderId, ldapBase, ldapUrl, encryptType));
     }
 
     @Override
-    public SystemUser getSystemUser(Map<String, String> userCredentials) throws InvalidUserCredentialsException,
-            UnexpectedException, InvalidParameterException, UnauthenticatedUserException {
+    public SystemUser getSystemUser(Map<String, String> userCredentials) throws UnauthenticatedUserException,
+            ConfigurationErrorException {
 
         String userId = userCredentials.get(CRED_USERNAME);
         String password = userCredentials.get(CRED_PASSWORD);
@@ -59,8 +61,8 @@ public class LdapSystemIdentityProviderPlugin implements SystemIdentityProviderP
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public String ldapAuthenticate(String uid, String password) throws UnexpectedException, InvalidParameterException,
-            InvalidUserCredentialsException, UnauthenticatedUserException {
+    public String ldapAuthenticate(String uid, String password) throws UnauthenticatedUserException,
+            ConfigurationErrorException {
 
         String contextFactory = "com.sun.jndi.ldap.LdapCtxFactory";
         String securityAuthentication = "simple";
@@ -95,7 +97,7 @@ public class LdapSystemIdentityProviderPlugin implements SystemIdentityProviderP
 
             if (dn == null || enm.hasMore()) {
                 // uid not found or not unique
-                throw new InvalidUserCredentialsException(cloud.fogbow.as.constants.Messages.Exception.UNABLE_TO_LOAD_LDAP_ACCOUNT);
+                throw new UnauthenticatedUserException(Messages.Exception.UNABLE_TO_LOAD_LDAP_INFO);
             }
 
             // Bind with found DN and given password
@@ -109,11 +111,11 @@ public class LdapSystemIdentityProviderPlugin implements SystemIdentityProviderP
             return name;
 
         } catch (AuthenticationException e0) {
-            throw new UnauthenticatedUserException(Messages.Exception.AUTHENTICATION_ERROR);
+            throw new UnauthenticatedUserException();
         } catch (NamingException e1) {
-            throw new InvalidParameterException(cloud.fogbow.as.constants.Messages.Exception.LDAP_URL_MISSING, e1);
+            throw new ConfigurationErrorException(Messages.Exception.MISSING_LDAP_ENDPOINT);
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e2) {
-            throw new UnexpectedException(e2.getMessage(), e2);
+            throw new ConfigurationErrorException(Messages.Exception.INVALID_ALGORITHM_OR_ENCODING);
         }
     }
 

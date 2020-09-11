@@ -2,7 +2,8 @@ package cloud.fogbow.as.api.http.request;
 
 import cloud.fogbow.as.constants.SystemConstants;
 import cloud.fogbow.common.constants.ApiDocumentation;
-import cloud.fogbow.common.exceptions.UnexpectedException;
+import cloud.fogbow.common.exceptions.FogbowException;
+import cloud.fogbow.common.exceptions.InternalServerErrorException;
 import cloud.fogbow.as.core.ApplicationFacade;
 import cloud.fogbow.as.constants.Messages;
 import io.swagger.annotations.Api;
@@ -23,16 +24,15 @@ public class PublicKey {
 
     @ApiOperation(value = ApiDocumentation.PublicKey.GET_OPERATION)
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<cloud.fogbow.as.api.http.response.PublicKey> getPublicKey() throws UnexpectedException {
+    public ResponseEntity<cloud.fogbow.as.api.http.response.PublicKey> getPublicKey() throws FogbowException {
         try {
-            LOGGER.info(Messages.Info.RECEIVING_GET_PUBLIC_KEY_REQUEST);
+            LOGGER.info(Messages.Log.RECEIVING_GET_PUBLIC_KEY_REQUEST);
             String publicKeyValue = ApplicationFacade.getInstance().getPublicKey();
             cloud.fogbow.as.api.http.response.PublicKey publicKey = new cloud.fogbow.as.api.http.response.PublicKey(publicKeyValue);
             return new ResponseEntity<>(publicKey, HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.info(String.format(
-                    cloud.fogbow.common.constants.Messages.Exception.OPERATION_RETURNED_ERROR_S, e.getMessage()), e);
-            throw e;
+            LOGGER.info(String.format(Messages.Log.OPERATION_RETURNED_ERROR_S, e.getMessage()), e);
+            throw new InternalServerErrorException(e.getMessage());
         }
     }
 }

@@ -3,6 +3,7 @@ package cloud.fogbow.as.core.systemidp;
 import cloud.fogbow.as.core.util.AuthenticationUtil;
 import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.common.exceptions.FogbowException;
+import cloud.fogbow.common.exceptions.InternalServerErrorException;
 import cloud.fogbow.common.models.SystemUser;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
@@ -24,8 +25,8 @@ public class FogbowTokenGenerator {
         this.embeddedPlugin = embeddedPlugin;
         try {
             this.privateKey = ServiceAsymmetricKeysHolder.getInstance().getPrivateKey();
-        } catch (IOException | GeneralSecurityException e) {
-            throw new FatalErrorException(Messages.Fatal.ERROR_READING_PRIVATE_KEY_FILE, e);
+        } catch (InternalServerErrorException e) {
+            throw new FatalErrorException(Messages.Exception.ERROR_READING_PRIVATE_KEY_FILE, e);
         }
     }
 

@@ -3,8 +3,8 @@ package cloud.fogbow.as.util;
 import cloud.fogbow.as.core.util.TokenProtector;
 import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.FogbowException;
+import cloud.fogbow.common.exceptions.InternalServerErrorException;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
-import cloud.fogbow.common.exceptions.UnexpectedException;
 import cloud.fogbow.common.util.HomeDir;
 import cloud.fogbow.common.util.CryptoUtil;
 import org.junit.After;
@@ -32,7 +32,7 @@ public class TokenProtectorTest {
     }
 
     @Test
-    public void testEcryptAndDecrypt() throws IOException, GeneralSecurityException, UnexpectedException, UnauthenticatedUserException {
+    public void testEcryptAndDecrypt() throws IOException, GeneralSecurityException, InternalServerErrorException, UnauthenticatedUserException {
         // set up
         String keysPath = HomeDir.getPath();
         String pubKeyPath = keysPath + "public.key";
@@ -52,7 +52,7 @@ public class TokenProtectorTest {
     }
 
     @Test
-    public void testRewrap() throws GeneralSecurityException, UnexpectedException, IOException, UnauthenticatedUserException {
+    public void testRewrap() throws GeneralSecurityException, InternalServerErrorException, IOException, UnauthenticatedUserException {
         // set up
         String keysPath = HomeDir.getPath();
         String pubKeyPath = keysPath + "public.key";

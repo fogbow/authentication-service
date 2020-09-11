@@ -27,8 +27,8 @@ public abstract class ConfigureRSAKeyTest {
         PublicKey publicKey= keyPair.getPublic();
         PrivateKey privateKey = keyPair.getPrivate();
 
-        saveKeyToFile(publicKeyPath, CryptoUtil.savePublicKey(publicKey));
-        saveKeyToFile(privateKeyPath, CryptoUtil.savePrivateKey(privateKey));
+        saveKeyToFile(publicKeyPath, CryptoUtil.toBase64(publicKey));
+        saveKeyToFile(privateKeyPath, CryptoUtil.toBase64(privateKey));
     }
 
     private static void saveKeyToFile(String path, String key) throws IOException {
