@@ -20,16 +20,20 @@ public class DefaultSystemRolePlugin implements SystemRolePlugin {
 		defaultRole = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.DEFAULT_ROLE_KEY);
 		String rolesNamesString = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.ROLES_KEY);
 		
-		for (String roleName : rolesNamesString.trim().split(SystemConstants.ROLE_NAMES_SEPARATOR)) {
-			String userNamesWithRoleString = PropertiesHolder.getInstance().getProperty(roleName);
-			
-			for (String userName : userNamesWithRoleString.trim().split(SystemConstants.ROLE_NAMES_SEPARATOR)) {
-				if (!usersWithSpecialRoles.containsKey(userName)) {
-					usersWithSpecialRoles.put(userName, new HashSet<String>());
-				}
+		if (!rolesNamesString.isEmpty()) {
+			for (String roleName : rolesNamesString.trim().split(SystemConstants.ROLE_NAMES_SEPARATOR)) {
+				String userNamesWithRoleString = PropertiesHolder.getInstance().getProperty(roleName);
 				
-				usersWithSpecialRoles.get(userName).add(roleName);
-			}
+				if (!userNamesWithRoleString.isEmpty()) {
+					for (String userName : userNamesWithRoleString.trim().split(SystemConstants.ROLE_NAMES_SEPARATOR)) {
+						if (!usersWithSpecialRoles.containsKey(userName)) {
+							usersWithSpecialRoles.put(userName, new HashSet<String>());
+						}
+						
+						usersWithSpecialRoles.get(userName).add(roleName);
+					}					
+				}
+			}			
 		}
 	}
 	

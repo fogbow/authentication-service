@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Set;
 
 import org.junit.Test;
-import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -49,10 +48,17 @@ public class DefaultSystemRolePluginTest {
 	private final String admins = String.format("%s,%s", userNameAdmin1, userNameAdmin2);
 	private final String managers = String.format("%s,%s,%s", userNameManager1, userNameAdmin2, userNameManager2);
 
+	private final String emptyRoles = "";
+	private final String emptyAdmins = "";
+	private final String emptyManagers = "";
+	
 	private DefaultSystemRolePlugin plugin;
 	
-	@Before
-	public void setUp() {
+	/**
+	 * Set up methods
+	 */
+	
+	private void setUpSystemWithAdminAndManagerRoles() {
 		PowerMockito.mockStatic(PropertiesHolder.class);
 		PropertiesHolder properties = Mockito.mock(PropertiesHolder.class);
 		
@@ -66,8 +72,37 @@ public class DefaultSystemRolePluginTest {
 		plugin = new DefaultSystemRolePlugin();
 	}
 	
+	private void setUpSystemWithNoSpecialRoles() {
+		PowerMockito.mockStatic(PropertiesHolder.class);
+		PropertiesHolder properties = Mockito.mock(PropertiesHolder.class);
+		
+		BDDMockito.given(PropertiesHolder.getInstance()).willReturn(properties);
+		
+		Mockito.when(properties.getProperty(ConfigurationPropertyKeys.DEFAULT_ROLE_KEY)).thenReturn(defaultRole);
+		Mockito.when(properties.getProperty(ConfigurationPropertyKeys.ROLES_KEY)).thenReturn(emptyRoles);
+		
+		plugin = new DefaultSystemRolePlugin();
+	}
+	
+	private void setUpSystemWithNoUsersForDefinedRoles() {
+		PowerMockito.mockStatic(PropertiesHolder.class);
+		PropertiesHolder properties = Mockito.mock(PropertiesHolder.class);
+		
+		BDDMockito.given(PropertiesHolder.getInstance()).willReturn(properties);
+		
+		Mockito.when(properties.getProperty(ConfigurationPropertyKeys.DEFAULT_ROLE_KEY)).thenReturn(defaultRole);
+		Mockito.when(properties.getProperty(ConfigurationPropertyKeys.ROLES_KEY)).thenReturn(roles);
+		Mockito.when(properties.getProperty(adminString)).thenReturn(emptyAdmins);
+		Mockito.when(properties.getProperty(managerString)).thenReturn(emptyManagers);
+		
+		// Should this be allowed?
+		plugin = new DefaultSystemRolePlugin();
+	}
+	
 	@Test
 	public void testSetUserRolesOneRole() {
+		setUpSystemWithAdminAndManagerRoles();
+		
 		// User is admin
 		SystemUser userAdmin1 = new SystemUser(userIdAdmin1, userNameAdmin1, identityProviderIdAdmin1);
 		
@@ -97,6 +132,8 @@ public class DefaultSystemRolePluginTest {
 	
 	@Test
 	public void testSetUserRolesTwoRoles() {
+		setUpSystemWithAdminAndManagerRoles();
+		
 		// User is both admin and manager
 		SystemUser userAdmin2 = new SystemUser(userIdAdmin2, userNameAdmin2, identityProviderIdAdmin2);
 		
@@ -109,7 +146,9 @@ public class DefaultSystemRolePluginTest {
 	}
 	
 	@Test
-	public void testSetUserRolesNoSpecialRoles() { 
+	public void testSetUserRolesNoSpecialRoles() {
+		setUpSystemWithAdminAndManagerRoles();
+		
 		// User has no special roles defined
 		SystemUser userNoSpecialRole = new SystemUser(userIdNoSpecialRole, userNameNoSpecialRole, identityProviderIdNoSpecialRole);
 		
@@ -118,5 +157,51 @@ public class DefaultSystemRolePluginTest {
 		Set<String> rolesUserNoSpecialRole = userNoSpecialRole.getUserRoles();
 		assertEquals(1, rolesUserNoSpecialRole.size());
 		assertTrue(rolesUserNoSpecialRole.contains(defaultRole));
+	}
+	
+	@Test
+	public void testSystemWithNoSpecialRoles() {
+		setUpSystemWithNoSpecialRoles();
+		
+		// User has no special role defined
+		SystemUser userNoSpecialRole = new SystemUser(userIdNoSpecialRole, userNameNoSpecialRole, identityProviderIdNoSpecialRole);
+	
+		plugin.setUserRoles(userNoSpecialRole);
+		
+		Set<String> rolesUserNoSpecialRole = userNoSpecialRole.getUserRoles();
+		assertEquals(1, rolesUserNoSpecialRole.size());
+		assertTrue(rolesUserNoSpecialRole.contains(defaultRole));
+		
+		// User has no special role defined
+		SystemUser userAdmin1 = new SystemUser(userIdAdmin1, userNameAdmin1, identityProviderIdAdmin1);
+		
+		plugin.setUserRoles(userAdmin1);
+		
+		Set<String> rolesUserAdmin1 = userAdmin1.getUserRoles();
+		assertEquals(1, rolesUserAdmin1.size());
+		assertTrue(rolesUserAdmin1.contains(defaultRole));
+	}
+	
+	@Test
+	public void testConfigurationFileDoesNotListUsersForRoles() {
+		setUpSystemWithNoUsersForDefinedRoles();
+		
+		// User has no special role defined
+		SystemUser userNoSpecialRole = new SystemUser(userIdNoSpecialRole, userNameNoSpecialRole, identityProviderIdNoSpecialRole);
+	
+		plugin.setUserRoles(userNoSpecialRole);
+		
+		Set<String> rolesUserNoSpecialRole = userNoSpecialRole.getUserRoles();
+		assertEquals(1, rolesUserNoSpecialRole.size());
+		assertTrue(rolesUserNoSpecialRole.contains(defaultRole));
+		
+		// User has no special role defined
+		SystemUser userAdmin1 = new SystemUser(userIdAdmin1, userNameAdmin1, identityProviderIdAdmin1);
+		
+		plugin.setUserRoles(userAdmin1);
+		
+		Set<String> rolesUserAdmin1 = userAdmin1.getUserRoles();
+		assertEquals(1, rolesUserAdmin1.size());
+		assertTrue(rolesUserAdmin1.contains(defaultRole));
 	}
 }
