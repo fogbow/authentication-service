@@ -16,24 +16,32 @@ public class DefaultSystemRolePlugin implements SystemRolePlugin {
 	private String defaultRole;
 	
 	public DefaultSystemRolePlugin() {
-		usersWithSpecialRoles = new HashMap<String, Set<String>>();
 		defaultRole = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.DEFAULT_ROLE_KEY);
+		getUsersWithSpecialRoles();
+	}
+
+	private void getUsersWithSpecialRoles() {
+		usersWithSpecialRoles = new HashMap<String, Set<String>>();
 		String rolesNamesString = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.ROLES_KEY);
 		
 		if (!rolesNamesString.isEmpty()) {
 			for (String roleName : rolesNamesString.trim().split(SystemConstants.ROLE_NAMES_SEPARATOR)) {
-				String userNamesWithRoleString = PropertiesHolder.getInstance().getProperty(roleName);
-				
-				if (!userNamesWithRoleString.isEmpty()) {
-					for (String userName : userNamesWithRoleString.trim().split(SystemConstants.ROLE_NAMES_SEPARATOR)) {
-						if (!usersWithSpecialRoles.containsKey(userName)) {
-							usersWithSpecialRoles.put(userName, new HashSet<String>());
-						}
-						
-						usersWithSpecialRoles.get(userName).add(roleName);
-					}					
-				}
+				getUserNamesWithRole(roleName);
 			}			
+		}
+	}
+
+	private void getUserNamesWithRole(String roleName) {
+		String userNamesWithRoleString = PropertiesHolder.getInstance().getProperty(roleName);
+		
+		if (!userNamesWithRoleString.isEmpty()) {
+			for (String userName : userNamesWithRoleString.trim().split(SystemConstants.ROLE_NAMES_SEPARATOR)) {
+				if (!usersWithSpecialRoles.containsKey(userName)) {
+					usersWithSpecialRoles.put(userName, new HashSet<String>());
+				}
+				
+				usersWithSpecialRoles.get(userName).add(roleName);
+			}					
 		}
 	}
 	
