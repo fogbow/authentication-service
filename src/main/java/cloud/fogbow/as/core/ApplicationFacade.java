@@ -1,6 +1,7 @@
 package cloud.fogbow.as.core;
 
 import cloud.fogbow.as.core.systemidp.SystemIdentityProviderPlugin;
+import cloud.fogbow.as.core.systemidp.SystemRolePlugin;
 import cloud.fogbow.common.exceptions.InternalServerErrorException;
 import cloud.fogbow.common.util.PropertiesUtil;
 import cloud.fogbow.common.util.CryptoUtil;
@@ -40,10 +41,12 @@ public class ApplicationFacade {
         }
     }
 
-    public void initializeFogbowTokenGenerator(SystemIdentityProviderPlugin systemIdentityProviderPlugin) {
+    public void initializeFogbowTokenGenerator(SystemIdentityProviderPlugin systemIdentityProviderPlugin,
+    										SystemRolePlugin systemRoleProviderPlugin) {
         // The token generator plugin generates a raw token; the wrapper adds an expiration time,
         // a signature, and encrypts the token using the public key provided by the client.
-        this.fogbowTokenGenerator = new FogbowTokenGenerator(systemIdentityProviderPlugin);
+        this.fogbowTokenGenerator = new FogbowTokenGenerator(systemIdentityProviderPlugin,
+        													systemRoleProviderPlugin);
     }
 
     public String createToken(Map<String, String> userCredentials, String publicKey) throws FogbowException {

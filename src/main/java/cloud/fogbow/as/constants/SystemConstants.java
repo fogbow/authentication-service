@@ -6,4 +6,6 @@ public class SystemConstants {
 
     // CONFIGURATION FILES PATHS
     public static final String AS_CONF_FILE_NAME = "as.conf";
+    
+    public static final String ROLE_NAMES_SEPARATOR = ",";
 }

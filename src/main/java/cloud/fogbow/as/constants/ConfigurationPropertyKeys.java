@@ -17,4 +17,8 @@ public class ConfigurationPropertyKeys {
     public static final String OPENNEBULA_URL_KEY = "opennebula_url";
     public static final String OPENSTACK_KEYSTONE_V3_URL_KEY = "openstack_keystone_v3_url";
     public static final String SHIB_PUBLIC_FILE_PATH_KEY = "shib_public_key_file_path";
+    
+    // Federation Roles configurations
+    public static final String DEFAULT_ROLE_KEY = "default_role";
+    public static final String ROLES_KEY = "roles";
 }
