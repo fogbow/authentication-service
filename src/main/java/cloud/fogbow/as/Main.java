@@ -5,6 +5,7 @@ import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.as.core.ApplicationFacade;
 import cloud.fogbow.as.core.PropertiesHolder;
 import cloud.fogbow.as.core.SystemIdentityProviderPluginInstantiator;
+import cloud.fogbow.as.core.SystemRolePluginInstantiator;
 import cloud.fogbow.as.core.role.SystemRolePlugin;
 import cloud.fogbow.as.core.role.plugins.VanillaSystemRolePlugin;
 
@@ -32,7 +33,8 @@ public class Main implements ApplicationRunner {
             SystemIdentityProviderPlugin systemIdentityProviderPlugin =
                     SystemIdentityProviderPluginInstantiator.getSystemIdentityProviderPlugin();
             
-            SystemRolePlugin systemRoleProviderPlugin = new VanillaSystemRolePlugin();
+            SystemRolePlugin systemRoleProviderPlugin = 
+                    SystemRolePluginInstantiator.getSystemRolePlugin();
 
             // Setting up application facade
             ApplicationFacade applicationFacade = ApplicationFacade.getInstance();
