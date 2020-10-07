@@ -1,5 +1,6 @@
 package cloud.fogbow.as.core.systemidp;
 
+import cloud.fogbow.as.core.role.SystemRolePlugin;
 import cloud.fogbow.as.core.util.AuthenticationUtil;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.models.SystemUser;

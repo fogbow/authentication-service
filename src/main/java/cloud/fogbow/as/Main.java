@@ -1,12 +1,13 @@
 package cloud.fogbow.as;
 
-import cloud.fogbow.as.core.systemidp.DefaultSystemRolePlugin;
 import cloud.fogbow.as.core.systemidp.SystemIdentityProviderPlugin;
-import cloud.fogbow.as.core.systemidp.SystemRolePlugin;
 import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.as.core.ApplicationFacade;
 import cloud.fogbow.as.core.PropertiesHolder;
 import cloud.fogbow.as.core.SystemIdentityProviderPluginInstantiator;
+import cloud.fogbow.as.core.role.SystemRolePlugin;
+import cloud.fogbow.as.core.role.plugins.DefaultSystemRolePlugin;
+
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;

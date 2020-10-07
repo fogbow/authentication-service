@@ -1,4 +1,4 @@
-package cloud.fogbow.as.core.systemidp;
+package cloud.fogbow.as.core.role.plugins;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

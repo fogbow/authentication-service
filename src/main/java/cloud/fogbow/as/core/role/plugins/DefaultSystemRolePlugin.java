@@ -1,4 +1,4 @@
-package cloud.fogbow.as.core.systemidp;
+package cloud.fogbow.as.core.role.plugins;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,6 +8,7 @@ import java.util.Set;
 import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.as.constants.SystemConstants;
 import cloud.fogbow.as.core.PropertiesHolder;
+import cloud.fogbow.as.core.role.SystemRolePlugin;
 import cloud.fogbow.common.models.SystemUser;
 
 public class DefaultSystemRolePlugin implements SystemRolePlugin {

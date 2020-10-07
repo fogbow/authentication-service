@@ -1,4 +1,4 @@
-package cloud.fogbow.as.core.systemidp;
+package cloud.fogbow.as.core.role;
 
 import cloud.fogbow.common.models.SystemUser;
 

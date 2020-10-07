@@ -1,7 +1,6 @@
 package cloud.fogbow.as.core;
 
 import cloud.fogbow.as.core.systemidp.SystemIdentityProviderPlugin;
-import cloud.fogbow.as.core.systemidp.SystemRolePlugin;
 import cloud.fogbow.common.exceptions.InternalServerErrorException;
 import cloud.fogbow.common.util.PropertiesUtil;
 import cloud.fogbow.common.util.CryptoUtil;
@@ -11,6 +10,7 @@ import cloud.fogbow.as.constants.SystemConstants;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
+import cloud.fogbow.as.core.role.SystemRolePlugin;
 import cloud.fogbow.as.core.systemidp.FogbowTokenGenerator;
 
 import java.io.IOException;
