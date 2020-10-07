@@ -19,7 +19,7 @@ import cloud.fogbow.common.models.SystemUser;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(PropertiesHolder.class)
-public class DefaultSystemRolePluginTest {
+public class VanillaSystemRolePluginTest {
 
 	private final String userIdAdmin1 = "userId-admin1";
 	private final String userNameAdmin1 = "username-admin1";
@@ -52,7 +52,7 @@ public class DefaultSystemRolePluginTest {
 	private final String emptyAdmins = "";
 	private final String emptyManagers = "";
 	
-	private DefaultSystemRolePlugin plugin;
+	private VanillaSystemRolePlugin plugin;
 	
 	/**
 	 * Set up methods
@@ -69,7 +69,7 @@ public class DefaultSystemRolePluginTest {
 		Mockito.when(properties.getProperty(adminString)).thenReturn(admins);
 		Mockito.when(properties.getProperty(managerString)).thenReturn(managers);
 		
-		plugin = new DefaultSystemRolePlugin();
+		plugin = new VanillaSystemRolePlugin();
 	}
 	
 	private void setUpSystemWithNoSpecialRoles() {
@@ -81,7 +81,7 @@ public class DefaultSystemRolePluginTest {
 		Mockito.when(properties.getProperty(ConfigurationPropertyKeys.DEFAULT_ROLE_KEY)).thenReturn(defaultRole);
 		Mockito.when(properties.getProperty(ConfigurationPropertyKeys.ROLES_KEY)).thenReturn(emptyRoles);
 		
-		plugin = new DefaultSystemRolePlugin();
+		plugin = new VanillaSystemRolePlugin();
 	}
 	
 	private void setUpSystemWithNoUsersForDefinedRoles() {
@@ -96,7 +96,7 @@ public class DefaultSystemRolePluginTest {
 		Mockito.when(properties.getProperty(managerString)).thenReturn(emptyManagers);
 		
 		// Should this be allowed?
-		plugin = new DefaultSystemRolePlugin();
+		plugin = new VanillaSystemRolePlugin();
 	}
 	
 	@Test

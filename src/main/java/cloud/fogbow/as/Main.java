@@ -6,7 +6,7 @@ import cloud.fogbow.as.core.ApplicationFacade;
 import cloud.fogbow.as.core.PropertiesHolder;
 import cloud.fogbow.as.core.SystemIdentityProviderPluginInstantiator;
 import cloud.fogbow.as.core.role.SystemRolePlugin;
-import cloud.fogbow.as.core.role.plugins.DefaultSystemRolePlugin;
+import cloud.fogbow.as.core.role.plugins.VanillaSystemRolePlugin;
 
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.constants.FogbowConstants;
@@ -32,7 +32,7 @@ public class Main implements ApplicationRunner {
             SystemIdentityProviderPlugin systemIdentityProviderPlugin =
                     SystemIdentityProviderPluginInstantiator.getSystemIdentityProviderPlugin();
             
-            SystemRolePlugin systemRoleProviderPlugin = new DefaultSystemRolePlugin();
+            SystemRolePlugin systemRoleProviderPlugin = new VanillaSystemRolePlugin();
 
             // Setting up application facade
             ApplicationFacade applicationFacade = ApplicationFacade.getInstance();
