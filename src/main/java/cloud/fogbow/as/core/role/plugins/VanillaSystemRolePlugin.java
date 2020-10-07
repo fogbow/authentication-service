@@ -36,22 +36,22 @@ public class VanillaSystemRolePlugin implements SystemRolePlugin {
 		String userNamesWithRoleString = PropertiesHolder.getInstance().getProperty(roleName);
 		
 		if (!userNamesWithRoleString.isEmpty()) {
-			for (String userName : userNamesWithRoleString.trim().split(SystemConstants.ROLE_NAMES_SEPARATOR)) {
-				if (!usersWithSpecialRoles.containsKey(userName)) {
-					usersWithSpecialRoles.put(userName, new HashSet<String>());
+			for (String userId : userNamesWithRoleString.trim().split(SystemConstants.ROLE_NAMES_SEPARATOR)) {
+				if (!usersWithSpecialRoles.containsKey(userId)) {
+					usersWithSpecialRoles.put(userId, new HashSet<String>());
 				}
 				
-				usersWithSpecialRoles.get(userName).add(roleName);
+				usersWithSpecialRoles.get(userId).add(roleName);
 			}					
 		}
 	}
 	
 	@Override
 	public void setUserRoles(SystemUser user) {
-		String userName = user.getName();
+		String userId = user.getId();
 		
-		if (usersWithSpecialRoles.containsKey(userName)) {
-			user.setUserRoles(usersWithSpecialRoles.get(userName));			
+		if (usersWithSpecialRoles.containsKey(userId)) {
+			user.setUserRoles(usersWithSpecialRoles.get(userId));			
 		} else {
 			HashSet<String> defaultRoleSet = new HashSet<String>();
 			defaultRoleSet.add(defaultRole);

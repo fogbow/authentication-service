@@ -45,8 +45,8 @@ public class VanillaSystemRolePluginTest {
 	private final String adminString = "admin";
 	private final String managerString = "manager";
 	private final String roles = String.format("%s,%s", adminString, managerString);
-	private final String admins = String.format("%s,%s", userNameAdmin1, userNameAdmin2);
-	private final String managers = String.format("%s,%s,%s", userNameManager1, userNameAdmin2, userNameManager2);
+	private final String admins = String.format("%s,%s", userIdAdmin1, userIdAdmin2);
+	private final String managers = String.format("%s,%s,%s", userIdManager1, userIdAdmin2, userIdManager2);
 
 	private final String emptyRoles = "";
 	private final String emptyAdmins = "";
