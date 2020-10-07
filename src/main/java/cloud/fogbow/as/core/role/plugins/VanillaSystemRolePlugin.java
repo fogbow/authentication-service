@@ -13,6 +13,12 @@ import cloud.fogbow.common.models.SystemUser;
 
 public class VanillaSystemRolePlugin implements SystemRolePlugin {
 
+    /**
+     * This class requires a configuration file using a mapping role -> users. 
+     * However, since normally we want to know the roles for a given user 
+     * rather than the list of users that have a given role, 
+     * for performance reasons, we use a user -> roles map.
+     */
     private Map<String, Set<String>> usersWithSpecialRoles;
     private String defaultRole;
 
