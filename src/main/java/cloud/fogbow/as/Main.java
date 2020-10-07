@@ -38,8 +38,9 @@ public class Main implements ApplicationRunner {
 
             // Setting up application facade
             ApplicationFacade applicationFacade = ApplicationFacade.getInstance();
-            applicationFacade.initializeFogbowTokenGenerator(systemIdentityProviderPlugin,
-            												systemRoleProviderPlugin);
+            
+            applicationFacade.initializeFogbowTokenGenerator(systemIdentityProviderPlugin, 
+                    systemRoleProviderPlugin);
         } catch (FatalErrorException errorException) {
             LOGGER.fatal(errorException.getMessage(), errorException);
             tryExit();

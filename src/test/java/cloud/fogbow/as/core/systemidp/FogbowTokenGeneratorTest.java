@@ -45,7 +45,5 @@ public class FogbowTokenGeneratorTest {
         String token = fogbowTokenGenerator.createToken(new HashMap<>(), VALID_PUBLIC_KEY);
 
         Assert.assertEquals(VALID_TOKEN, token);
-        
-        System.out.println(ServiceAsymmetricKeysHolder.getInstance().getPrivateKey());
     }
 }

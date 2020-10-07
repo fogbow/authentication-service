@@ -45,8 +45,8 @@ public class ApplicationFacade {
     										SystemRolePlugin systemRoleProviderPlugin) {
         // The token generator plugin generates a raw token; the wrapper adds an expiration time,
         // a signature, and encrypts the token using the public key provided by the client.
-        this.fogbowTokenGenerator = new FogbowTokenGenerator(systemIdentityProviderPlugin,
-        													systemRoleProviderPlugin);
+        this.fogbowTokenGenerator = new FogbowTokenGenerator(systemIdentityProviderPlugin, 
+                systemRoleProviderPlugin);
     }
 
     public String createToken(Map<String, String> userCredentials, String publicKey) throws FogbowException {
