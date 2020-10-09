@@ -1,5 +1,6 @@
 package cloud.fogbow.as.core.systemidp;
 
+import cloud.fogbow.as.core.role.SystemRolePlugin;
 import cloud.fogbow.as.core.util.AuthenticationUtil;
 import cloud.fogbow.common.exceptions.FatalErrorException;
 import cloud.fogbow.common.exceptions.FogbowException;
@@ -21,17 +22,22 @@ public class FogbowTokenGenerator {
 
     private RSAPrivateKey privateKey;
 
-    public FogbowTokenGenerator(SystemIdentityProviderPlugin embeddedPlugin) {
+    private SystemRolePlugin systemRoleProvider;
+    
+    public FogbowTokenGenerator(SystemIdentityProviderPlugin embeddedPlugin,
+    								SystemRolePlugin systemRoleProvider) {
         this.embeddedPlugin = embeddedPlugin;
         try {
             this.privateKey = ServiceAsymmetricKeysHolder.getInstance().getPrivateKey();
         } catch (InternalServerErrorException e) {
             throw new FatalErrorException(Messages.Exception.ERROR_READING_PRIVATE_KEY_FILE, e);
         }
+        this.systemRoleProvider = systemRoleProvider;
     }
 
     public String createToken(Map<String, String> userCredentials, String publicKeyString) throws FogbowException {
         SystemUser systemUser = this.embeddedPlugin.getSystemUser(userCredentials);
+        systemRoleProvider.setUserRoles(systemUser);
         return AuthenticationUtil.createFogbowToken(systemUser, this.privateKey, publicKeyString);
     }
 }

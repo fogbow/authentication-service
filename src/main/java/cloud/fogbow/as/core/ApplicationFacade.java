@@ -10,6 +10,7 @@ import cloud.fogbow.as.constants.SystemConstants;
 import org.apache.log4j.Logger;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
+import cloud.fogbow.as.core.role.SystemRolePlugin;
 import cloud.fogbow.as.core.systemidp.FogbowTokenGenerator;
 
 import java.io.IOException;
@@ -40,10 +41,12 @@ public class ApplicationFacade {
         }
     }
 
-    public void initializeFogbowTokenGenerator(SystemIdentityProviderPlugin systemIdentityProviderPlugin) {
+    public void initializeFogbowTokenGenerator(SystemIdentityProviderPlugin systemIdentityProviderPlugin,
+    										SystemRolePlugin systemRoleProviderPlugin) {
         // The token generator plugin generates a raw token; the wrapper adds an expiration time,
         // a signature, and encrypts the token using the public key provided by the client.
-        this.fogbowTokenGenerator = new FogbowTokenGenerator(systemIdentityProviderPlugin);
+        this.fogbowTokenGenerator = new FogbowTokenGenerator(systemIdentityProviderPlugin, 
+                systemRoleProviderPlugin);
     }
 
     public String createToken(Map<String, String> userCredentials, String publicKey) throws FogbowException {
