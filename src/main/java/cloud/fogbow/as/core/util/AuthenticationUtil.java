@@ -9,7 +9,6 @@ import cloud.fogbow.common.util.CryptoUtil;
 import cloud.fogbow.common.util.ServiceAsymmetricKeysHolder;
 import org.apache.commons.lang.StringUtils;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
@@ -40,8 +39,21 @@ public class AuthenticationUtil {
             throw new UnauthenticatedUserException(e.getMessage());
         }
     }
-
+    
     public static String createFogbowToken(SystemUser systemUser, RSAPrivateKey privateKey, String publicKeyString)
+            throws InternalServerErrorException {
+        RSAPublicKey publicKey;
+        
+        try {
+            publicKey = CryptoUtil.getPublicKeyFromString(publicKeyString);
+        } catch (GeneralSecurityException e) {
+            throw new InternalServerErrorException();
+        }
+        
+        return createFogbowToken(systemUser, privateKey, publicKey);
+    }
+    
+    public static String createFogbowToken(SystemUser systemUser, RSAPrivateKey privateKey, RSAPublicKey publicKey)
             throws InternalServerErrorException {
         String tokenAttributes = SystemUser.serialize(systemUser);
         String expirationTime = generateExpirationTime();
@@ -49,7 +61,6 @@ public class AuthenticationUtil {
         try {
             String signature = CryptoUtil.sign(privateKey, payload);
             String signedUnprotectedToken = payload + FogbowConstants.TOKEN_SEPARATOR + signature;
-            RSAPublicKey publicKey = CryptoUtil.getPublicKeyFromString(publicKeyString);
             return TokenProtector.encrypt(publicKey, signedUnprotectedToken, FogbowConstants.TOKEN_STRING_SEPARATOR);
         } catch (UnsupportedEncodingException | GeneralSecurityException e) {
             throw new InternalServerErrorException();
