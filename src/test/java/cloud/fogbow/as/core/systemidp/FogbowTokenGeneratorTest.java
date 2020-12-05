@@ -1,6 +1,5 @@
 package cloud.fogbow.as.core.systemidp;
 
-import cloud.fogbow.as.core.role.SystemRolePlugin;
 import cloud.fogbow.as.core.util.AuthenticationUtil;
 import cloud.fogbow.common.exceptions.FogbowException;
 import cloud.fogbow.common.models.SystemUser;
@@ -39,9 +38,7 @@ public class FogbowTokenGeneratorTest {
         SystemIdentityProviderPlugin identityProviderPlugin = Mockito.mock(SystemIdentityProviderPlugin.class);
         Mockito.when(identityProviderPlugin.getSystemUser(Mockito.anyMap())).thenReturn(new SystemUser(USER_ID, USER_NAME, IDENTITY_PROVIDER_ID));
 
-        SystemRolePlugin roleProviderPlugin = Mockito.mock(SystemRolePlugin.class);
-        
-        FogbowTokenGenerator fogbowTokenGenerator = new FogbowTokenGenerator(identityProviderPlugin, roleProviderPlugin);
+        FogbowTokenGenerator fogbowTokenGenerator = new FogbowTokenGenerator(identityProviderPlugin);
         String token = fogbowTokenGenerator.createToken(new HashMap<>(), VALID_PUBLIC_KEY);
 
         Assert.assertEquals(VALID_TOKEN, token);
