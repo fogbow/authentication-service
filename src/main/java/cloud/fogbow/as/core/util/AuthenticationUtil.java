@@ -59,9 +59,14 @@ public class AuthenticationUtil {
         String tokenAttributes = SystemUser.serialize(systemUser);
         String expirationTime = generateExpirationTime();
         String payload = tokenAttributes + FogbowConstants.PAYLOAD_SEPARATOR + expirationTime;
+        return encryptToken(payload, privateKey, publicKey);
+    }
+    
+    public static String encryptToken(String token, RSAPrivateKey privateKey, RSAPublicKey publicKey) 
+            throws InternalServerErrorException {
         try {
-            String signature = CryptoUtil.sign(privateKey, payload);
-            String signedUnprotectedToken = payload + FogbowConstants.TOKEN_SEPARATOR + signature;
+            String signature = CryptoUtil.sign(privateKey, token);
+            String signedUnprotectedToken = token + FogbowConstants.TOKEN_SEPARATOR + signature;
             return TokenProtector.encrypt(publicKey, signedUnprotectedToken, FogbowConstants.TOKEN_STRING_SEPARATOR);
         } catch (UnsupportedEncodingException | GeneralSecurityException e) {
             throw new InternalServerErrorException();
