@@ -1,6 +1,9 @@
 package cloud.fogbow.as.core.util;
 
+import cloud.fogbow.as.constants.ConfigurationPropertyDefaults;
+import cloud.fogbow.as.constants.ConfigurationPropertyKeys;
 import cloud.fogbow.as.constants.Messages;
+import cloud.fogbow.as.core.PropertiesHolder;
 import cloud.fogbow.common.constants.FogbowConstants;
 import cloud.fogbow.common.exceptions.UnauthenticatedUserException;
 import cloud.fogbow.common.exceptions.InternalServerErrorException;
@@ -14,10 +17,8 @@ import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class AuthenticationUtil {
-    private static final long EXPIRATION_INTERVAL = TimeUnit.DAYS.toMillis(1); // One day
 
     public static SystemUser authenticate(PublicKey asPublicKey, String encryptedTokenValue)
             throws UnauthenticatedUserException {
@@ -58,9 +59,14 @@ public class AuthenticationUtil {
         String tokenAttributes = SystemUser.serialize(systemUser);
         String expirationTime = generateExpirationTime();
         String payload = tokenAttributes + FogbowConstants.PAYLOAD_SEPARATOR + expirationTime;
+        return encryptToken(payload, privateKey, publicKey);
+    }
+    
+    public static String encryptToken(String token, RSAPrivateKey privateKey, RSAPublicKey publicKey) 
+            throws InternalServerErrorException {
         try {
-            String signature = CryptoUtil.sign(privateKey, payload);
-            String signedUnprotectedToken = payload + FogbowConstants.TOKEN_SEPARATOR + signature;
+            String signature = CryptoUtil.sign(privateKey, token);
+            String signedUnprotectedToken = token + FogbowConstants.TOKEN_SEPARATOR + signature;
             return TokenProtector.encrypt(publicKey, signedUnprotectedToken, FogbowConstants.TOKEN_STRING_SEPARATOR);
         } catch (UnsupportedEncodingException | GeneralSecurityException e) {
             throw new InternalServerErrorException();
@@ -88,7 +94,11 @@ public class AuthenticationUtil {
     }
 
     private static String generateExpirationTime() {
-        Date expirationDate = new Date(getNow() + EXPIRATION_INTERVAL);
+        String expirationIntervalProperty = PropertiesHolder.getInstance().getProperty(
+                ConfigurationPropertyKeys.TOKEN_EXPIRATION_INTERVAL, 
+                ConfigurationPropertyDefaults.DEFAULT_TOKEN_EXPIRATION_INTERVAL);
+        Long expirationInterval = Long.valueOf(expirationIntervalProperty);
+        Date expirationDate = new Date(getNow() + expirationInterval);
         String expirationTime = Long.toString(expirationDate.getTime());
         return expirationTime;
     }
