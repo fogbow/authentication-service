@@ -39,6 +39,14 @@ public class LdapSystemIdentityProviderPlugin implements SystemIdentityProviderP
     private String ldapUrl;
     private String encryptType;
 
+    public LdapSystemIdentityProviderPlugin(String identityProviderId, String ldapBase, 
+            String ldapUrl, String encryptType) {
+        this.identityProviderId = identityProviderId;
+        this.ldapBase = ldapBase;
+        this.ldapUrl = ldapUrl;
+        this.encryptType = encryptType;
+    }
+    
     public LdapSystemIdentityProviderPlugin() {
         this.identityProviderId = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.PROVIDER_ID_KEY);
         this.ldapBase = PropertiesHolder.getInstance().getProperty(ConfigurationPropertyKeys.LDAP_BASE_KEY);
